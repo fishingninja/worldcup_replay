@@ -1,0 +1,83 @@
+[
+  {
+    "date": "6月15日",
+    "kickoff": "2026-06-15T01:00:00+08:00",
+    "teamA": "🇩🇪 德国",
+    "teamB": "🇨🇼 库拉索",
+    "cctvUrl": "https://sports.cctv.com/2026/06/15/VIDE6jG8Ys7H2mQbPxA7xM260615.shtml",
+    "miguUrl": "",
+    "verified": true
+  },
+  {
+    "date": "6月14日",
+    "kickoff": "2026-06-14T12:00:00+08:00",
+    "teamA": "🇦🇺 澳大利亚",
+    "teamB": "🇹🇷 土耳其",
+    "cctvUrl": "https://sports.cctv.com/2026/06/14/VIDEPqw4902JL00BxqBqhNhQ260614.shtml",
+    "miguUrl": "",
+    "verified": false
+  },
+  {
+    "date": "6月14日",
+    "kickoff": "2026-06-14T09:00:00+08:00",
+    "teamA": "🇭🇹 海地",
+    "teamB": "🏴󠁧󠁭󠁯󠁰󠁿 苏格兰",
+    "cctvUrl": "https://sports.cctv.com/2026/06/14/VIDEl4MKG9oQahuI30GQm9ZE260614.shtml",
+    "miguUrl": "",
+    "verified": false
+  },
+  {
+    "date": "6月14日",
+    "kickoff": "2026-06-14T06:00:00+08:00",
+    "teamA": "🇧🇷 巴西",
+    "teamB": "🇲🇦 摩洛哥",
+    "cctvUrl": "https://sports.cctv.com/2026/06/14/VIDEd5TLQj9bzFTDbQM5cjI2260614.shtml",
+    "miguUrl": "https://www.miguvideo.com/p/detail/965306581",
+    "verified": true
+  },
+  {
+    "date": "6月14日",
+    "kickoff": "2026-06-14T03:00:00+08:00",
+    "teamA": "🇶🇦 卡塔尔",
+    "teamB": "🇨🇭 瑞士",
+    "cctvUrl": "https://sports.cctv.com/2026/06/14/VIDE65YyIeBEzTpIrdro7HTj260614.shtml",
+    "miguUrl": "",
+    "verified": false
+  },
+  {
+    "date": "6月13日",
+    "kickoff": "2026-06-13T12:00:00+08:00",
+    "teamA": "🇺🇸 美国",
+    "teamB": "🇵🇾 巴拉圭",
+    "cctvUrl": "https://sports.cctv.com/2026/06/13/VIDEmmuqQcFu5vHN6bQFCshI260613.shtml",
+    "miguUrl": "",
+    "verified": true
+  },
+  {
+    "date": "6月13日",
+    "kickoff": "2026-06-13T06:00:00+08:00",
+    "teamA": "🇨🇦 加拿大",
+    "teamB": "🇧🇦 波黑",
+    "cctvUrl": "https://sports.cctv.com/2026/06/13/VIDEILwRhaFlRNrec13HXu0b260613.shtml",
+    "miguUrl": "",
+    "verified": true
+  },
+  {
+    "date": "6月12日",
+    "kickoff": "2026-06-12T09:00:00+08:00",
+    "teamA": "🇰🇷 韩国",
+    "teamB": "🇨🇿 捷克",
+    "cctvUrl": "https://sports.cctv.com/2026/06/12/VIDEw0mPt3PccqSZ1GkIPKUS260612.shtml",
+    "miguUrl": "",
+    "verified": true
+  },
+  {
+    "date": "6月11日",
+    "kickoff": "2026-06-11T12:00:00+08:00",
+    "teamA": "🇲🇽 墨西哥",
+    "teamB": "🇿🇦 南非",
+    "cctvUrl": "https://sports.cctv.com/2026/06/12/VIDEqZhlibbbqE64UwKAcj1g260612.shtml",
+    "miguUrl": "",
+    "verified": true
+  }
+]

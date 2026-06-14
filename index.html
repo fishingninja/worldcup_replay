@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2026世界杯 · 防剧透回放入口</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Microsoft YaHei',sans-serif;
+    background:#0d1117; color:#c9d1d9; min-height:100vh;
+  }
+
+  /* ── 头部 ── */
+  .header {
+    background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);
+    color:#fff; padding:20px 24px 16px; text-align:center;
+    border-bottom:2px solid #e94560;
+  }
+  .header h1 { font-size:18px; font-weight:700; letter-spacing:1px; }
+  .header .sub { font-size:12.5px; color:#ccd6f6; margin-top:4px; opacity:.9; }
+  .badge-row {
+    display:flex; justify-content:center; gap:6px; margin-top:10px; flex-wrap:wrap;
+  }
+  .badge {
+    display:inline-block; font-size:10.5px; padding:3px 11px; border-radius:14px; font-weight:600;
+    letter-spacing:.3px;
+  }
+  .badge-cctv { background:#1a3d5c; color:#58a6ff; }
+  .badge-done { background:#1a3d2e; color:#3fb950; }
+  .badge-clock { background:#2d1f00; color:#d29922; }
+
+  /* ── 主容器 ── */
+  .container { max-width:720px; margin:0 auto; padding:14px 16px; }
+
+  /* ── 紧凑信息条 ── */
+  .info-bar {
+    background:linear-gradient(90deg,#161b22 0%,#161b22 80%,#1a1205 100%);
+    border:1px solid #30363d; border-radius:10px;
+    padding:13px 16px; margin-bottom:14px; font-size:12.5px; line-height:1.75;
+    display:flex; align-items:flex-start; gap:14px;
+  }
+  .info-bar .emoji { font-size:22px; flex-shrink:0; line-height:1; margin-top:-2px; }
+  .info-bar .text { color:#8b949e; flex:1; }
+  .info-bar .text b { color:#ccd6f6; font-weight:600; }
+  .info-bar .text .hl { color:#d29922; font-weight:600; }
+  .info-bar .text .ok { color:#3fb950; font-weight:500; }
+
+  /* ── 可展开详情 ── */
+  .detail-toggle {
+    text-align:center; margin:0 0 14px;
+  }
+  .detail-toggle button {
+    background:none; border:1px dashed #30363d; color:#666;
+    font-size:11px; padding:4px 14px; border-radius:12px; cursor:pointer;
+    transition:all .2s; font-family:inherit;
+  }
+  .detail-toggle button:hover { color:#8b949e; border-color:#484f58; }
+
+  .detail-panel {
+    background:#161b22; border:1px solid #30363d; border-radius:10px;
+    padding:14px 16px; margin-bottom:14px; font-size:12.5px; line-height:1.85;
+    color:#8b949e; display:none;
+  }
+  .detail-panel.show { display:block; animation:fadeDown .25s ease-out; }
+  @keyframes fadeDown { from{opacity:0;transform:translateY(-6px)} to{opacity:1;transform:translateY(0)} }
+  .detail-panel .row { margin-bottom:6px; }
+  .detail-panel .row:last-child { margin-bottom:0; }
+  .detail-panel .label { color:#58a6ff; font-weight:600; }
+
+  /* ── 比赛卡片 ── */
+  .match-card {
+    background:#161b22; border:1px solid #30363d; border-radius:10px;
+    padding:16px 18px; margin-bottom:10px; transition:border-color .2s, box-shadow .2s;
+    display:none;
+  }
+  .match-card:hover { border-color:#38444d; box-shadow:0 2px 12px rgba(0,0,0,.15); }
+  .match-card.show { display:block; }
+  .match-date {
+    font-size:11px; color:#6e7681; margin-bottom:6px;
+    display:flex; align-items:center; gap:7px; flex-wrap:wrap;
+  }
+  .match-date .date-badge {
+    background:#21262d; padding:2px 8px; border-radius:5px;
+    font-size:10.5px; color:#58a6ff; font-weight:600;
+  }
+  .match-date .time-badge {
+    background:#132a1c; padding:2px 8px; border-radius:5px;
+    font-size:10.5px; color:#3fb950; font-weight:600;
+  }
+  .match-date .done-tag {
+    font-size:10.5px; color:#3fb950; font-weight:500;
+  }
+  .match-teams {
+    font-size:17px; font-weight:700; color:#e6edf3;
+    margin-bottom:12px; text-align:center;
+    display:flex; align-items:center; justify-content:center; gap:10px;
+  }
+  .match-teams .vs {
+    font-size:12px; color:#484f58; font-weight:400;
+  }
+  .btn-row { display:flex; gap:8px; flex-wrap:wrap; }
+  .btn {
+    flex:1; min-width:130px; padding:8px 14px; border-radius:7px;
+    text-align:center; font-size:13px; font-weight:600;
+    text-decoration:none; transition:all .2s; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center; gap:5px;
+  }
+  .btn-cctv {
+    background:linear-gradient(135deg,#1a3d5c,#0d2b4a);
+    color:#58a6ff; border:1px solid #1a3d5c;
+  }
+  .btn-cctv:hover { background:linear-gradient(135deg,#58a6ff,#3b8de6); color:#fff; }
+  .btn-migu {
+    background:linear-gradient(135deg,#1a3d2e,#0d2b1a);
+    color:#3fb950; border:1px solid #1a3d2e;
+  }
+  .btn-migu:hover { background:linear-gradient(135deg,#3fb950,#2ea043); color:#fff; }
+
+  /* ── 提示条（更紧凑） ── */
+  .tip-line {
+    margin-top:10px; font-size:11px; color:#6e7681;
+    line-height:1.6; padding-left:2px;
+  }
+  .tip-line.warn { color:#8b6914; }
+  .tip-line.ok { color:#238636; }
+  .tip-line a { color:#58a6ff; text-decoration:none; }
+  .tip-line a:hover { text-decoration:underline; }
+
+  /* ── 底部 ── */
+  .footer {
+    text-align:center; padding:18px; font-size:10.5px; color:#484f58;
+    border-top:1px solid #21262d; margin-top:14px;
+  }
+
+  /* ── 空状态 ── */
+  .no-match {
+    text-align:center; padding:32px 20px; color:#6e7681; font-size:13px;
+    display:none; line-height:1.7;
+  }
+  .no-match.show { display:block; }
+
+  /* ── 日期分组标题 ── */
+  .section-title {
+    font-size:13px; font-weight:700; color:#8b949e;
+    padding:10px 0 8px; margin-bottom:10px;
+    border-bottom:1px solid #21262d; letter-spacing:.5px;
+  }
+  .section-title.today { color:#e94560; border-bottom-color:#e94560; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🏆 2026世界杯 · 防剧透回放入口</h1>
+  <div class="sub">为不方便熬夜看球的你 · 守护每一场未知的乐趣</div>
+  <div class="badge-row">
+    <span class="badge badge-cctv">● CNTV 直连播放</span>
+    <span class="badge badge-done">✓ 全场录像 无剧透</span>
+    <span class="badge badge-clock">⏰ 每天3次更新</span>
+  </div>
+</div>
+
+<div class="container" id="app">
+
+  <!-- 一行搞定核心信息 -->
+  <div class="info-bar">
+    <div class="emoji">🌙</div>
+    <div class="text">
+      <b>昨晚错过的比赛，今天放心看。</b>只显示最近两天已完赛回放，页面无比分。
+      每天自动更新 <span class="hl">07:00 / 12:00 / 18:00</span> ·
+      <span class="ok">进入播放页后不往下滚动即可避开剧透 ✅</span>
+    </div>
+  </div>
+
+  <!-- 展开更多详情 -->
+  <div class="detail-toggle">
+    <button onclick="document.querySelector('.detail-panel').classList.toggle('show');this.textContent=this.textContent.includes('展开')?'△ 收起详细说明':'▽ 展开详细说明'">
+      ▽ 展开详细说明
+    </button>
+  </div>
+
+  <div class="detail-panel">
+    <div class="row"><span class="label">🎯 适用场景：</span>世界杯比赛多在深夜/凌晨开球，不方便熬夜？第二天用这个页面安全地补看全场录像。</div>
+    <div class="row"><span class="label">⏰ 更新频率：</span><span class="hl">每天 07:00、12:00、18:00</span> 自动从央视体育抓取最新回放链接。</div>
+    <div class="row"><span class="label">📅 显示范围：</span>最近两天已完赛的比赛（比赛结束约2.5小时后回放上线）。</div>
+    <div class="row"><span class="label">⚠️ 防剧透要点：</span>点击链接进入央视播放页后，<b>只观看播放器区域，不要向下滚动</b>查看文字介绍（可能含比分）。</div>
+    <div class="row" style="margin-top:8px;padding-top:8px;border-top:1px solid #21262d;color:#555;">
+      数据来源：sports.cctv.com（央视体育官方）· 回放需浏览器直接打开，无需下载App
+    </div>
+  </div>
+
+  <!-- 比赛列表 -->
+  <div id="match-list"></div>
+
+  <div class="no-match" id="no-match">
+    📭 最近两天暂无已完赛的比赛<br>
+    <span style="font-size:11.5px;color:#555;">请在比赛结束约2.5小时后再来查看</span>
+  </div>
+
+  <div class="footer" id="footer"></div>
+
+</div>
+
+<!-- 比赛数据：自动化脚本会更新此标签内的JSON -->
+<script id="match-data" type="application/json">
+[
+  {"date":"6月15日","kickoff":"2026-06-15T01:00:00+08:00","teamA":"🇩🇪 德国","teamB":"🇨🇼 库拉索","cctvUrl":"https://sports.cctv.com/2026/06/15/VIDE6jG8Ys7H2mQbPxA7xM260615.shtml","miguUrl":"","verified":true},
+  {"date":"6月14日","kickoff":"2026-06-14T12:00:00+08:00","teamA":"🇦🇺 澳大利亚","teamB":"🇹🇷 土耳其","cctvUrl":"https://sports.cctv.com/2026/06/14/VIDEPqw4902JL00BxqBqhNhQ260614.shtml","miguUrl":"","verified":false},
+  {"date":"6月14日","kickoff":"2026-06-14T09:00:00+08:00","teamA":"🇭🇹 海地","teamB":"🏴󠁧󠁭󠁯󠁰󠁿 苏格兰","cctvUrl":"https://sports.cctv.com/2026/06/14/VIDEl4MKG9oQahuI30GQm9ZE260614.shtml","miguUrl":"","verified":false},
+  {"date":"6月14日","kickoff":"2026-06-14T06:00:00+08:00","teamA":"🇧🇷 巴西","teamB":"🇲🇦 摩洛哥","cctvUrl":"https://sports.cctv.com/2026/06/14/VIDEd5TLQj9bzFTDbQM5cjI2260614.shtml","miguUrl":"https://www.miguvideo.com/p/detail/965306581","verified":true},
+  {"date":"6月14日","kickoff":"2026-06-14T03:00:00+08:00","teamA":"🇶🇦 卡塔尔","teamB":"🇨🇭 瑞士","cctvUrl":"https://sports.cctv.com/2026/06/14/VIDE65YyIeBEzTpIrdro7HTj260614.shtml","miguUrl":"","verified":false},
+  {"date":"6月13日","kickoff":"2026-06-13T12:00:00+08:00","teamA":"🇺🇸 美国","teamB":"🇵🇾 巴拉圭","cctvUrl":"https://sports.cctv.com/2026/06/13/VIDEmmuqQcFu5vHN6bQFCshI260613.shtml","miguUrl":"","verified":true},
+  {"date":"6月13日","kickoff":"2026-06-13T06:00:00+08:00","teamA":"🇨🇦 加拿大","teamB":"🇧🇦 波黑","cctvUrl":"https://sports.cctv.com/2026/06/13/VIDEILwRhaFlRNrec13HXu0b260613.shtml","miguUrl":"","verified":true},
+  {"date":"6月12日","kickoff":"2026-06-12T09:00:00+08:00","teamA":"🇰🇷 韩国","teamB":"🇨🇿 捷克","cctvUrl":"https://sports.cctv.com/2026/06/12/VIDEw0mPt3PccqSZ1GkIPKUS260612.shtml","miguUrl":"","verified":true},
+  {"date":"6月11日","kickoff":"2026-06-11T12:00:00+08:00","teamA":"🇲🇽 墨西哥","teamB":"🇿🇦 南非","cctvUrl":"https://sports.cctv.com/2026/06/12/VIDEqZhlibbbqE64UwKAcj1g260612.shtml","miguUrl":"","verified":true}
+]
+</script>
+
+<script>
+(function() {
+  var MATCH_DURATION_MS = 2.5 * 60 * 60 * 1000;
+
+  function isFinished(kickoffISO) {
+    return (new Date(kickoffISO).getTime() + MATCH_DURATION_MS) < Date.now();
+  }
+
+  function isWithinTwoDays(kickoffISO) {
+    return (Date.now() - new Date(kickoffISO).getTime()) <= (2 * 24 * 60 * 60 * 1000);
+  }
+
+  function render() {
+    var raw = document.getElementById('match-data').textContent;
+    var matches = [];
+    try { matches = JSON.parse(raw); }
+    catch(e) { console.error('解析失败:', e); }
+
+    var listEl = document.getElementById('match-list');
+    var noMatchEl = document.getElementById('no-match');
+    listEl.innerHTML = '';
+
+    if (!matches.length) { noMatchEl.classList.add('show'); updateFooter(); return; }
+
+    var filtered = matches.filter(function(m) { return isFinished(m.kickoff) && isWithinTwoDays(m.kickoff); });
+
+    if (filtered.length === 0) { noMatchEl.classList.add('show'); updateFooter(); return; }
+    noMatchEl.classList.remove('show');
+
+    filtered.sort(function(a, b) { return new Date(b.kickoff) - new Date(a.kickoff); });
+
+    var currentDate = '';
+    for (var i = 0; i < filtered.length; i++) {
+      var m = filtered[i];
+      var kickoffDate = new Date(m.kickoff);
+      var dateStr = m.date;
+      var timeStr = kickoffDate.toLocaleString('zh-CN', {
+        hour: '2-digit', minute: '2-digit', hour12: false, timeZone: 'Asia/Shanghai'
+      });
+
+      if (dateStr !== currentDate) {
+        currentDate = dateStr;
+        var title = document.createElement('div');
+        title.className = 'section-title' + (dateStr === '6月15日' ? ' today' : '');
+        title.textContent = '\uD83D\uDCC5 ' + dateStr + ' 已完赛';
+        listEl.appendChild(title);
+      }
+
+      var card = document.createElement('div');
+      card.className = 'match-card show';
+
+      var btnHTML = '<a class="btn btn-cctv" href="' + m.cctvUrl + '" target="_blank">\u25B6 CNTV\u56DE\u653E\uFF08\u592E\u89C6\uFF09</a>';
+      if (m.miguUrl && m.miguUrl.trim() !== '') {
+        btnHTML += '<a class="btn btn-migu" href="' + m.miguUrl + '" target="_blank">\uD83C\uDFA5 \u54AA\u549C\u56DE\u653E</a>';
+      }
+
+      var tipHTML = '';
+      if (!m.verified) {
+        tipHTML = '<div class="tip-line warn">\u26A0\uFE0F \u56DE\u653E\u94FE\u63A5\u5F85\u9A8C\u8BC1\uFF0C\u5982\u65E0\u6CD5\u64AD\u653E\u8BF7<a href="https://sports.cctv.com/2026/schedule/index.shtml" target="_blank">\u524D\u5F80\u592C\u89C6\u8D5B\u7A0B\u9875</a>\u67E5\u627E';
+      } else {
+        tipHTML = '<div class="tip-line ok">\u2705 \u5168\u573A\u5F55\u50CF \u00B7 \u6D4F\u89C8\u5668\u76F4\u63A5\u64AD\u653E \u00B7 \u65E0\u9700App';
+      }
+
+      card.innerHTML =
+        '<div class="match-date">' +
+          '<span class="date-badge">' + dateStr + '</span>' +
+          '<span class="time-badge">\u23F0 ' + timeStr + ' \u5F00\u7403</span>' +
+          '<span class="done-tag">\u2705 \u5DF2\u5B8C\u8D5B</span>' +
+        '</div>' +
+        '<div class="match-teams">' + m.teamA + ' <span class="vs">VS</span> ' + m.teamB + '</div>' +
+        '<div class="btn-row">' + btnHTML + '</div>' +
+        tipHTML;
+
+      listEl.appendChild(card);
+    }
+
+    updateFooter();
+  }
+
+  function updateFooter() {
+    var now = new Date();
+    document.getElementById('footer').innerHTML =
+      '2026\u4E16\u754C\u676F \u00B7 \u9632\u5267\u900F\u56DE\u653E\u5165\u53E3 &nbsp;\u007C&nbsp; \u6570\u636E\u6765\u6E90\uFF1A\u592C\u89C6\u4F53\u80B2 &nbsp;\u007C&nbsp; \u5237\u65B0\uFF1A' +
+      now.toLocaleString('zh-CN', { timeZone:'Asia/Shanghai' });
+  }
+
+  render();
+  setInterval(render, 30000);
+})();
+</script>
+
+</body>
+</html>

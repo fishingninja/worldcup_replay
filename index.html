@@ -177,6 +177,14 @@
     display:flex; align-items:center; justify-content:space-between;
     width:100%; max-width:800px; margin-bottom:12px;
   }
+  .player-header-btns {
+    display:flex; align-items:center; gap:8px;
+  }
+  .player-fs-btn {
+    background:none; border:none; color:#8b949e; font-size:20px; cursor:pointer;
+    transition:color .2s; line-height:1; padding:4px 8px; border-radius:4px;
+  }
+  .player-fs-btn:hover { color:#fff; background:rgba(255,255,255,.1); }
   .player-close {
     background:none; border:none; color:#8b949e; font-size:24px; cursor:pointer;
     transition:color .2s; line-height:1; padding:4px 8px; border-radius:4px;
@@ -1101,12 +1109,6 @@
     fallbackEl.classList.remove('show');
     overlay.classList.add('show');
 
-    // 移动端：自动尝试全屏 + 横屏
-    if (isMobile()) {
-      tryLockLandscape();
-      setTimeout(function() { tryEnterFullscreen(video); }, 200);
-    }
-
     titleEl.textContent = matchTitle;
 
     tryLoadVideo(noteId, video, loadingEl, container, fallbackEl, false);
@@ -1189,6 +1191,12 @@
     // 点击遮罩背景关闭
     if (e.target.id === 'player-overlay') { closePlayer(); return; }
     if (e.target.closest('[data-action="close-player"]')) { closePlayer(); return; }
+    if (e.target.id === 'player-fs-btn' || e.target.closest('#player-fs-btn')) {
+      var video = document.getElementById('player-video');
+      tryLockLandscape();
+      tryEnterFullscreen(video);
+      return;
+    }
     if (e.target.closest('#player-retry-btn')) {
       if (!currentNoteId) return;
       var video = document.getElementById('player-video');
@@ -1257,11 +1265,11 @@
       var hasMigu = m.miguUrl && m.miguUrl.trim() !== '';
       var hasXhs = m.xhsNoteId && m.xhsNoteId.trim() !== '';
       var btnHTML = '';
-      if (hasXhs) {
-        btnHTML += '<button class="btn btn-xhs" data-xhs-note="' + m.xhsNoteId + '" data-xhs-teams="' + m.teamA + ' VS ' + m.teamB + '">📱 小红书高清回放</button>';
-      }
       if (hasCctv) {
         btnHTML += '<a class="btn btn-cctv" href="' + m.cctvUrl + '" target="_blank">▶ CNTV回放（央视）</a>';
+      }
+      if (hasXhs) {
+        btnHTML += '<button class="btn btn-xhs" data-xhs-note="' + m.xhsNoteId + '" data-xhs-teams="' + m.teamA + ' VS ' + m.teamB + '">📱 小红书高清回放</button>';
       }
       if (hasMigu) {
         btnHTML += '<a class="btn btn-migu" href="' + m.miguUrl + '" target="_blank">🎥 咪咕回放</a>';
@@ -1349,7 +1357,10 @@
 <div class="player-overlay" id="player-overlay">
   <div class="player-header">
     <div class="player-title" id="player-title"></div>
-    <button class="player-close" data-action="close-player" title="关闭">✕</button>
+    <div class="player-header-btns">
+      <button class="player-fs-btn" id="player-fs-btn" title="全屏">⛶</button>
+      <button class="player-close" data-action="close-player" title="关闭">✕</button>
+    </div>
   </div>
   <div class="player-loading" id="player-loading">⏳ 正在获取视频源...</div>
   <div class="player-container" id="player-container" style="display:none">

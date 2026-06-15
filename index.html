@@ -137,6 +137,11 @@
     text-align:center; padding:18px; font-size:10.5px; color:#484f58;
     border-top:1px solid #21262d; margin-top:14px;
   }
+  .footer .counter {
+    display:inline-block; margin-top:6px; padding:4px 14px;
+    background:#161b22; border-radius:20px; font-size:11px; color:#8b949e;
+  }
+  .footer .counter b { color:#58a6ff; font-size:13px; }
 
   /* ── 空状态 ── */
   .no-match {
@@ -1031,8 +1036,49 @@
   function updateFooter() {
     var now = new Date();
     document.getElementById('footer').innerHTML =
-      '2026\u4E16\u754C\u676F \u00B7 \u9632\u5267\u900F\u56DE\u653E\u5165\u53E3 &nbsp;\u007C&nbsp; \u6570\u636E\u6765\u6E90\uFF1A\u592C\u89C6\u4F53\u80B2 &nbsp;\u007C&nbsp; \u5237\u65B0\uFF1A' +
-      now.toLocaleString('zh-CN', { timeZone:'Asia/Shanghai' });
+      '2026\u4E16\u754C\u676F \u00B7 \u9632\u5267\u900F\u56DE\u653E\u5165\u53E3 &nbsp;\u007C&nbsp; \u6570\u636E\u6765\u6E90\uFF1A\u592E\u89C6\u4F53\u80B2 &nbsp;\u007C&nbsp; \u5237\u65B0\uFF1A' +
+      now.toLocaleString('zh-CN', { timeZone:'Asia/Shanghai' }) +
+      '<br><span class="counter">\uD83D\uDCC8 \u9875\u9762\u8BBF\u95EE\uFF1A<b id="pv2">...</b> \u6B21</span>' +
+      ' &nbsp; <span class="counter">\uD83D\uDC64 \u72EC\u7ACB\u8BBF\u5BA2\uFF1A<b id="uv2">...</b> \u4EBA</span>';
+    loadCounter();
+  }
+
+  // ── 简易计数器（GA 备份）──
+  var LAST_VISIT_KEY = 'wc2026_last_visit';
+  function loadCounter() {
+    var pvEl = document.getElementById('pv2');
+    var uvEl = document.getElementById('uv2');
+    if (!pvEl || !uvEl) return;
+
+    // ── 独立访客计数（localStorage）──
+    var now = new Date();
+    var last = localStorage.getItem(LAST_VISIT_KEY);
+    var dayStr = now.getFullYear() + '-' + (now.getMonth()+1) + '-' + now.getDate();
+    var seenStr = localStorage.getItem('wc2026_uv_seen') || '';
+    var seenDays = seenStr ? seenStr.split(',') : [];
+
+    if (!last || last !== dayStr) {
+      localStorage.setItem(LAST_VISIT_KEY, dayStr);
+      if (seenDays.indexOf(dayStr) === -1) {
+        seenDays.push(dayStr);
+        localStorage.setItem('wc2026_uv_seen', seenDays.join(','));
+      }
+    }
+    uvEl.innerText = seenDays.length;
+
+    // ── 总访问次数（countapi.xyz）──
+    try {
+      fetch('https://api.countapi.xyz/hit/fishingninja-worldcup-replay/visits')
+        .then(function(r) { return r.json(); })
+        .then(function(d) {
+          if (pvEl) pvEl.innerText = d.value;
+        })
+        .catch(function() {
+          if (pvEl) pvEl.innerText = '---';
+        });
+    } catch(e) {
+      if (pvEl) pvEl.innerText = '---';
+    }
   }
 
   render();

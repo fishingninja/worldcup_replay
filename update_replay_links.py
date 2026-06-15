@@ -112,6 +112,7 @@ async def search_one_match(page, team_a: str, team_b: str) -> str | None:
 
     best_url = None
     best_dur = 0
+    fallback_url = None  # 降级：无时长信息但标题匹配
 
     for kw in keywords:
         encoded = urllib.parse.quote(kw)
@@ -160,10 +161,21 @@ async def search_one_match(page, team_a: str, team_b: str) -> str | None:
                 print(f"    [匹配] {dur}分钟")
             elif dur > 0 and dur < DURATION_MIN:
                 print(f"    [跳过] {dur}分钟(太短)")
+            else:
+                # dur == 0: 搜索摘要未包含时长 → 降级用标题匹配
+                if fallback_url is None:
+                    title_text = item.get("title", "")
+                    # 必须同时包含两队名称（已去 emoji）
+                    if a in title_text and b in title_text:
+                        fallback_url = href
+                        print(f"    [降级匹配] 标题含 {a} + {b}（无时长信息）")
 
     if best_url:
         print(f"  [命中] {best_dur}分钟")
         return best_url
+    elif fallback_url:
+        print(f"  [降级命中] 无时长信息，通过标题匹配")
+        return fallback_url
     else:
         print(f"  [未找到]")
         return None

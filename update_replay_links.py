@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-使用 Playwright 从央视频搜索页面抓取比赛回放链接（v2）
-核心改进：复用浏览器，一次启动处理全部比赛；每场搜索有独立超时保护。
-- 搜索："{teamA} {teamB} 世界杯 全场回放"
-- 筛选时长 > 90 分钟的视频
-- 提取 sports.cctv.com 回放链接
+增量抓取回放链接（v3 — 高效版）
+- 只处理最近2天已完成（kickoff+2.5h < now）且缺链接的比赛
+- 复用一个浏览器，每场搜索独立超时保护
 """
 
 import asyncio
@@ -13,7 +11,7 @@ import json
 import re
 import sys
 import urllib.parse
-import traceback
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 try:
@@ -28,7 +26,9 @@ if hasattr(sys.stdout, "reconfigure"):
 
 CCTV_SEARCH = "https://search.cctv.com/search.php"
 DURATION_MIN = 90
-PER_MATCH_TIMEOUT = 45  # 每场比赛最多 45 秒
+PER_MATCH_TIMEOUT = 30  # 每场比赛最多 30 秒
+TZ = timezone(timedelta(hours=8))  # 北京时间
+LOOKBACK_DAYS = 2
 
 
 def strip_emoji(text: str) -> str:
@@ -59,15 +59,51 @@ def parse_duration(text: str) -> int:
     return 0
 
 
+def is_match_done(m: dict) -> bool:
+    """比赛是否已完成（kickoff + 2.5h < now）"""
+    kickoff_str = m.get("kickoff", "")
+    if not kickoff_str:
+        return False
+    try:
+        kickoff = datetime.fromisoformat(kickoff_str)
+        now = datetime.now(TZ)
+        return kickoff + timedelta(hours=2.5) < now
+    except ValueError:
+        return False
+
+
+def is_recent(m: dict) -> bool:
+    """比赛是否在最近 LOOKBACK_DAYS 天内"""
+    kickoff_str = m.get("kickoff", "")
+    if not kickoff_str:
+        return False
+    try:
+        kickoff = datetime.fromisoformat(kickoff_str)
+        now = datetime.now(TZ)
+        cutoff = now.replace(hour=0, minute=0, second=0, microsecond=0) - timedelta(days=LOOKBACK_DAYS)
+        return kickoff >= cutoff
+    except ValueError:
+        return False
+
+
+def needs_scraping(m: dict) -> bool:
+    """判断是否需要抓取：已完成 + 在时间窗口内 + 缺链接"""
+    if m.get("verified") is True:
+        return False
+    existing = m.get("cctvUrl", "")
+    if existing and "VIDE" in existing:
+        return False
+    if not is_match_done(m):
+        return False
+    if not is_recent(m):
+        return False
+    return True
+
+
 async def search_one_match(page, team_a: str, team_b: str) -> str | None:
-    """
-    对一对比赛搜索回放链接。复用外部传入的 page，不自行管理浏览器。
-    每场比赛最多 PER_MATCH_TIMEOUT 秒。
-    """
     a = strip_emoji(team_a)
     b = strip_emoji(team_b)
 
-    # 多组搜索关键词
     keywords = [
         f"{a} {b} 世界杯 全场回放",
         f"{a}vs{b}世界杯",
@@ -82,16 +118,15 @@ async def search_one_match(page, team_a: str, team_b: str) -> str | None:
         url = f"{CCTV_SEARCH}?qtext={encoded}&channel=体育,CCTV-5+体育赛事频道,CCTV-5体育频道"
         print(f"    [搜索] {kw}")
         try:
-            await page.goto(url, timeout=20000, wait_until="domcontentloaded")
-            await page.wait_for_timeout(3000)
+            await page.goto(url, timeout=15000, wait_until="domcontentloaded")
+            await page.wait_for_timeout(2500)
         except asyncio.TimeoutError:
-            print(f"    [超时] 页面加载超时(20s)，跳过此关键词")
+            print(f"    [超时] 跳过此关键词")
             continue
         except Exception as e:
-            print(f"    [错误] 加载失败: {e}")
+            print(f"    [错误] {e}")
             continue
 
-        # 用 JS 提取所有含 VIDE 的链接及其父容器文本
         try:
             items = await page.evaluate("""
                 () => {
@@ -109,21 +144,20 @@ async def search_one_match(page, team_a: str, team_b: str) -> str | None:
                 }
             """)
         except Exception as e:
-            print(f"    [错误] JS 提取失败: {e}")
+            print(f"    [JS错误] {e}")
             continue
 
-        print(f"    [结果] 找到 {len(items)} 个含 VIDE 链接")
+        print(f"    [结果] {len(items)} 个 VIDE 链接")
 
         for item in items:
             href = item.get("href", "")
             if "/2026/" not in href or "VIDE" not in href:
                 continue
-            full_text = item.get("title", "") + " " + item.get("context", "")
-            dur = parse_duration(full_text)
+            dur = parse_duration(item.get("title", "") + " " + item.get("context", ""))
             if dur >= DURATION_MIN and dur > best_dur:
                 best_dur = dur
                 best_url = href
-                print(f"    [匹配] {dur}分钟 -> ...{href[-50:]}")
+                print(f"    [匹配] {dur}分钟")
             elif dur > 0 and dur < DURATION_MIN:
                 print(f"    [跳过] {dur}分钟(太短)")
 
@@ -131,33 +165,18 @@ async def search_one_match(page, team_a: str, team_b: str) -> str | None:
         print(f"  [命中] {best_dur}分钟")
         return best_url
     else:
-        print(f"  [未找到] 所有关键词均无 > {DURATION_MIN}min 的视频")
+        print(f"  [未找到]")
         return None
 
 
-async def update_all_matches(matches: list) -> int:
-    """
-    复用一个浏览器实例处理所有比赛。
-    返回更新的场次数。
-    """
-    updated = 0
-    total = len(matches)
-
-    # 统计需要处理的
-    todo = []
-    for m in matches:
-        existing = m.get("cctvUrl", "")
-        if m.get("verified") is True and existing:
-            continue
-        if existing and "VIDE" in existing:
-            continue
-        todo.append(m)
+async def update_matches(matches: list) -> int:
+    todo = [m for m in matches if needs_scraping(m)]
 
     if not todo:
-        print("所有比赛链接均已齐全，无需处理。")
+        print("无需抓取（近2天已完成比赛链接均已齐全）。")
         return 0
 
-    print(f"共 {total} 场比赛，需要抓取 {len(todo)} 场\n")
+    print(f"共 {len(matches)} 场比赛，需增量抓取 {len(todo)} 场\n")
 
     async with async_playwright() as pw:
         browser = await pw.chromium.launch(
@@ -170,20 +189,17 @@ async def update_all_matches(matches: list) -> int:
                 "AppleWebKit/537.36 (KHTML, like Gecko) "
                 "Chrome/120.0.0.0 Safari/537.36"
             ),
-            # 不加载图片/字体/媒体，加快速度
             extra_http_headers={"Accept-Language": "zh-CN,zh;q=0.9"},
         )
         page = await context.new_page()
+        # 不加载图片/字体/媒体
+        await page.route("**/*.{png,jpg,jpeg,gif,svg,woff,woff2,ttf,eot,mp4,mp3,webm,ogg}", lambda route: route.abort())
 
-        # 关闭不必要的资源请求以加速
-        await page.route("**/*.{png,jpg,jpeg,gif,svg,woff,woff2,ttf,eot}", lambda route: route.abort())
-        await page.route("**/*.mp4,**/*.mp3,**/*.webm,**/*.ogg", lambda route: route.abort())
-
+        updated = 0
         for i, m in enumerate(todo):
             team_a = m.get("teamA", "")
             team_b = m.get("teamB", "")
             date_str = m.get("date", "")
-            existing = m.get("cctvUrl", "")
 
             print(f"[{i+1}/{len(todo)}] {date_str} {strip_emoji(team_a)} vs {strip_emoji(team_b)}")
 
@@ -193,19 +209,17 @@ async def update_all_matches(matches: list) -> int:
                     timeout=PER_MATCH_TIMEOUT,
                 )
             except asyncio.TimeoutError:
-                print(f"  [超时] 整场比赛搜索超过 {PER_MATCH_TIMEOUT}s，跳过")
+                print(f"  [超时] >{PER_MATCH_TIMEOUT}s，跳过")
                 continue
             except Exception as e:
                 print(f"  [异常] {e}")
                 continue
 
-            if new_url and new_url != existing:
+            if new_url:
                 m["cctvUrl"] = new_url
                 m["verified"] = False
                 updated += 1
                 print(f"  [已更新] ✓")
-            elif new_url == existing:
-                print(f"  [相同]")
             else:
                 print(f"  [无结果]")
 
@@ -223,10 +237,16 @@ def main():
     with open(mp, "r", encoding="utf-8") as f:
         matches = json.load(f)
 
-    print(f"加载 {len(matches)} 场比赛，时长阈值 > {DURATION_MIN} 分钟")
+    # 统计
+    total = len(matches)
+    done = sum(1 for m in matches if is_match_done(m))
+    recent = sum(1 for m in matches if is_recent(m))
+    need = sum(1 for m in matches if needs_scraping(m))
+
+    print(f"{total} 场比赛 | {done} 场已完成 | 近{LOOKBACK_DAYS}天 {recent} 场 | 需抓取 {need} 场")
     print("=" * 50)
 
-    updated = asyncio.run(update_all_matches(matches))
+    updated = asyncio.run(update_matches(matches))
 
     if updated:
         with open(mp, "w", encoding="utf-8") as f:
@@ -234,11 +254,10 @@ def main():
         sync_to_html(matches)
         print(f"\n[完成] 更新了 {updated} 场比赛的回放链接")
     else:
-        print("\n[完成] 无新链接，全部已有链接或暂无回放")
+        print("\n[完成] 无新链接")
 
 
 def sync_to_html(matches: list) -> None:
-    """把 matches.json 同步到 index.html 的 <script id=match-data> 标签。"""
     hp = Path(__file__).parent / "index.html"
     if not hp.exists():
         return
@@ -250,8 +269,7 @@ def sync_to_html(matches: list) -> None:
         r'(.*?)'
         r'(</script>)'
     )
-    replacement = r"\1\n" + json_str + r"\n\3"
-    new_html = re.sub(pattern, replacement, html, flags=re.DOTALL)
+    new_html = re.sub(pattern, r"\1\n" + json_str + r"\n\3", html, flags=re.DOTALL)
     with open(hp, "w", encoding="utf-8") as f:
         f.write(new_html)
     print("[同步] index.html 已更新")

@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>2026世界杯 · 防剧透回放入口</title>
 <style>
   * { margin:0; padding:0; box-sizing:border-box; }
@@ -29,6 +29,7 @@
   .badge-cctv { background:#1a3d5c; color:#58a6ff; }
   .badge-done { background:#1a3d2e; color:#3fb950; }
   .badge-clock { background:#2d1f00; color:#d29922; }
+  .badge-xhs { background:#3d1a2e; color:#ff6b8a; }
 
   /* ── 主容器 ── */
   .container { max-width:720px; margin:0 auto; padding:14px 16px; }
@@ -116,6 +117,11 @@
     color:#3fb950; border:1px solid #1a3d2e;
   }
   .btn-migu:hover { background:linear-gradient(135deg,#3fb950,#2ea043); color:#fff; }
+  .btn-xhs {
+    background:linear-gradient(135deg,#3d1a2e,#2d1f00);
+    color:#ff6b8a; border:1px solid #3d1a2e;
+  }
+  .btn-xhs:hover { background:linear-gradient(135deg,#ff6b8a,#e94560); color:#fff; }
   .btn-na {
     display:inline-block; font-size:13px; color:#6e7681;
     padding:10px 16px; background:#161b22; border:1px dashed #30363d;
@@ -157,6 +163,76 @@
     border-bottom:1px solid #21262d; letter-spacing:.5px;
   }
   .section-title.today { color:#e94560; border-bottom-color:#e94560; }
+
+  /* ── 小红书播放器弹窗 ── */
+  .player-overlay {
+    display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,.92); z-index:1000;
+    flex-direction:column; align-items:center; justify-content:center;
+    padding:24px; box-sizing:border-box;
+  }
+  .player-overlay.show { display:flex; animation:fadeIn .25s ease-out; }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  .player-header {
+    display:flex; align-items:center; justify-content:space-between;
+    width:100%; max-width:800px; margin-bottom:12px;
+  }
+  .player-close {
+    background:none; border:none; color:#8b949e; font-size:24px; cursor:pointer;
+    transition:color .2s; line-height:1; padding:4px 8px; border-radius:4px;
+  }
+  .player-close:hover { color:#fff; background:rgba(255,255,255,.1); }
+  .player-title {
+    color:#e6edf3; font-size:15px; font-weight:600; margin-bottom:16px;
+    text-align:center; max-width:600px; word-break:break-all;
+  }
+  .player-container {
+    width:100%; max-width:800px; background:#000; border-radius:12px; overflow:hidden;
+    box-shadow:0 8px 40px rgba(0,0,0,.5);
+  }
+  .player-container video {
+    width:100%; display:block; max-height:70vh;
+  }
+  .player-loading {
+    color:#8b949e; font-size:14px; text-align:center; padding:40px;
+  }
+  .player-fallback {
+    display:none; text-align:center; padding:24px; color:#8b949e; font-size:13px;
+    background:#161b22; border-radius:8px; margin-top:16px; max-width:500px;
+  }
+  .player-fallback.show { display:block; }
+  .player-fallback .retry-btn {
+    display:inline-block; margin-top:12px; padding:8px 24px;
+    background:transparent; border:1px solid #ff6b8a; color:#ff6b8a;
+    border-radius:6px; cursor:pointer; font-size:14px; transition:all .2s;
+  }
+  .player-fallback .retry-btn:hover { background:#ff6b8a; color:#fff; }
+
+  /* ── 移动端适配 ── */
+  @media (max-width:768px) {
+    .player-overlay { padding:0; }
+    .player-header {
+      position:absolute; top:0; left:0; right:0;
+      padding:12px 16px; z-index:10;
+      background:linear-gradient(to bottom, rgba(0,0,.7) 0%, transparent 100%);
+      max-width:none;
+    }
+    .player-title { font-size:13px; color:#ccc; flex:1; text-align:left; }
+    .player-close { font-size:20px; padding:8px; }
+    .player-container {
+      width:100%; max-width:none; border-radius:0;
+      position:absolute; top:0; left:0; width:100%; height:100%;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .player-container video {
+      width:100%; height:100%; max-height:none; object-fit:contain;
+    }
+    .player-loading { padding:20px; font-size:13px; }
+    .player-fallback {
+      position:absolute; bottom:20px; left:50%; transform:translateX(-50%);
+      width:90%; max-width:400px; z-index:10;
+    }
+  }
 </style>
 <!-- Google Analytics -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-YP0YMH5S9H"></script>
@@ -171,12 +247,12 @@
 
 <div class="header">
   <h1>🏆 2026世界杯 · 防剧透回放入口</h1>
-  <div class="sub">为不方便熬夜看球的你 · 守护每一场未知的乐趣</div>
-  <div class="badge-row">
-    <span class="badge badge-cctv">● CNTV 直连播放</span>
-    <span class="badge badge-done">✓ 全场录像 无剧透</span>
-    <span class="badge badge-clock">⏰ 每天3次更新</span>
-  </div>
+    <div class="sub">为不方便熬夜看球的你 · 守护每一场未知的乐趣</div>
+    <div class="badge-row">
+      <span class="badge badge-cctv">● 央视 CNTV 回放</span>
+      <span class="badge badge-xhs">● 小红书 高清回放</span>
+      <span class="badge badge-done">✓ 双入口任选 · 防剧透</span>
+    </div>
 </div>
 
 <div class="container" id="app">
@@ -185,7 +261,7 @@
   <div class="info-bar">
     <div class="emoji">🌙</div>
     <div class="text">
-      <b>昨晚错过的比赛，今天放心看。</b>只显示最近两天已完赛回放，页面无比分。
+      <b>昨晚错过的比赛，今天放心看。</b>每场提供两个回放入口，小红书和央视任选。
       每天自动更新 <span class="hl">07:00 / 12:00 / 18:00</span> ·
       <span class="ok">进入播放页后不往下滚动即可避开剧透 ✅</span>
     </div>
@@ -231,7 +307,8 @@
     "cctvUrl": "https://sports.cctv.com/2026/06/12/VIDEqZhlibbbqE64UwKAcj1g260612.shtml",
     "miguUrl": "",
     "verified": true,
-    "group": "A组"
+    "group": "A组",
+    "xhsNoteId": "6a2b3526000000000701093f"
   },
   {
     "date": "6月12日",
@@ -241,7 +318,8 @@
     "cctvUrl": "https://sports.cctv.com/2026/06/12/VIDEw0mPt3PccqSZ1GkIPKUS260612.shtml",
     "miguUrl": "",
     "verified": true,
-    "group": "A组"
+    "group": "A组",
+    "xhsNoteId": "6a2b8b570000000007020226"
   },
   {
     "date": "6月13日",
@@ -251,7 +329,8 @@
     "cctvUrl": "https://sports.cctv.com/2026/06/13/VIDEILwRhaFlRNrec13HXu0b260613.shtml",
     "miguUrl": "",
     "verified": true,
-    "group": "B组"
+    "group": "B组",
+    "xhsNoteId": "6a2c7ccb00000000210214ba"
   },
   {
     "date": "6月13日",
@@ -261,7 +340,8 @@
     "cctvUrl": "https://sports.cctv.com/2026/06/13/VIDEmmuqQcFu5vHN6bQFCshI260613.shtml",
     "miguUrl": "",
     "verified": true,
-    "group": "D组"
+    "group": "D组",
+    "xhsNoteId": "6a2cd22d0000000007010f84"
   },
   {
     "date": "6月14日",
@@ -271,7 +351,8 @@
     "cctvUrl": "https://sports.cctv.com/2026/06/14/VIDE65YyIeBEzTpIrdro7HTj260614.shtml",
     "miguUrl": "",
     "verified": false,
-    "group": "B组"
+    "group": "B组",
+    "xhsNoteId": "6a2dd60d000000000702bac6"
   },
   {
     "date": "6月14日",
@@ -279,9 +360,10 @@
     "teamA": "🇧🇷 巴西",
     "teamB": "🇲🇦 摩洛哥",
     "cctvUrl": "https://sports.cctv.com/2026/06/14/VIDEd5TLQj9bzFTDbQM5cjI2260614.shtml",
-    "miguUrl": "https://www.miguvideo.com/p/detail/965306581",
+    "miguUrl": "",
     "verified": true,
-    "group": "C组"
+    "group": "C组",
+    "xhsNoteId": "6a2dfcd3000000007027ff7"
   },
   {
     "date": "6月14日",
@@ -291,7 +373,8 @@
     "cctvUrl": "https://sports.cctv.com/2026/06/14/VIDEl4MKG9oQahuI30GQm9ZE260614.shtml",
     "miguUrl": "",
     "verified": false,
-    "group": "C组"
+    "group": "C组",
+    "xhsNoteId": "6a2e2c8a00000000080330ef"
   },
   {
     "date": "6月14日",
@@ -301,7 +384,8 @@
     "cctvUrl": "https://sports.cctv.com/2026/06/14/VIDEPqw4902JL00BxqBqhNhQ260614.shtml",
     "miguUrl": "",
     "verified": false,
-    "group": "D组"
+    "group": "D组",
+    "xhsNoteId": "6a2e543d000000002101b01d"
   },
   {
     "date": "6月15日",
@@ -311,7 +395,8 @@
     "cctvUrl": "https://sports.cctv.com/2026/06/15/VIDEyCW2ZCBTGcDaEaocGB4s260615.shtml",
     "miguUrl": "",
     "verified": true,
-    "group": "E组"
+    "group": "E组",
+    "xhsNoteId": "6a2f08ae0000000006030ef8"
   },
   {
     "date": "6月15日",
@@ -321,7 +406,8 @@
     "cctvUrl": "https://sports.cctv.com/2026/06/15/VIDEYgY4J5FDotAlLeBUzLuD260615.shtml",
     "miguUrl": "",
     "verified": true,
-    "group": "F组"
+    "group": "F组",
+    "xhsNoteId": "6a2f336a00000000060375f4"
   },
   {
     "date": "6月15日",
@@ -331,7 +417,8 @@
     "cctvUrl": "https://sports.cctv.com/2026/06/15/VIDEMy3nBKvINsO8uPf1L3aT260615.shtml",
     "miguUrl": "",
     "verified": true,
-    "group": "E组"
+    "group": "E组",
+    "xhsNoteId": "6a2f67e10000000021023102"
   },
   {
     "date": "6月15日",
@@ -341,7 +428,8 @@
     "cctvUrl": "https://sports.cctv.com/2026/06/15/VIDEeEHT8E3LUsZeNsRM1gUl260615.shtml",
     "miguUrl": "",
     "verified": true,
-    "group": "F组"
+    "group": "F组",
+    "xhsNoteId": "6a2f8728000000002101b966"
   },
   {
     "date": "6月16日",
@@ -946,6 +1034,24 @@
 ]
 </script>
 
+<!-- 小红书视频 URL 缓存（由 CI 自动更新，前端优先读此内联数据，避免 file:// CORS 问题） -->
+<script id="video-url-data" type="application/json">
+[
+  {"note_id": "6a2b3526000000000701093f", "video_urls": ["https://sns-video-v3-m.xhscdn.com/stream/79/110/258/01ea2b4d983ca51d4f0370019eb970e92c_258.mp4?sign=f079d196f0d569fb3054805b2e180404&t=6a303064"]},
+  {"note_id": "6a2b8b570000000007020226", "video_urls": ["https://sns-video-v4-m.xhscdn.com/stream/79/110/259/01ea2c28d031663a010370039ebc9fb6d7_259.mp4?sign=afa934dbd9561a8264f1e013725757f2&t=6a30306b"]},
+  {"note_id": "6a2c7ccb00000000210214ba", "video_urls": ["https://sns-video-v4-m.xhscdn.com/stream/79/110/259/01ea2c7ccc3b5354010370039ebe05a5e1_259.mp4?sign=4d3f256b09c0a47ada8942fd1df1173b&t=6a303072"]},
+  {"note_id": "6a2cd22d0000000007010f84", "video_urls": ["https://sns-video-v4-m.xhscdn.com/stream/1/110/259/01ea2d94b93673b8010370039ec2a973fb_259.mp4?sign=f4e2525c5c4f7339cacebc29dd7ceef8&t=6a303079"]},
+  {"note_id": "6a2dd60d000000000702bac6", "video_urls": ["https://sns-video-v4-m.xhscdn.com/stream/1/110/259/01ea2dd5e941c7d3010370039ec337d2ad_259.mp4?sign=fa06e9ec45fc0636198128760f8b6bf8&t=6a30307f"]},
+  {"note_id": "6a2dfcd30000000007027ff7", "video_urls": ["https://sns-video-v4-m.xhscdn.com/stream/1/110/259/01ea2e1b3e2f7b1f010370039ec46708c7_259.mp4?sign=176928ac65d4787fc4f6f501be2860d7&t=6a303086"]},
+  {"note_id": "6a2e2c8a00000000080330ef", "video_urls": ["https://sns-video-v4-m.xhscdn.com/stream/1/110/259/01ea2e2c8a4e5f92010370039ec49359c5_259.mp4?sign=1f4946a854faebce50885763a052b8ab&t=6a30308d"]},
+  {"note_id": "6a2e543d000000002101b01d", "video_urls": ["https://sns-video-v4-m.xhscdn.com/stream/1/110/259/01ea2e6ed62f4157010370039ec5a792c3_259.mp4?sign=fee425de849100874cf097cb2dee42ff&t=6a303093"]},
+  {"note_id": "6a2f08ae0000000006030ef8", "video_urls": ["https://sns-video-v4-m.xhscdn.com/stream/1/110/259/01ea2f060c2f6ec7010370039ec85bbde5_259.mp4?sign=d9cc5e5fa3926ee4f61fa24c360bcabf&t=6a30309a"]},
+  {"note_id": "6a2f336a00000000060375f4", "video_urls": ["https://sns-video-v4-m.xhscdn.com/stream/79/110/259/01ea2fcb433ffb9c010370039ecad632c1_259.mp4?sign=99423938357ebd21872724ec006f4dc0&t=6a3030a1"]},
+  {"note_id": "6a2f67e10000000021023102", "video_urls": ["https://sns-video-v4-m.xhscdn.com/stream/79/110/259/01ea2f67e13cb7e2010370039ec973d5ee_259.mp4?sign=45120de7a49893d92eab940113cabec7&t=6a3030a7"]},
+  {"note_id": "6a2f8728000000002101b966", "video_urls": ["https://sns-video-v4-m.xhscdn.com/stream/79/110/259/01ea2f87283d015b010370039ec9cd5fbe_259.mp4?sign=54aa93d2e3d0d7dbc31a5a49cf0a2ec7&t=6a3030ae"]}
+]
+</script>
+
 <script>
 (function() {
   var MATCH_DURATION_MS = 2.5 * 60 * 60 * 1000;
@@ -957,6 +1063,156 @@
   function isWithinTwoDays(kickoffISO) {
     return (Date.now() - new Date(kickoffISO).getTime()) <= (2 * 24 * 60 * 60 * 1000);
   }
+
+  // ── 小红书视频播放器 ──
+  var cachedUrls = {};
+  var currentNoteId = null;
+  var retryTimer = null;
+
+  function isMobile() {
+    return /Android|iPhone|iPad|iPod|Opera Mini/i.test(navigator.userAgent) || window.innerWidth <= 768;
+  }
+
+  function tryEnterFullscreen(el) {
+    if (!el) return;
+    var rfs = el.requestFullscreen || el.webkitRequestFullscreen || el.msRequestFullscreen;
+    if (rfs) { try { rfs.call(el); } catch(e) {} }
+  }
+
+  function tryLockLandscape() {
+    if (screen.orientation && screen.orientation.lock) {
+      try { screen.orientation.lock('landscape').catch(function(){}); } catch(e) {}
+    }
+  }
+
+  function playXhs(noteId, matchTitle) {
+    var overlay = document.getElementById('player-overlay');
+    var video = document.getElementById('player-video');
+    var container = document.getElementById('player-container');
+    var loadingEl = document.getElementById('player-loading');
+    var fallbackEl = document.getElementById('player-fallback');
+    var titleEl = document.getElementById('player-title');
+
+    video.onerror = null;
+    video.src = '';
+    currentNoteId = noteId;
+    container.style.display = 'none';
+    loadingEl.classList.add('show');
+    fallbackEl.classList.remove('show');
+    overlay.classList.add('show');
+
+    // 移动端：自动尝试全屏 + 横屏
+    if (isMobile()) {
+      tryLockLandscape();
+      setTimeout(function() { tryEnterFullscreen(video); }, 200);
+    }
+
+    titleEl.textContent = matchTitle;
+
+    tryLoadVideo(noteId, video, loadingEl, container, fallbackEl, false);
+  }
+
+  function tryLoadVideo(noteId, video, loadingEl, container, fallbackEl, isRetry) {
+    if (!isRetry && cachedUrls[noteId] && cachedUrls[noteId].expires > Date.now()) {
+      setVideoSrc(video, cachedUrls[noteId].url, loadingEl, container, fallbackEl);
+      return;
+    }
+
+    function lookupInData(data) {
+      for (var i = 0; i < data.length; i++) {
+        if (data[i].note_id === noteId && data[i].video_urls && data[i].video_urls.length > 0) {
+          var url = data[i].video_urls[0];
+          cachedUrls[noteId] = { url: url, expires: Date.now() + 8 * 60 * 1000 };
+          setVideoSrc(video, url, loadingEl, container, fallbackEl);
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // 优先读内联数据（解决 file:// 下 fetch 被 Chrome 阻止的问题）
+    var inlineEl = document.getElementById('video-url-data');
+    if (inlineEl && inlineEl.textContent) {
+      try {
+        var inlineData = JSON.parse(inlineEl.textContent);
+        if (lookupInData(inlineData)) return;
+      } catch(e) {}
+    }
+
+    // 回退到 fetch（线上 HTTPS 环境可用，并可获 CI 更新的 URL）
+    fetch('video_urls.json?t=' + Date.now())
+      .then(function(resp) { return resp.json(); })
+      .then(function(data) {
+        if (!lookupInData(data)) showFallback(loadingEl, fallbackEl);
+      })
+      .catch(function() { showFallback(loadingEl, fallbackEl); });
+  }
+
+  function setVideoSrc(video, url, loadingEl, container, fallbackEl) {
+    video.onerror = function() {
+      video.onerror = null;
+      showFallback(loadingEl, fallbackEl);
+    };
+    video.src = url;
+    container.style.display = 'block';
+    loadingEl.classList.remove('show');
+    fallbackEl.classList.remove('show');
+    video.play().catch(function() {});
+  }
+
+  function showFallback(loadingEl, fallbackEl) {
+    loadingEl.classList.remove('show');
+    fallbackEl.classList.add('show');
+  }
+
+  function closePlayer() {
+    var overlay = document.getElementById('player-overlay');
+    var video = document.getElementById('player-video');
+    overlay.classList.remove('show');
+    video.onerror = null;
+    video.pause();
+    video.src = '';
+    currentNoteId = null;
+    if (retryTimer) { clearTimeout(retryTimer); retryTimer = null; }
+    // 退出全屏 + 解除横屏锁定
+    if (document.fullscreenElement) {
+      var exitFS = document.exitFullscreen || document.webkitExitFullscreen || document.msExitFullscreen;
+      if (exitFS) { try { exitFS.call(document); } catch(e) {} }
+    }
+    if (screen.orientation && screen.orientation.unlock) {
+      try { screen.orientation.unlock(); } catch(e) {}
+    }
+  }
+
+  // 事件委托
+  document.addEventListener('click', function(e) {
+    // 点击遮罩背景关闭
+    if (e.target.id === 'player-overlay') { closePlayer(); return; }
+    if (e.target.closest('[data-action="close-player"]')) { closePlayer(); return; }
+    if (e.target.closest('#player-retry-btn')) {
+      if (!currentNoteId) return;
+      var video = document.getElementById('player-video');
+      var container = document.getElementById('player-container');
+      var loadingEl = document.getElementById('player-loading');
+      var fallbackEl = document.getElementById('player-fallback');
+      fallbackEl.classList.remove('show');
+      loadingEl.classList.add('show');
+      container.style.display = 'none';
+      cachedUrls[currentNoteId] = null;
+      tryLoadVideo(currentNoteId, video, loadingEl, container, fallbackEl, true);
+      return;
+    }
+    var btn = e.target.closest('.btn-xhs');
+    if (!btn) return;
+    e.preventDefault();
+    var noteId = btn.getAttribute('data-xhs-note');
+    var teams = btn.getAttribute('data-xhs-teams');
+    if (noteId && teams) playXhs(noteId, teams);
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closePlayer();
+  });
 
   function render() {
     var raw = document.getElementById('match-data').textContent;
@@ -990,7 +1246,7 @@
         currentDate = dateStr;
         var title = document.createElement('div');
         title.className = 'section-title' + (dateStr === '6月15日' ? ' today' : '');
-        title.textContent = '\uD83D\uDCC5 ' + dateStr + ' 已完赛';
+        title.textContent = '📅 ' + dateStr;
         listEl.appendChild(title);
       }
 
@@ -999,14 +1255,18 @@
 
       var hasCctv = m.cctvUrl && m.cctvUrl.trim() !== '';
       var hasMigu = m.miguUrl && m.miguUrl.trim() !== '';
+      var hasXhs = m.xhsNoteId && m.xhsNoteId.trim() !== '';
       var btnHTML = '';
+      if (hasXhs) {
+        btnHTML += '<button class="btn btn-xhs" data-xhs-note="' + m.xhsNoteId + '" data-xhs-teams="' + m.teamA + ' VS ' + m.teamB + '">📱 小红书高清回放</button>';
+      }
       if (hasCctv) {
-        btnHTML += '<a class="btn btn-cctv" href="' + m.cctvUrl + '" target="_blank">\u25B6 CNTV\u56DE\u653E\uFF08\u592E\u89C6\uFF09</a>';
+        btnHTML += '<a class="btn btn-cctv" href="' + m.cctvUrl + '" target="_blank">▶ CNTV回放（央视）</a>';
       }
       if (hasMigu) {
-        btnHTML += '<a class="btn btn-migu" href="' + m.miguUrl + '" target="_blank">\uD83C\uDFA5 \u54AA\u549C\u56DE\u653E</a>';
+        btnHTML += '<a class="btn btn-migu" href="' + m.miguUrl + '" target="_blank">🎥 咪咕回放</a>';
       }
-      if (!hasCctv && !hasMigu) {
+      if (!hasCctv && !hasMigu && !hasXhs) {
         btnHTML = '<span class="btn-na">\u23F3 \u56DE\u653E\u94FE\u63A5\u5F85\u6293\u53D6\u4E2D\u2026</span>';
       }
 
@@ -1021,7 +1281,6 @@
         '<div class="match-date">' +
           '<span class="date-badge">' + dateStr + '</span>' +
           '<span class="time-badge">\u23F0 ' + timeStr + ' \u5F00\u7403</span>' +
-          '<span class="done-tag">\u2705 \u5DF2\u5B8C\u8D5B</span>' +
         '</div>' +
         '<div class="match-teams">' + m.teamA + ' <span class="vs">VS</span> ' + m.teamB + '</div>' +
         '<div class="btn-row">' + btnHTML + '</div>' +
@@ -1085,6 +1344,22 @@
   setInterval(render, 30000);
 })();
 </script>
+
+<!-- 小红书视频播放器弹窗 -->
+<div class="player-overlay" id="player-overlay">
+  <div class="player-header">
+    <div class="player-title" id="player-title"></div>
+    <button class="player-close" data-action="close-player" title="关闭">✕</button>
+  </div>
+  <div class="player-loading" id="player-loading">⏳ 正在获取视频源...</div>
+  <div class="player-container" id="player-container" style="display:none">
+    <video id="player-video" controls autoplay playsinline></video>
+  </div>
+  <div class="player-fallback" id="player-fallback">
+    视频源暂时不可用（链接有效期约10分钟）<br>
+    <button class="retry-btn" id="player-retry-btn">🔄 重新获取</button>
+  </div>
+</div>
 
 </body>
 </html>

@@ -27,6 +27,7 @@
     letter-spacing:.3px;
   }
   .badge-cctv { background:#1a3d5c; color:#58a6ff; }
+  .badge-xhs { background:#3d1a2e; color:#ff6b8a; }
   .badge-done { background:#1a3d2e; color:#3fb950; }
   .badge-clock { background:#2d1f00; color:#d29922; }
 
@@ -116,6 +117,11 @@
     color:#3fb950; border:1px solid #1a3d2e;
   }
   .btn-migu:hover { background:linear-gradient(135deg,#3fb950,#2ea043); color:#fff; }
+  .btn-xhs {
+    background:linear-gradient(135deg,#3d1a2e,#2d0a1a);
+    color:#ff6b8a; border:1px solid #3d1a2e;
+  }
+  .btn-xhs:hover { background:linear-gradient(135deg,#ff6b8a,#e94560); color:#fff; }
   .btn-na {
     display:inline-block; font-size:13px; color:#6e7681;
     padding:10px 16px; background:#161b22; border:1px dashed #30363d;
@@ -137,11 +143,6 @@
     text-align:center; padding:18px; font-size:10.5px; color:#484f58;
     border-top:1px solid #21262d; margin-top:14px;
   }
-  .footer .counter {
-    display:inline-block; margin-top:6px; padding:4px 14px;
-    background:#161b22; border-radius:20px; font-size:11px; color:#8b949e;
-  }
-  .footer .counter b { color:#58a6ff; font-size:13px; }
 
   /* ── 空状态 ── */
   .no-match {
@@ -157,15 +158,45 @@
     border-bottom:1px solid #21262d; letter-spacing:.5px;
   }
   .section-title.today { color:#e94560; border-bottom-color:#e94560; }
+
+  /* ── 内嵌播放器Modal ── */
+  .player-overlay {
+    display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+    background:rgba(0,0,0,.92); z-index:9999; flex-direction:column;
+    align-items:center; justify-content:center;
+  }
+  .player-overlay.show { display:flex; }
+  .player-overlay .player-close {
+    position:absolute; top:12px; right:16px; z-index:10;
+    background:none; border:none; color:#fff; font-size:28px;
+    cursor:pointer; opacity:.7; transition:opacity .2s;
+  }
+  .player-overlay .player-close:hover { opacity:1; }
+  .player-overlay .player-container {
+    width:95%; max-width:960px; position:relative;
+  }
+  .player-overlay video {
+    width:100%; border-radius:6px; background:#000; display:block;
+  }
+  .player-overlay .player-title {
+    color:#8b949e; font-size:13px; margin-bottom:10px; text-align:center;
+  }
+  .player-overlay .player-fallback {
+    display:none; text-align:center; padding:20px; color:#8b949e; font-size:13px;
+    background:#161b22; border-radius:8px; margin-top:12px;
+  }
+  .player-overlay .player-fallback.show { display:block; }
+  .player-overlay .player-fallback a {
+    color:#ff6b8a; font-weight:600; text-decoration:none;
+    display:inline-block; margin-top:8px; padding:8px 20px;
+    background:#3d1a2e; border-radius:6px; transition:all .2s;
+  }
+  .player-overlay .player-fallback a:hover { background:#ff6b8a; color:#fff; }
+  .player-loading {
+    display:none; color:#8b949e; font-size:14px; text-align:center; padding:40px;
+  }
+  .player-loading.show { display:block; }
 </style>
-<!-- Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-YP0YMH5S9H"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-YP0YMH5S9H');
-</script>
 </head>
 <body>
 
@@ -174,6 +205,7 @@
   <div class="sub">为不方便熬夜看球的你 · 守护每一场未知的乐趣</div>
   <div class="badge-row">
     <span class="badge badge-cctv">● CNTV 直连播放</span>
+    <span class="badge badge-xhs">● 小红书 高清回放</span>
     <span class="badge badge-done">✓ 全场录像 无剧透</span>
     <span class="badge badge-clock">⏰ 每天3次更新</span>
   </div>
@@ -204,7 +236,7 @@
     <div class="row"><span class="label">📅 显示范围：</span>最近两天已完赛的比赛（比赛结束约2.5小时后回放上线）。</div>
     <div class="row"><span class="label">⚠️ 防剧透要点：</span>点击链接进入央视播放页后，<b>只观看播放器区域，不要向下滚动</b>查看文字介绍（可能含比分）。</div>
     <div class="row" style="margin-top:8px;padding-top:8px;border-top:1px solid #21262d;color:#555;">
-      数据来源：sports.cctv.com（央视体育官方）· 回放需浏览器直接打开，无需下载App
+      数据来源：sports.cctv.com（央视体育）+ 小红书世界杯官方 · 回放需浏览器直接打开，无需下载App
     </div>
   </div>
 
@@ -217,6 +249,20 @@
   </div>
 
   <div class="footer" id="footer"></div>
+
+  <!-- 内嵌播放器 -->
+  <div class="player-overlay" id="player-overlay">
+    <button class="player-close" onclick="closePlayer()" title="关闭">✕</button>
+    <div class="player-title" id="player-title"></div>
+    <div class="player-loading show" id="player-loading">⏳ 正在获取视频源...</div>
+    <div class="player-container" id="player-container" style="display:none">
+      <video id="player-video" controls autoplay playsinline></video>
+    </div>
+    <div class="player-fallback" id="player-fallback">
+      视频链接已过期，请前往小红书观看
+      <br><a id="player-fallback-link" href="#" target="_blank">📱 打开小红书观看 →</a>
+    </div>
+  </div>
 
 </div>
 
@@ -338,9 +384,9 @@
     "kickoff": "2026-06-15T10:00:00+08:00",
     "teamA": "🇸🇪 瑞典",
     "teamB": "🇹🇳 突尼斯",
-    "cctvUrl": "https://sports.cctv.com/2026/06/15/VIDEeEHT8E3LUsZeNsRM1gUl260615.shtml",
+    "cctvUrl": "",
     "miguUrl": "",
-    "verified": true,
+    "verified": false,
     "group": "F组"
   },
   {
@@ -958,6 +1004,94 @@
     return (Date.now() - new Date(kickoffISO).getTime()) <= (2 * 24 * 60 * 60 * 1000);
   }
 
+  // ── 工具函数 ──
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  // ── 小红书播放器 ──
+  var cachedUrls = {}; // note_id -> {url, expires}
+
+  function playXhs(noteId, matchTitle) {
+    var overlay = document.getElementById('player-overlay');
+    var video = document.getElementById('player-video');
+    var container = document.getElementById('player-container');
+    var loadingEl = document.getElementById('player-loading');
+    var fallbackEl = document.getElementById('player-fallback');
+    var fallbackLink = document.getElementById('player-fallback-link');
+    var titleEl = document.getElementById('player-title');
+
+    // Reset
+    video.src = '';
+    container.style.display = 'none';
+    loadingEl.classList.add('show');
+    fallbackEl.classList.remove('show');
+    overlay.classList.add('show');
+    titleEl.textContent = matchTitle;
+
+    // 设置回退链接
+    var fallbackUrl = 'https://www.xiaohongshu.com/explore/' + noteId;
+    // 从 matches.json 获取 xsec_token
+    var raw = document.getElementById('match-data').textContent;
+    var matches = [];
+    try { matches = JSON.parse(raw); } catch(e) {}
+    for (var i = 0; i < matches.length; i++) {
+      if (matches[i].xhsNoteId === noteId) {
+        if (matches[i].xhsUrl) fallbackUrl = matches[i].xhsUrl;
+        break;
+      }
+    }
+    fallbackLink.href = fallbackUrl;
+
+    // 尝试获取视频 URL
+    fetchXhsVideoUrl(noteId, function(url) {
+      loadingEl.classList.remove('show');
+      if (url) {
+        video.src = url;
+        container.style.display = 'block';
+        video.play().catch(function(e) {
+          console.log('自动播放被阻止:', e.message);
+        });
+      } else {
+        fallbackEl.classList.add('show');
+      }
+    });
+  }
+
+  function fetchXhsVideoUrl(noteId, callback) {
+    // 优先使用缓存的 URL
+    if (cachedUrls[noteId] && cachedUrls[noteId].expires > Date.now()) {
+      return callback(cachedUrls[noteId].url);
+    }
+
+    // 尝试从 video_urls.json 获取（GitHub Actions 定期刷新）
+    fetch('video_urls.json?t=' + Date.now())
+      .then(function(resp) { return resp.json(); })
+      .then(function(data) {
+        for (var i = 0; i < data.length; i++) {
+          if (data[i].note_id === noteId && data[i].video_urls && data[i].video_urls.length > 0) {
+            var url = data[i].video_urls[0];
+            // 缓存 8 分钟（URL 约 10 分钟过期）
+            cachedUrls[noteId] = { url: url, expires: Date.now() + 8 * 60 * 1000 };
+            callback(url);
+            return;
+          }
+        }
+        callback(null);
+      })
+      .catch(function() {
+        callback(null);
+      });
+  }
+
+  function closePlayer() {
+    var overlay = document.getElementById('player-overlay');
+    var video = document.getElementById('player-video');
+    overlay.classList.remove('show');
+    video.pause();
+    video.src = '';
+  }
+
   function render() {
     var raw = document.getElementById('match-data').textContent;
     var matches = [];
@@ -999,19 +1133,28 @@
 
       var hasCctv = m.cctvUrl && m.cctvUrl.trim() !== '';
       var hasMigu = m.miguUrl && m.miguUrl.trim() !== '';
+      var hasXhs = m.xhsNoteId && m.xhsNoteId.trim() !== '';
+      var xhsUrl = m.xhsUrl || (hasXhs ? 'https://www.xiaohongshu.com/explore/' + m.xhsNoteId : '');
       var btnHTML = '';
       if (hasCctv) {
         btnHTML += '<a class="btn btn-cctv" href="' + m.cctvUrl + '" target="_blank">\u25B6 CNTV\u56DE\u653E\uFF08\u592E\u89C6\uFF09</a>';
       }
+      if (hasXhs) {
+        btnHTML += '<button class="btn btn-xhs" onclick="playXhs(\'' + m.xhsNoteId + '\',\'' + escapeHtml(m.teamA) + ' VS ' + escapeHtml(m.teamB) + '\')">\uD83D\uDCF1 \u5C0F\u7EA2\u4E66\u9AD8\u6E05\u56DE\u653E</button>';
+      }
       if (hasMigu) {
         btnHTML += '<a class="btn btn-migu" href="' + m.miguUrl + '" target="_blank">\uD83C\uDFA5 \u54AA\u549C\u56DE\u653E</a>';
       }
-      if (!hasCctv && !hasMigu) {
+      if (!hasCctv && !hasXhs && !hasMigu) {
         btnHTML = '<span class="btn-na">\u23F3 \u56DE\u653E\u94FE\u63A5\u5F85\u6293\u53D6\u4E2D\u2026</span>';
       }
 
       var tipHTML = '';
-      if (!m.verified) {
+      if (hasXhs && hasCctv) {
+        tipHTML = '<div class="tip-line ok">\u2705 \u5168\u573A\u5F55\u50CF \u00B7 \u5C0F\u7EA2\u4E66\u9AD8\u6E05 + \u592E\u89C6\u56DE\u653E \u00B7 \u6D4F\u89C8\u5668\u76F4\u63A5\u64AD\u653E';
+      } else if (hasXhs) {
+        tipHTML = '<div class="tip-line ok">\u2705 \u5C0F\u7EA2\u4E66\u9AD8\u6E05\u56DE\u653E \u00B7 \u6D4F\u89C8\u5668\u76F4\u63A5\u64AD\u653E';
+      } else if (!m.verified) {
         tipHTML = '<div class="tip-line warn">\u26A0\uFE0F \u56DE\u653E\u94FE\u63A5\u5F85\u9A8C\u8BC1\uFF0C\u5982\u65E0\u6CD5\u64AD\u653E\u8BF7<a href="https://sports.cctv.com/2026/schedule/index.shtml" target="_blank">\u524D\u5F80\u592C\u89C6\u8D5B\u7A0B\u9875</a>\u67E5\u627E';
       } else {
         tipHTML = '<div class="tip-line ok">\u2705 \u5168\u573A\u5F55\u50CF \u00B7 \u6D4F\u89C8\u5668\u76F4\u63A5\u64AD\u653E \u00B7 \u65E0\u9700App';
@@ -1036,53 +1179,17 @@
   function updateFooter() {
     var now = new Date();
     document.getElementById('footer').innerHTML =
-      '2026\u4E16\u754C\u676F \u00B7 \u9632\u5267\u900F\u56DE\u653E\u5165\u53E3 &nbsp;\u007C&nbsp; \u6570\u636E\u6765\u6E90\uFF1A\u592E\u89C6\u4F53\u80B2 &nbsp;\u007C&nbsp; \u5237\u65B0\uFF1A' +
-      now.toLocaleString('zh-CN', { timeZone:'Asia/Shanghai' }) +
-      '<br><span class="counter">\uD83D\uDCC8 \u9875\u9762\u8BBF\u95EE\uFF1A<b id="pv2">...</b> \u6B21</span>' +
-      ' &nbsp; <span class="counter">\uD83D\uDC64 \u72EC\u7ACB\u8BBF\u5BA2\uFF1A<b id="uv2">...</b> \u4EBA</span>';
-    loadCounter();
-  }
-
-  // ── 简易计数器（GA 备份）──
-  var LAST_VISIT_KEY = 'wc2026_last_visit';
-  function loadCounter() {
-    var pvEl = document.getElementById('pv2');
-    var uvEl = document.getElementById('uv2');
-    if (!pvEl || !uvEl) return;
-
-    // ── 独立访客计数（localStorage）──
-    var now = new Date();
-    var last = localStorage.getItem(LAST_VISIT_KEY);
-    var dayStr = now.getFullYear() + '-' + (now.getMonth()+1) + '-' + now.getDate();
-    var seenStr = localStorage.getItem('wc2026_uv_seen') || '';
-    var seenDays = seenStr ? seenStr.split(',') : [];
-
-    if (!last || last !== dayStr) {
-      localStorage.setItem(LAST_VISIT_KEY, dayStr);
-      if (seenDays.indexOf(dayStr) === -1) {
-        seenDays.push(dayStr);
-        localStorage.setItem('wc2026_uv_seen', seenDays.join(','));
-      }
-    }
-    uvEl.innerText = seenDays.length;
-
-    // ── 总访问次数（countapi.xyz）──
-    try {
-      fetch('https://api.countapi.xyz/hit/fishingninja-worldcup-replay/visits')
-        .then(function(r) { return r.json(); })
-        .then(function(d) {
-          if (pvEl) pvEl.innerText = d.value;
-        })
-        .catch(function() {
-          if (pvEl) pvEl.innerText = '---';
-        });
-    } catch(e) {
-      if (pvEl) pvEl.innerText = '---';
-    }
+      '2026\u4E16\u754C\u676F \u00B7 \u9632\u5267\u900F\u56DE\u653E\u5165\u53E3 &nbsp;\u007C&nbsp; \u6570\u636E\u6765\u6E90\uFF1A\u592C\u89C6\u4F53\u80B2 &nbsp;\u007C&nbsp; \u5237\u65B0\uFF1A' +
+      now.toLocaleString('zh-CN', { timeZone:'Asia/Shanghai' });
   }
 
   render();
   setInterval(render, 30000);
+
+  // ESC 关闭播放器
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closePlayer();
+  });
 })();
 </script>
 

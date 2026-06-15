@@ -114,9 +114,9 @@
     "kickoff": "2026-06-15T10:00:00+08:00",
     "teamA": "🇸🇪 瑞典",
     "teamB": "🇹🇳 突尼斯",
-    "cctvUrl": "",
+    "cctvUrl": "https://sports.cctv.com/2026/06/15/VIDEeEHT8E3LUsZeNsRM1gUl260615.shtml",
     "miguUrl": "",
-    "verified": false,
+    "verified": true,
     "group": "F组"
   },
   {

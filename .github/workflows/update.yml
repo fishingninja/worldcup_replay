@@ -24,10 +24,13 @@ jobs:
           python-version: '3.13'
 
       - name: Install dependencies
-        run: pip install requests beautifulsoup4
+        run: pip install playwright
 
-      - name: Run update script
-        run: python update_matches.py
+      - name: Install Playwright browser
+        run: python -m playwright install chromium
+
+      - name: Run Playwright CCTV scraper
+        run: python update_replay_links.py
 
       - name: Commit and push if changed
         run: |
@@ -37,6 +40,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "auto: update match data [skip ci]"
+            git commit -m "auto: update match replay links [skip ci]"
             git push
           fi

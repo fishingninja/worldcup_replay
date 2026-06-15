@@ -4,12 +4,10 @@ on:
   schedule:
     # 北京时间 07:00 / 12:00 / 18:00 → UTC 23:00 / 04:00 / 10:00
     - cron: '0 23,4,10 * * *'
-    # 每小时刷新 XHS 视频 URL（URL 约 10 分钟过期，尽量保持新鲜）
-    - cron: '0 * * * *'
   workflow_dispatch:  # 支持手动触发
 
 jobs:
-  update-cctv:
+  update:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -34,17 +32,11 @@ jobs:
       - name: Run Playwright CCTV scraper
         run: python update_replay_links.py
 
-      - name: Refresh XHS video URLs
-        run: python fetch_all_video_urls.py
-
-      - name: Generate video_urls.json
-        run: python generate_video_urls_json.py
-
       - name: Commit and push if changed
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add matches.json index.html video_urls.json
+          git add matches.json index.html
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else

@@ -2,8 +2,8 @@ name: Update WorldCup Replay Data
 
 on:
   schedule:
-    # 北京时间 07:00 / 12:00 / 18:00 -> UTC 23:00 / 04:00 / 10:00
-    - cron: "0 23,4,10 * * *"
+    # 北京时间 07:00 / 12:00 / 18:00 → UTC 23:00 / 04:00 / 10:00
+    - cron: '0 23,4,10 * * *'
   workflow_dispatch:  # 支持手动触发
 
 jobs:
@@ -24,13 +24,10 @@ jobs:
           python-version: '3.13'
 
       - name: Install dependencies
-        run: pip install playwright requests
+        run: pip install requests beautifulsoup4
 
-      - name: Install Playwright browser
-        run: python -m playwright install chromium
-
-      - name: Run update script (Playwright CCTV search)
-        run: python update_replay_links.py
+      - name: Run update script
+        run: python update_matches.py
 
       - name: Commit and push if changed
         run: |
@@ -40,6 +37,6 @@ jobs:
           if git diff --cached --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "auto: update match replay links [skip ci]"
+            git commit -m "auto: update match data [skip ci]"
             git push
           fi

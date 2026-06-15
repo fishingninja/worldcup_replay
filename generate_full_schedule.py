@@ -1,1 +1,250 @@
-IyEvdXNyL2Jpbi9lbnYgcHl0aG9uMwojIC0qLSBjb2Rpbmc6IHV0Zi04IC0qLQoiIiIK55Sf5oiQ5a6M5pW055qEMjAyNuS4lueVjOadr+Wwj+e7hOi1m+eoi++8iDcy5Zy65q+U6LWb77yJCuaVsOaNruadpea6kDogd2MtMjAyNi5jb20g6LWb56iL6KGoCuS/neeVmeW3suacieWbnuaUvumTvuaOpe+8jOS/ruato+S5i+WJjemUmeivr+eahOaXpeacny/ml7bpl7QKIiIiCgppbXBvcnQganNvbgppbXBvcnQgcmUKaW1wb3J0IHN5cwpmcm9tIHBhdGhsaWIgaW1wb3J0IFBhdGgKCmlmIGhhc2F0dHIoc3lzLnN0ZG91dCwgInJlY29uZmlndXJlIik6CiAgICBzeXMuc3Rkb3V0LnJlY29uZmlndXJlKGVuY29kaW5nPSJ1dGYtOCIpCiAgICBzeXMuc3RkZXJyLnJlY29uZmlndXJlKGVuY29kaW5nPSJ1dGYtOCIpCgojIOeQg+mYn+aXl+W4nOaYoOWwhApGTEFHUyA9IHsKICAgICLloqjopb/lk6UiOiAi8J+HsvCfh70iLCAi5Y2X6Z2eIjogIvCfh7/wn4emIiwgIumfqeWbvSI6ICLwn4ew8J+HtyIsICLmjbflhYsiOiAi8J+HqPCfh78iLAogICAgIuWKoOaLv+WkpyI6ICLwn4eo8J+HpiIsICLms6Lpu5EiOiAi8J+Hp/Cfh6YiLCAi5Y2h5aGU5bCUIjogIvCfh7bwn4emIiwgIueRnuWjqyI6ICLwn4eo8J+HrSIsCiAgICAi5be06KW/IjogIvCfh6fwn4e3IiwgIuaRqea0m+WTpSI6ICLwn4ey8J+HpiIsICLmtbflnLAiOiAi8J+HrfCfh7kiLAogICAgIuiLj+agvOWFsCI6ICLwn4+086CBp/Ogga3zoIGv86CBsPOggb8iLAogICAgIue+juWbvSI6ICLwn4e68J+HuCIsICLlt7Tmi4nlnK0iOiAi8J+HtfCfh74iLCAi5r6z5aSn5Yip5LqaIjogIvCfh6bwn4e6IiwgIuWcn+iAs+WFtiI6ICLwn4e58J+HtyIsCiAgICAi5b635Zu9IjogIvCfh6nwn4eqIiwgIuW6k+aLiee0oiI6ICLwn4eo8J+HvCIsICLnp5Hnibnov6rnk6YiOiAi8J+HqPCfh64iLCAi5Y6E55Oc5aSa5bCUIjogIvCfh6rwn4eoIiwKICAgICLojbflhbAiOiAi8J+Hs/Cfh7EiLCAi5pel5pysIjogIvCfh6/wn4e1IiwgIueRnuWFuCI6ICLwn4e48J+HqiIsICLnqoHlsLzmlq8iOiAi8J+HufCfh7MiLAogICAgIuavlOWIqeaXtiI6ICLwn4en8J+HqiIsICLln4Plj4oiOiAi8J+HqvCfh6wiLCAi5LyK5pyXIjogIvCfh67wn4e3IiwgIuaWsOilv+WFsCI6ICLwn4ez8J+HvyIsCiAgICAi6KW/54+t54mZIjogIvCfh6rwn4e4IiwgIuS9m+W+l+inkiI6ICLwn4eo8J+HuyIsICLmspnnibnpmL/mi4nkvK8iOiAi8J+HuPCfh6YiLCAi5LmM5ouJ5ZytIjogIvCfh7rwn4e+IiwKICAgICLms5Xlm70iOiAi8J+Hq/Cfh7ciLCAi5aGe5YaF5Yqg5bCUIjogIvCfh7jwn4ezIiwgIuS8iuaLieWFiyI6ICLwn4eu8J+HtiIsICLmjKrlqIEiOiAi8J+Hs/Cfh7QiLAogICAgIumYv+agueW7tyI6ICLwn4em8J+HtyIsICLpmL/lsJTlj4rliKnkupoiOiAi8J+HqfCfh78iLCAi5aWl5Zyw5YipIjogIvCfh6bwn4e5IiwgIue6puaXpiI6ICLwn4ev8J+HtCIsCiAgICAi6JGh6JCE54mZIjogIvCfh7Xwn4e5IiwgIuWImuaenOawkeS4u+WFseWSjOWbvSI6ICLwn4eo8J+HqSIsICLkuYzlhbnliKvlhYvmlq/lnaYiOiAi8J+HuvCfh78iLCAi5ZOl5Lym5q+U5LqaIjogIvCfh6jwn4e0IiwKICAgICLoi7HmoLzlhbAiOiAi8J+PtPOggafzoIGi86CBpfOgga7zoIGn86CBvyIsICLlhYvnvZflnLDkupoiOiAi8J+HrfCfh7ciLCAi5Yqg57qzIjogIvCfh6zwn4etIiwgIuW3tOaLv+mprCI6ICLwn4e18J+HpiIsCn0KCmRlZiBmbGFnKHRlYW0pOgogICAgcmV0dXJuIEZMQUdTLmdldCh0ZWFtLCAiIikgKyAiICIgKyB0ZWFtCgojIOKUgOKUgOKUgCDlrozmlbTlsI/nu4TotZvotZvnqIsgKHdjLTIwMjYuY29tKSDilIDilIDilIAKIyDmoLzlvI86ICjml6XmnJ/kuK3mlocsIGtpY2tvZmYgSVNPLCB0ZWFtQSwgdGVhbUIsIOWwj+e7hCkKU0NIRURVTEUgPSBbCiAgICAjID09PSA25pyIMTLml6UgPT09CiAgICAoIjbmnIgxMuaXpSIsICIyMDI2LTA2LTEyVDAzOjAwOjAwKzA4OjAwIiwgIuWiqOilv+WTpSIsICLljZfpnZ4iLCAiQee7hCIpLAogICAgKCI25pyIMTLml6UiLCAiMjAyNi0wNi0xMlQxMDowMDowMCswODowMCIsICLpn6nlm70iLCAi5o235YWLIiwgIkHnu4QiKSwKICAgICMgPT09IDbmnIgxM+aXpSA9PT0KICAgICgiNuaciDEz5pelIiwgIjIwMjYtMDYtMTNUMDM6MDA6MDArMDg6MDAiLCAi5Yqg5ou/5aSnIiwgIuazoum7kSIsICJC57uEIiksCiAgICAoIjbmnIgxM+aXpSIsICIyMDI2LTA2LTEzVDA5OjAwOjAwKzA4OjAwIiwgIue+juWbvSIsICLlt7Tmi4nlnK0iLCAiROe7hCIpLAogICAgIyA9PT0gNuaciDE05pelID09PQogICAgKCI25pyIMTTml6UiLCAiMjAyNi0wNi0xNFQwMzowMDowMCswODowMCIsICLljaHloZTlsJQiLCAi55Ge5aOrIiwgIkLnu4QiKSwKICAgICgiNuaciDE05pelIiwgIjIwMjYtMDYtMTRUMDY6MDA6MDArMDg6MDAiLCAi5be06KW/IiwgIuaRqea0m+WTpSIsICJD57uEIiksCiAgICAoIjbmnIgxNOaXpSIsICIyMDI2LTA2LTE0VDA5OjAwOjAwKzA4OjAwIiwgIua1t+WcsCIsICLoi4/moLzlhbAiLCAiQ+e7hCIpLAogICAgKCI25pyIMTTml6UiLCAiMjAyNi0wNi0xNFQxMjowMDowMCswODowMCIsICLmvrPlpKfliKnkupoiLCAi5Zyf6ICz5YW2IiwgIkTnu4QiKSwKICAgICMgPT09IDbmnIgxNeaXpSA9PT0KICAgICgiNuaciDE15pelIiwgIjIwMjYtMDYtMTVUMDE6MDA6MDArMDg6MDAiLCAi5b635Zu9IiwgIuW6k+aLiee0oiIsICJF57uEIiksCiAgICAoIjbmnIgxNeaXpSIsICIyMDI2LTA2LTE1VDA0OjAwOjAwKzA4OjAwIiwgIuiNt+WFsCIsICLml6XmnKwiLCAiRue7hCIpLAogICAgKCI25pyIMTXml6UiLCAiMjAyNi0wNi0xNVQwNzowMDowMCswODowMCIsICLnp5Hnibnov6rnk6YiLCAi5Y6E55Oc5aSa5bCUIiwgIkXnu4QiKSwKICAgICgiNuaciDE15pelIiwgIjIwMjYtMDYtMTVUMTA6MDA6MDArMDg6MDAiLCAi55Ge5YW4IiwgIueqgeWwvOaWryIsICJG57uEIiksCiAgICAjID09PSA25pyIMTbml6UgPT09CiAgICAoIjbmnIgxNuaXpSIsICIyMDI2LTA2LTE2VDAwOjAwOjAwKzA4OjAwIiwgIuilv+ePreeJmSIsICLkvZvlvpfop5IiLCAiSOe7hCIpLAogICAgKCI25pyIMTbml6UiLCAiMjAyNi0wNi0xNlQwMzowMDowMCswODowMCIsICLmr5TliKnml7YiLCAi5Z+D5Y+KIiwgIkfnu4QiKSwKICAgICgiNuaciDE25pelIiwgIjIwMjYtMDYtMTZUMDY6MDA6MDArMDg6MDAiLCAi5rKZ54m56Zi/5ouJ5LyvIiwgIuS5jOaLieWcrSIsICJI57uEIiksCiAgICAoIjbmnIgxNuaXpSIsICIyMDI2LTA2LTE2VDA5OjAwOjAwKzA4OjAwIiwgIuS8iuaclyIsICLmlrDopb/lhbAiLCAiR+e7hCIpLAogICAgIyA9PT0gNuaciDE35pelID09PQogICAgKCI25pyIMTfml6UiLCAiMjAyNi0wNi0xN1QwMzowMDowMCswODowMCIsICLms5Xlm70iLCAi5aGe5YaF5Yqg5bCUIiwgIknnu4QiKSwKICAgICgiNuaciDE35pelIiwgIjIwMjYtMDYtMTdUMDY6MDA6MDArMDg6MDAiLCAi5LyK5ouJ5YWLIiwgIuaMquWogSIsICJJ57uEIiksCiAgICAoIjbmnIgxN+aXpSIsICIyMDI2LTA2LTE3VDA5OjAwOjAwKzA4OjAwIiwgIumYv+agueW7tyIsICLpmL/lsJTlj4rliKnkupoiLCAiSue7hCIpLAogICAgKCI25pyIMTfml6UiLCAiMjAyNi0wNi0xN1QxMjowMDowMCswODowMCIsICLlpaXlnLDliKkiLCAi57qm5pemIiwgIkrnu4QiKSwKICAgICMgPT09IDbmnIgxOOaXpSA9PT0KICAgICgiNuaciDE45pelIiwgIjIwMjYtMDYtMThUMDE6MDA6MDArMDg6MDAiLCAi6JGh6JCE54mZIiwgIuWImuaenOawkeS4u+WFseWSjOWbvSIsICJL57uEIiksCiAgICAoIjbmnIgxOOaXpSIsICIyMDI2LTA2LTE4VDA0OjAwOjAwKzA4OjAwIiwgIuiLseagvOWFsCIsICLlhYvnvZflnLDkupoiLCAiTOe7hCIpLAogICAgKCI25pyIMTjml6UiLCAiMjAyNi0wNi0xOFQwNzowMDowMCswODowMCIsICLliqDnurMiLCAi5be05ou/6amsIiwgIkznu4QiKSwKICAgICgiNuaciDE45pelIiwgIjIwMjYtMDYtMThUMTA6MDA6MDArMDg6MDAiLCAi5LmM5YW55Yir5YWL5pav5Z2mIiwgIuWTpeS8puavlOS6miIsICJL57uEIiksCiAgICAjID09PSA25pyIMTnml6UgPT09CiAgICAoIjbmnIgxOeaXpSIsICIyMDI2LTA2LTE5VDAwOjAwOjAwKzA4OjAwIiwgIuaNt+WFiyIsICLljZfpnZ4iLCAiQee7hCIpLAogICAgKCI25pyIMTnml6UiLCAiMjAyNi0wNi0xOVQwMzowMDowMCswODowMCIsICLnkZ7lo6siLCAi5rOi6buRIiwgIkLnu4QiKSwKICAgICgiNuaciDE55pelIiwgIjIwMjYtMDYtMTlUMDY6MDA6MDArMDg6MDAiLCAi5Yqg5ou/5aSnIiwgIuWNoeWhlOWwlCIsICJC57uEIiksCiAgICAoIjbmnIgxOeaXpSIsICIyMDI2LTA2LTE5VDA5OjAwOjAwKzA4OjAwIiwgIuWiqOilv+WTpSIsICLpn6nlm70iLCAiQee7hCIpLAogICAgIyA9PT0gNuaciDIw5pelID09PQogICAgKCI25pyIMjDml6UiLCAiMjAyNi0wNi0yMFQwMzowMDowMCswODowMCIsICLnvo7lm70iLCAi5r6z5aSn5Yip5LqaIiwgIkTnu4QiKSwKICAgICgiNuaciDIw5pelIiwgIjIwMjYtMDYtMjBUMDY6MDA6MDArMDg6MDAiLCAi6IuP5qC85YWwIiwgIuaRqea0m+WTpSIsICJD57uEIiksCiAgICAoIjbmnIgyMOaXpSIsICIyMDI2LTA2LTIwVDA5OjAwOjAwKzA4OjAwIiwgIuW3tOilvyIsICLmtbflnLAiLCAiQ+e7hCIpLAogICAgKCI25pyIMjDml6UiLCAiMjAyNi0wNi0yMFQxMjowMDowMCswODowMCIsICLlnJ/ogLPlhbYiLCAi5be05ouJ5ZytIiwgIkTnu4QiKSwKICAgICMgPT09IDbmnIgyMeaXpSA9PT0KICAgICgiNuaciDIx5pelIiwgIjIwMjYtMDYtMjFUMDE6MDA6MDArMDg6MDAiLCAi6I235YWwIiwgIueRnuWFuCIsICJG57uEIiksCiAgICAoIjbmnIgyMeaXpSIsICIyMDI2LTA2LTIxVDA0OjAwOjAwKzA4OjAwIiwgIuW+t+WbvSIsICLnp5Hnibnov6rnk6YiLCAiRee7hCIpLAogICAgKCI25pyIMjHml6UiLCAiMjAyNi0wNi0yMVQwODowMDowMCswODowMCIsICLljoTnk5zlpJrlsJQiLCAi5bqT5ouJ57SiIiwgIkXnu4QiKSwKICAgICgiNuaciDIx5pelIiwgIjIwMjYtMDYtMjFUMTI6MDA6MDArMDg6MDAiLCAi56qB5bC85pavIiwgIuaXpeacrCIsICJG57uEIiksCiAgICAjID09PSA25pyIMjLml6UgPT09CiAgICAoIjbmnIgyMuaXpSIsICIyMDI2LTA2LTIyVDAwOjAwOjAwKzA4OjAwIiwgIuilv+ePreeJmSIsICLmspnnibnpmL/mi4nkvK8iLCAiSOe7hCIpLAogICAgKCI25pyIMjLml6UiLCAiMjAyNi0wNi0yMlQwMzowMDowMCswODowMCIsICLmr5TliKnml7YiLCAi5LyK5pyXIiwgIkfnu4QiKSwKICAgICgiNuaciDIy5pelIiwgIjIwMjYtMDYtMjJUMDY6MDA6MDArMDg6MDAiLCAi5LmM5ouJ5ZytIiwgIuS9m+W+l+inkiIsICJI57uEIiksCiAgICAoIjbmnIgyMuaXpSIsICIyMDI2LTA2LTIyVDA5OjAwOjAwKzA4OjAwIiwgIuaWsOilv+WFsCIsICLln4Plj4oiLCAiR+e7hCIpLAogICAgIyA9PT0gNuaciDIz5pelID09PQogICAgKCI25pyIMjPml6UiLCAiMjAyNi0wNi0yM1QwMTowMDowMCswODowMCIsICLpmL/moLnlu7ciLCAi5aWl5Zyw5YipIiwgIkrnu4QiKSwKICAgICgiNuaciDIz5pelIiwgIjIwMjYtMDYtMjNUMDU6MDA6MDArMDg6MDAiLCAi5rOV5Zu9IiwgIuS8iuaLieWFiyIsICJJ57uEIiksCiAgICAoIjbmnIgyM+aXpSIsICIyMDI2LTA2LTIzVDA4OjAwOjAwKzA4OjAwIiwgIuaMquWogSIsICLloZ7lhoXliqDlsJQiLCAiSee7hCIpLAogICAgKCI25pyIMjPml6UiLCAiMjAyNi0wNi0yM1QxMTowMDowMCswODowMCIsICLnuqbml6YiLCAi6Zi/5bCU5Y+K5Yip5LqaIiwgIkrnu4QiKSwKICAgICMgPT09IDbmnIgyNOaXpSA9PT0KICAgICgiNuaciDI05pelIiwgIjIwMjYtMDYtMjRUMDE6MDA6MDArMDg6MDAiLCAi6JGh6JCE54mZIiwgIuS5jOWFueWIq+WFi+aWr+WdpiIsICJL57uEIiksCiAgICAoIjbmnIgyNOaXpSIsICIyMDI2LTA2LTI0VDA0OjAwOjAwKzA4OjAwIiwgIuiLseagvOWFsCIsICLliqDnurMiLCAiTOe7hCIpLAogICAgKCI25pyIMjTml6UiLCAiMjAyNi0wNi0yNFQwNzowMDowMCswODowMCIsICLlt7Tmi7/pqawiLCAi5YWL572X5Zyw5LqaIiwgIkznu4QiKSwKICAgICgiNuaciDI05pelIiwgIjIwMjYtMDYtMjRUMTA6MDA6MDArMDg6MDAiLCAi5ZOl5Lym5q+U5LqaIiwgIuWImuaenOawkeS4u+WFseWSjOWbvSIsICJL57uEIiksCiAgICAjID09PSA25pyIMjXml6UgKOesrOS4iei9ru+8jOWQjOe7hOWQjOaXtuW8gOeQgykgPT09CiAgICAoIjbmnIgyNeaXpSIsICIyMDI2LTA2LTI1VDAzOjAwOjAwKzA4OjAwIiwgIueRnuWjqyIsICLliqDmi7/lpKciLCAiQue7hCIpLAogICAgKCI25pyIMjXml6UiLCAiMjAyNi0wNi0yNVQwMzowMDowMCswODowMCIsICLms6Lpu5EiLCAi5Y2h5aGU5bCUIiwgIkLnu4QiKSwKICAgICgiNuaciDI15pelIiwgIjIwMjYtMDYtMjVUMDY6MDA6MDArMDg6MDAiLCAi6IuP5qC85YWwIiwgIuW3tOilvyIsICJD57uEIiksCiAgICAoIjbmnIgyNeaXpSIsICIyMDI2LTA2LTI1VDA2OjAwOjAwKzA4OjAwIiwgIuaRqea0m+WTpSIsICLmtbflnLAiLCAiQ+e7hCIpLAogICAgKCI25pyIMjXml6UiLCAiMjAyNi0wNi0yNVQwOTowMDowMCswODowMCIsICLmjbflhYsiLCAi5aKo6KW/5ZOlIiwgIkHnu4QiKSwKICAgICgiNuaciDI15pelIiwgIjIwMjYtMDYtMjVUMDk6MDA6MDArMDg6MDAiLCAi5Y2X6Z2eIiwgIumfqeWbvSIsICJB57uEIiksCiAgICAjID09PSA25pyIMjbml6UgPT09CiAgICAoIjbmnIgyNuaXpSIsICIyMDI2LTA2LTI2VDA0OjAwOjAwKzA4OjAwIiwgIuW6k+aLiee0oiIsICLnp5Hnibnov6rnk6YiLCAiRee7hCIpLAogICAgKCI25pyIMjbml6UiLCAiMjAyNi0wNi0yNlQwNDowMDowMCswODowMCIsICLljoTnk5zlpJrlsJQiLCAi5b635Zu9IiwgIkXnu4QiKSwKICAgICgiNuaciDI25pelIiwgIjIwMjYtMDYtMjZUMDc6MDA6MDArMDg6MDAiLCAi5pel5pysIiwgIueRnuWFuCIsICJG57uEIiksCiAgICAoIjbmnIgyNuaXpSIsICIyMDI2LTA2LTI2VDA3OjAwOjAwKzA4OjAwIiwgIueqgeWwvOaWryIsICLojbflhbAiLCAiRue7hCIpLAogICAgKCI25pyIMjbml6UiLCAiMjAyNi0wNi0yNlQxMDowMDowMCswODowMCIsICLlnJ/ogLPlhbYiLCAi576O5Zu9IiwgIkTnu4QiKSwKICAgICgiNuaciDI25pelIiwgIjIwMjYtMDYtMjZUMTA6MDA6MDArMDg6MDAiLCAi5be05ouJ5ZytIiwgIua+s+Wkp+WIqeS6miIsICJE57uEIiksCiAgICAjID09PSA25pyIMjfml6UgPT09CiAgICAoIjbmnIgyN+aXpSIsICIyMDI2LTA2LTI3VDAzOjAwOjAwKzA4OjAwIiwgIuaMquWogSIsICLms5Xlm70iLCAiSee7hCIpLAogICAgKCI25pyIMjfml6UiLCAiMjAyNi0wNi0yN1QwMzowMDowMCswODowMCIsICLloZ7lhoXliqDlsJQiLCAi5LyK5ouJ5YWLIiwgIknnu4QiKSwKICAgICgiNuaciDI35pelIiwgIjIwMjYtMDYtMjdUMDg6MDA6MDArMDg6MDAiLCAi5L2b5b6X6KeSIiwgIuaymeeJuemYv+aLieS8ryIsICJI57uEIiksCiAgICAoIjbmnIgyN+aXpSIsICIyMDI2LTA2LTI3VDA4OjAwOjAwKzA4OjAwIiwgIuS5jOaLieWcrSIsICLopb/nj63niZkiLCAiSOe7hCIpLAogICAgKCI25pyIMjfml6UiLCAiMjAyNi0wNi0yN1QxMTowMDowMCswODowMCIsICLln4Plj4oiLCAi5LyK5pyXIiwgIkfnu4QiKSwKICAgICgiNuaciDI35pelIiwgIjIwMjYtMDYtMjdUMTE6MDA6MDArMDg6MDAiLCAi5paw6KW/5YWwIiwgIuavlOWIqeaXtiIsICJH57uEIiksCiAgICAjID09PSA25pyIMjjml6UgPT09CiAgICAoIjbmnIgyOOaXpSIsICIyMDI2LTA2LTI4VDA1OjAwOjAwKzA4OjAwIiwgIuW3tOaLv+mprCIsICLoi7HmoLzlhbAiLCAiTOe7hCIpLAogICAgKCI25pyIMjjml6UiLCAiMjAyNi0wNi0yOFQwNTowMDowMCswODowMCIsICLlhYvnvZflnLDkupoiLCAi5Yqg57qzIiwgIkznu4QiKSwKICAgICgiNuaciDI45pelIiwgIjIwMjYtMDYtMjhUMDc6MzA6MDArMDg6MDAiLCAi5ZOl5Lym5q+U5LqaIiwgIuiRoeiQhOeJmSIsICJL57uEIiksCiAgICAoIjbmnIgyOOaXpSIsICIyMDI2LTA2LTI4VDA3OjMwOjAwKzA4OjAwIiwgIuWImuaenOawkeS4u+WFseWSjOWbvSIsICLkuYzlhbnliKvlhYvmlq/lnaYiLCAiS+e7hCIpLAogICAgKCI25pyIMjjml6UiLCAiMjAyNi0wNi0yOFQxMDowMDowMCswODowMCIsICLpmL/lsJTlj4rliKnkupoiLCAi5aWl5Zyw5YipIiwgIkrnu4QiKSwKICAgICgiNuaciDI45pelIiwgIjIwMjYtMDYtMjhUMTA6MDA6MDArMDg6MDAiLCAi57qm5pemIiwgIumYv+agueW7tyIsICJK57uEIiksCl0KCgpkZWYgbG9hZF9leGlzdGluZ191cmxzKG1wOiBQYXRoKSAtPiBkaWN0OgogICAgIiIi6K+75Y+W5bey5pyJ55qE5Zue5pS+6ZO+5o6l77yM5oyJICh0ZWFtQV9jbGVhbiwgdGVhbUJfY2xlYW4pIOaYoOWwhCIiIgogICAgaWYgbm90IG1wLmV4aXN0cygpOgogICAgICAgIHJldHVybiB7fQogICAgd2l0aCBvcGVuKG1wLCAiciIsIGVuY29kaW5nPSJ1dGYtOCIpIGFzIGY6CiAgICAgICAgb2xkID0ganNvbi5sb2FkKGYpCgogICAgdXJsX21hcCA9IHt9CiAgICBmb3IgbSBpbiBvbGQ6CiAgICAgICAgYSA9IHJlLnN1YihyJ1teXHU0ZTAwLVx1OWZmZlx1MTEwMC1cdTExRkZcdUFDMDAtXHVEN0FGXScsICcnLCBtWyJ0ZWFtQSJdKS5zdHJpcCgpCiAgICAgICAgYiA9IHJlLnN1YihyJ1teXHU0ZTAwLVx1OWZmZlx1MTEwMC1cdTExRkZcdUFDMDAtXHVEN0FGXScsICcnLCBtWyJ0ZWFtQiJdKS5zdHJpcCgpCiAgICAgICAga2V5ID0gKGEsIGIpCiAgICAgICAgZW50cnkgPSB7ImNjdHZVcmwiOiBtLmdldCgiY2N0dlVybCIsICIiKSwgIm1pZ3VVcmwiOiBtLmdldCgibWlndVVybCIsICIiKSwKICAgICAgICAgICAgICAgICAidmVyaWZpZWQiOiBtLmdldCgidmVyaWZpZWQiLCBGYWxzZSl9CiAgICAgICAgaWYgZW50cnlbImNjdHZVcmwiXToKICAgICAgICAgICAgdXJsX21hcFtrZXldID0gZW50cnkKICAgICAgICAjIGFsc28gc3RvcmUgcmV2ZXJzZQogICAgICAgIHVybF9tYXBbKGIsIGEpXSA9IGVudHJ5CiAgICByZXR1cm4gdXJsX21hcAoKCmRlZiBnZW5lcmF0ZShtcDogUGF0aCk6CiAgICB1cmxfbWFwID0gbG9hZF9leGlzdGluZ191cmxzKG1wKQoKICAgIG1hdGNoZXMgPSBbXQogICAgZm9yIGRhdGVfc3RyLCBraWNrb2ZmLCB0ZWFtQSwgdGVhbUIsIGdyb3VwIGluIFNDSEVEVUxFOgogICAgICAgIGNjdHZVcmwgPSAiIgogICAgICAgIG1pZ3VVcmwgPSAiIgogICAgICAgIHZlcmlmaWVkID0gRmFsc2UKCiAgICAgICAgIyB0cnkgdG8gZmluZCBleGlzdGluZyBVUkwKICAgICAgICBrZXkgPSAodGVhbUEsIHRlYW1CKQogICAgICAgIGlmIGtleSBpbiB1cmxfbWFwOgogICAgICAgICAgICBleGlzdGluZyA9IHVybF9tYXBba2V5XQogICAgICAgICAgICBjY3R2VXJsID0gZXhpc3RpbmdbImNjdHZVcmwiXQogICAgICAgICAgICBtaWd1VXJsID0gZXhpc3RpbmcuZ2V0KCJtaWd1VXJsIiwgIiIpCiAgICAgICAgICAgIHZlcmlmaWVkID0gZXhpc3RpbmcuZ2V0KCJ2ZXJpZmllZCIsIEZhbHNlKQogICAgICAgICAgICAjIHZlcmlmeSB0aGUgVVJMIGRhdGUgbWF0Y2hlcyB0aGUgbWF0Y2ggZGF0ZSAod2FybmluZyBvbmx5KQogICAgICAgICAgICBpZiBjY3R2VXJsOgogICAgICAgICAgICAgICAgeXltbWRkID0ga2lja29mZlsyOjEwXS5yZXBsYWNlKCItIiwgIiIpCiAgICAgICAgICAgICAgICBpZiB5eW1tZGQgbm90IGluIGNjdHZVcmw6CiAgICAgICAgICAgICAgICAgICAgcHJpbnQoZiIgIOKaoCB7dGVhbUF9IHZzIHt0ZWFtQn06IFVSTOaXpeacn+S4jui1m+eoi+S4jeS4gOiHtCAoVVJM5ZCre2NjdHZVcmxbLTEyOi02XX0sIOi1m+eoi3t5eW1tZGR9KSIpCgogICAgICAgIG1hdGNoZXMuYXBwZW5kKHsKICAgICAgICAgICAgImRhdGUiOiBkYXRlX3N0ciwKICAgICAgICAgICAgImtpY2tvZmYiOiBraWNrb2ZmLAogICAgICAgICAgICAidGVhbUEiOiBmbGFnKHRlYW1BKSwKICAgICAgICAgICAgInRlYW1CIjogZmxhZyh0ZWFtQiksCiAgICAgICAgICAgICJjY3R2VXJsIjogY2N0dlVybCwKICAgICAgICAgICAgIm1pZ3VVcmwiOiBtaWd1VXJsLAogICAgICAgICAgICAidmVyaWZpZWQiOiB2ZXJpZmllZCwKICAgICAgICAgICAgImdyb3VwIjogZ3JvdXAsCiAgICAgICAgfSkKCiAgICByZXR1cm4gbWF0Y2hlcwoKCmRlZiBzeW5jX3RvX2h0bWwobWF0Y2hlczogbGlzdCwgaHA6IFBhdGgpOgogICAgIiIi5ZCM5q2l5YiwIGluZGV4Lmh0bWwiIiIKICAgIGlmIG5vdCBocC5leGlzdHMoKToKICAgICAgICByZXR1cm4KICAgIHdpdGggb3BlbihocCwgInIiLCBlbmNvZGluZz0idXRmLTgiKSBhcyBmOgogICAgICAgIGh0bWwgPSBmLnJlYWQoKQoKICAgIGpzb25fc3RyID0ganNvbi5kdW1wcyhtYXRjaGVzLCBlbnN1cmVfYXNjaWk9RmFsc2UsIGluZGVudD0yKQogICAgcGF0dGVybiA9IHInKDxzY3JpcHRccytpZD1bIlwnXW1hdGNoLWRhdGFbIlwnXVxzKnR5cGU9WyJcJ11hcHBsaWNhdGlvbi9qc29uWyJcJ11ccyo+KSguKj8pKDwvc2NyaXB0PiknCiAgICByZXBsYWNlbWVudCA9IHInXDFcbicgKyBqc29uX3N0ciArIHInXG5cMycKICAgIG5ld19odG1sID0gcmUuc3ViKHBhdHRlcm4sIHJlcGxhY2VtZW50LCBodG1sLCBmbGFncz1yZS5ET1RBTEwpCiAgICB3aXRoIG9wZW4oaHAsICJ3IiwgZW5jb2Rpbmc9InV0Zi04IikgYXMgZjoKICAgICAgICBmLndyaXRlKG5ld19odG1sKQogICAgcHJpbnQoIlvlkIzmraVdIGluZGV4Lmh0bWwg5bey5pu05pawIikKCgpkZWYgbWFpbigpOgogICAgbXAgPSBQYXRoKF9fZmlsZV9fKS5wYXJlbnQgLyAibWF0Y2hlcy5qc29uIgogICAgaHAgPSBQYXRoKF9fZmlsZV9fKS5wYXJlbnQgLyAiaW5kZXguaHRtbCIKCiAgICBtYXRjaGVzID0gZ2VuZXJhdGUobXApCgogICAgcHJpbnQoZiLnlJ/miJAge2xlbihtYXRjaGVzKX0g5Zy65q+U6LWbXG4iKQoKICAgICMg57uf6K6hCiAgICBoYXNfdXJsID0gc3VtKDEgZm9yIG0gaW4gbWF0Y2hlcyBpZiBtWyJjY3R2VXJsIl0pCiAgICB2ZXJpZmllZCA9IHN1bSgxIGZvciBtIGluIG1hdGNoZXMgaWYgbVsidmVyaWZpZWQiXSkKICAgIHByaW50KGYi5bey5pyJ5Zue5pS+6ZO+5o6lOiB7aGFzX3VybH0ve2xlbihtYXRjaGVzKX0iKQogICAgcHJpbnQoZiLlt7Lpqozor4E6IHt2ZXJpZmllZH0ve2xlbihtYXRjaGVzKX0iKQoKICAgICMg5oyJ5pel5pyf57uf6K6hCiAgICBmcm9tIGNvbGxlY3Rpb25zIGltcG9ydCBDb3VudGVyCiAgICBkYXRlX2NvdW50cyA9IENvdW50ZXIobVsiZGF0ZSJdIGZvciBtIGluIG1hdGNoZXMpCiAgICBmb3IgZCBpbiBzb3J0ZWQoZGF0ZV9jb3VudHMua2V5cygpLCBrZXk9bGFtYmRhIHg6IGludCh4LnJlcGxhY2UoIuaciCIsIiIpLnJlcGxhY2UoIuaXpSIsIiIpKSk6CiAgICAgICAgdG90YWwgPSBkYXRlX2NvdW50c1tkXQogICAgICAgIHdpdGhfdXJsID0gc3VtKDEgZm9yIG0gaW4gbWF0Y2hlcyBpZiBtWyJkYXRlIl0gPT0gZCBhbmQgbVsiY2N0dlVybCJdKQogICAgICAgIHByaW50KGYiICB7ZH06IHt0b3RhbH3lnLosIHt3aXRoX3VybH3mnInlm57mlL7pk77mjqUiKQoKICAgICMg5YaZ5YWl5Yy56YWN5paH5Lu2CiAgICB3aXRoIG9wZW4obXAsICJ3IiwgZW5jb2Rpbmc9InV0Zi04IikgYXMgZjoKICAgICAgICBqc29uLmR1bXAobWF0Y2hlcywgZiwgZW5zdXJlX2FzY2lpPUZhbHNlLCBpbmRlbnQ9MikKICAgIHByaW50KGYiXG5b5YaZ5YWlXSB7bXB9IikKCiAgICAjIOWQjOatpSBIVE1MCiAgICBzeW5jX3RvX2h0bWwobWF0Y2hlcywgaHApCgogICAgcHJpbnQoZiJcblvlrozmiJBdIOaAu+WFsSB7bGVuKG1hdGNoZXMpfSDlnLrmr5TotZvvvIzlt7LmnIkge2hhc191cmx9IOWcuuWbnuaUvumTvuaOpSIpCgoKaWYgX19uYW1lX18gPT0gIl9fbWFpbl9fIjoKICAgIG1haW4oKQo=
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+生成完整的2026世界杯小组赛程（72场比赛）
+数据来源: wc-2026.com 赛程表
+保留已有回放链接，修正之前错误的日期/时间
+"""
+
+import json
+import re
+import sys
+from pathlib import Path
+
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+    sys.stderr.reconfigure(encoding="utf-8")
+
+# 球队旗帜映射
+FLAGS = {
+    "墨西哥": "🇲🇽", "南非": "🇿🇦", "韩国": "🇰🇷", "捷克": "🇨🇿",
+    "加拿大": "🇨🇦", "波黑": "🇧🇦", "卡塔尔": "🇶🇦", "瑞士": "🇨🇭",
+    "巴西": "🇧🇷", "摩洛哥": "🇲🇦", "海地": "🇭🇹",
+    "苏格兰": "🏴󠁧󠁭󠁯󠁰󠁿",
+    "美国": "🇺🇸", "巴拉圭": "🇵🇾", "澳大利亚": "🇦🇺", "土耳其": "🇹🇷",
+    "德国": "🇩🇪", "库拉索": "🇨🇼", "科特迪瓦": "🇨🇮", "厄瓜多尔": "🇪🇨",
+    "荷兰": "🇳🇱", "日本": "🇯🇵", "瑞典": "🇸🇪", "突尼斯": "🇹🇳",
+    "比利时": "🇧🇪", "埃及": "🇪🇬", "伊朗": "🇮🇷", "新西兰": "🇳🇿",
+    "西班牙": "🇪🇸", "佛得角": "🇨🇻", "沙特阿拉伯": "🇸🇦", "乌拉圭": "🇺🇾",
+    "法国": "🇫🇷", "塞内加尔": "🇸🇳", "伊拉克": "🇮🇶", "挪威": "🇳🇴",
+    "阿根廷": "🇦🇷", "阿尔及利亚": "🇩🇿", "奥地利": "🇦🇹", "约旦": "🇯🇴",
+    "葡萄牙": "🇵🇹", "刚果民主共和国": "🇨🇩", "乌兹别克斯坦": "🇺🇿", "哥伦比亚": "🇨🇴",
+    "英格兰": "🏴󠁧󠁢󠁥󠁮󠁧󠁿", "克罗地亚": "🇭🇷", "加纳": "🇬🇭", "巴拿马": "🇵🇦",
+}
+
+def flag(team):
+    return FLAGS.get(team, "") + " " + team
+
+# ─── 完整小组赛赛程 (wc-2026.com) ───
+# 格式: (日期中文, kickoff ISO, teamA, teamB, 小组)
+SCHEDULE = [
+    # === 6月12日 ===
+    ("6月12日", "2026-06-12T03:00:00+08:00", "墨西哥", "南非", "A组"),
+    ("6月12日", "2026-06-12T10:00:00+08:00", "韩国", "捷克", "A组"),
+    # === 6月13日 ===
+    ("6月13日", "2026-06-13T03:00:00+08:00", "加拿大", "波黑", "B组"),
+    ("6月13日", "2026-06-13T09:00:00+08:00", "美国", "巴拉圭", "D组"),
+    # === 6月14日 ===
+    ("6月14日", "2026-06-14T03:00:00+08:00", "卡塔尔", "瑞士", "B组"),
+    ("6月14日", "2026-06-14T06:00:00+08:00", "巴西", "摩洛哥", "C组"),
+    ("6月14日", "2026-06-14T09:00:00+08:00", "海地", "苏格兰", "C组"),
+    ("6月14日", "2026-06-14T12:00:00+08:00", "澳大利亚", "土耳其", "D组"),
+    # === 6月15日 ===
+    ("6月15日", "2026-06-15T01:00:00+08:00", "德国", "库拉索", "E组"),
+    ("6月15日", "2026-06-15T04:00:00+08:00", "荷兰", "日本", "F组"),
+    ("6月15日", "2026-06-15T07:00:00+08:00", "科特迪瓦", "厄瓜多尔", "E组"),
+    ("6月15日", "2026-06-15T10:00:00+08:00", "瑞典", "突尼斯", "F组"),
+    # === 6月16日 ===
+    ("6月16日", "2026-06-16T00:00:00+08:00", "西班牙", "佛得角", "H组"),
+    ("6月16日", "2026-06-16T03:00:00+08:00", "比利时", "埃及", "G组"),
+    ("6月16日", "2026-06-16T06:00:00+08:00", "沙特阿拉伯", "乌拉圭", "H组"),
+    ("6月16日", "2026-06-16T09:00:00+08:00", "伊朗", "新西兰", "G组"),
+    # === 6月17日 ===
+    ("6月17日", "2026-06-17T03:00:00+08:00", "法国", "塞内加尔", "I组"),
+    ("6月17日", "2026-06-17T06:00:00+08:00", "伊拉克", "挪威", "I组"),
+    ("6月17日", "2026-06-17T09:00:00+08:00", "阿根廷", "阿尔及利亚", "J组"),
+    ("6月17日", "2026-06-17T12:00:00+08:00", "奥地利", "约旦", "J组"),
+    # === 6月18日 ===
+    ("6月18日", "2026-06-18T01:00:00+08:00", "葡萄牙", "刚果民主共和国", "K组"),
+    ("6月18日", "2026-06-18T04:00:00+08:00", "英格兰", "克罗地亚", "L组"),
+    ("6月18日", "2026-06-18T07:00:00+08:00", "加纳", "巴拿马", "L组"),
+    ("6月18日", "2026-06-18T10:00:00+08:00", "乌兹别克斯坦", "哥伦比亚", "K组"),
+    # === 6月19日 ===
+    ("6月19日", "2026-06-19T00:00:00+08:00", "捷克", "南非", "A组"),
+    ("6月19日", "2026-06-19T03:00:00+08:00", "瑞士", "波黑", "B组"),
+    ("6月19日", "2026-06-19T06:00:00+08:00", "加拿大", "卡塔尔", "B组"),
+    ("6月19日", "2026-06-19T09:00:00+08:00", "墨西哥", "韩国", "A组"),
+    # === 6月20日 ===
+    ("6月20日", "2026-06-20T03:00:00+08:00", "美国", "澳大利亚", "D组"),
+    ("6月20日", "2026-06-20T06:00:00+08:00", "苏格兰", "摩洛哥", "C组"),
+    ("6月20日", "2026-06-20T09:00:00+08:00", "巴西", "海地", "C组"),
+    ("6月20日", "2026-06-20T12:00:00+08:00", "土耳其", "巴拉圭", "D组"),
+    # === 6月21日 ===
+    ("6月21日", "2026-06-21T01:00:00+08:00", "荷兰", "瑞典", "F组"),
+    ("6月21日", "2026-06-21T04:00:00+08:00", "德国", "科特迪瓦", "E组"),
+    ("6月21日", "2026-06-21T08:00:00+08:00", "厄瓜多尔", "库拉索", "E组"),
+    ("6月21日", "2026-06-21T12:00:00+08:00", "突尼斯", "日本", "F组"),
+    # === 6月22日 ===
+    ("6月22日", "2026-06-22T00:00:00+08:00", "西班牙", "沙特阿拉伯", "H组"),
+    ("6月22日", "2026-06-22T03:00:00+08:00", "比利时", "伊朗", "G组"),
+    ("6月22日", "2026-06-22T06:00:00+08:00", "乌拉圭", "佛得角", "H组"),
+    ("6月22日", "2026-06-22T09:00:00+08:00", "新西兰", "埃及", "G组"),
+    # === 6月23日 ===
+    ("6月23日", "2026-06-23T01:00:00+08:00", "阿根廷", "奥地利", "J组"),
+    ("6月23日", "2026-06-23T05:00:00+08:00", "法国", "伊拉克", "I组"),
+    ("6月23日", "2026-06-23T08:00:00+08:00", "挪威", "塞内加尔", "I组"),
+    ("6月23日", "2026-06-23T11:00:00+08:00", "约旦", "阿尔及利亚", "J组"),
+    # === 6月24日 ===
+    ("6月24日", "2026-06-24T01:00:00+08:00", "葡萄牙", "乌兹别克斯坦", "K组"),
+    ("6月24日", "2026-06-24T04:00:00+08:00", "英格兰", "加纳", "L组"),
+    ("6月24日", "2026-06-24T07:00:00+08:00", "巴拿马", "克罗地亚", "L组"),
+    ("6月24日", "2026-06-24T10:00:00+08:00", "哥伦比亚", "刚果民主共和国", "K组"),
+    # === 6月25日 (第三轮，同组同时开球) ===
+    ("6月25日", "2026-06-25T03:00:00+08:00", "瑞士", "加拿大", "B组"),
+    ("6月25日", "2026-06-25T03:00:00+08:00", "波黑", "卡塔尔", "B组"),
+    ("6月25日", "2026-06-25T06:00:00+08:00", "苏格兰", "巴西", "C组"),
+    ("6月25日", "2026-06-25T06:00:00+08:00", "摩洛哥", "海地", "C组"),
+    ("6月25日", "2026-06-25T09:00:00+08:00", "捷克", "墨西哥", "A组"),
+    ("6月25日", "2026-06-25T09:00:00+08:00", "南非", "韩国", "A组"),
+    # === 6月26日 ===
+    ("6月26日", "2026-06-26T04:00:00+08:00", "库拉索", "科特迪瓦", "E组"),
+    ("6月26日", "2026-06-26T04:00:00+08:00", "厄瓜多尔", "德国", "E组"),
+    ("6月26日", "2026-06-26T07:00:00+08:00", "日本", "瑞典", "F组"),
+    ("6月26日", "2026-06-26T07:00:00+08:00", "突尼斯", "荷兰", "F组"),
+    ("6月26日", "2026-06-26T10:00:00+08:00", "土耳其", "美国", "D组"),
+    ("6月26日", "2026-06-26T10:00:00+08:00", "巴拉圭", "澳大利亚", "D组"),
+    # === 6月27日 ===
+    ("6月27日", "2026-06-27T03:00:00+08:00", "挪威", "法国", "I组"),
+    ("6月27日", "2026-06-27T03:00:00+08:00", "塞内加尔", "伊拉克", "I组"),
+    ("6月27日", "2026-06-27T08:00:00+08:00", "佛得角", "沙特阿拉伯", "H组"),
+    ("6月27日", "2026-06-27T08:00:00+08:00", "乌拉圭", "西班牙", "H组"),
+    ("6月27日", "2026-06-27T11:00:00+08:00", "埃及", "伊朗", "G组"),
+    ("6月27日", "2026-06-27T11:00:00+08:00", "新西兰", "比利时", "G组"),
+    # === 6月28日 ===
+    ("6月28日", "2026-06-28T05:00:00+08:00", "巴拿马", "英格兰", "L组"),
+    ("6月28日", "2026-06-28T05:00:00+08:00", "克罗地亚", "加纳", "L组"),
+    ("6月28日", "2026-06-28T07:30:00+08:00", "哥伦比亚", "葡萄牙", "K组"),
+    ("6月28日", "2026-06-28T07:30:00+08:00", "刚果民主共和国", "乌兹别克斯坦", "K组"),
+    ("6月28日", "2026-06-28T10:00:00+08:00", "阿尔及利亚", "奥地利", "J组"),
+    ("6月28日", "2026-06-28T10:00:00+08:00", "约旦", "阿根廷", "J组"),
+]
+
+
+def load_existing_urls(mp: Path) -> dict:
+    """读取已有的回放链接，按 (teamA_clean, teamB_clean) 映射"""
+    if not mp.exists():
+        return {}
+    with open(mp, "r", encoding="utf-8") as f:
+        old = json.load(f)
+
+    url_map = {}
+    for m in old:
+        a = re.sub(r'[^\u4e00-\u9fff\u1100-\u11FF\uAC00-\uD7AF]', '', m["teamA"]).strip()
+        b = re.sub(r'[^\u4e00-\u9fff\u1100-\u11FF\uAC00-\uD7AF]', '', m["teamB"]).strip()
+        key = (a, b)
+        entry = {"cctvUrl": m.get("cctvUrl", ""), "miguUrl": m.get("miguUrl", ""),
+                 "verified": m.get("verified", False)}
+        if entry["cctvUrl"]:
+            url_map[key] = entry
+        # also store reverse
+        url_map[(b, a)] = entry
+    return url_map
+
+
+def generate(mp: Path):
+    url_map = load_existing_urls(mp)
+
+    # Known corrections (manually verified)
+    KNOWN_FIXES = {
+        ("德国", "库拉索"): "https://sports.cctv.com/2026/06/15/VIDEyCW2ZCBTGcDaEaocGB4s260615.shtml",
+    }
+
+    matches = []
+    for date_str, kickoff, teamA, teamB, group in SCHEDULE:
+        cctvUrl = ""
+        miguUrl = ""
+        verified = False
+
+        # Check known fixes first
+        fix_key = (teamA, teamB)
+        if fix_key in KNOWN_FIXES:
+            cctvUrl = KNOWN_FIXES[fix_key]
+            verified = True
+            print(f"  ✓ {teamA} vs {teamB}: using known-fixed URL")
+        # Then try to find existing URL
+        elif fix_key in url_map:
+            existing = url_map[fix_key]
+            cctvUrl = existing["cctvUrl"]
+            miguUrl = existing.get("miguUrl", "")
+            verified = existing.get("verified", False)
+            # verify the URL date matches the match date (warning only)
+            if cctvUrl:
+                yymmdd = kickoff[2:10].replace("-", "")
+                if yymmdd not in cctvUrl:
+                    print(f"  ⚠ {teamA} vs {teamB}: URL日期与赛程不一致 (URL含{cctvUrl[-12:-6]}, 赛程{yymmdd})")
+
+        matches.append({
+            "date": date_str,
+            "kickoff": kickoff,
+            "teamA": flag(teamA),
+            "teamB": flag(teamB),
+            "cctvUrl": cctvUrl,
+            "miguUrl": miguUrl,
+            "verified": verified,
+            "group": group,
+        })
+
+    return matches
+
+
+def sync_to_html(matches: list, hp: Path):
+    """同步到 index.html"""
+    if not hp.exists():
+        return
+    with open(hp, "r", encoding="utf-8") as f:
+        html = f.read()
+
+    json_str = json.dumps(matches, ensure_ascii=False, indent=2)
+    pattern = r'(<script\s+id=["\']match-data["\']\s*type=["\']application/json["\']\s*>)(.*?)(</script>)'
+    replacement = r'\1\n' + json_str + r'\n\3'
+    new_html = re.sub(pattern, replacement, html, flags=re.DOTALL)
+    with open(hp, "w", encoding="utf-8") as f:
+        f.write(new_html)
+    print("[同步] index.html 已更新")
+
+
+def main():
+    mp = Path(__file__).parent / "matches.json"
+    hp = Path(__file__).parent / "index.html"
+
+    matches = generate(mp)
+
+    print(f"生成 {len(matches)} 场比赛\n")
+
+    # 统计
+    has_url = sum(1 for m in matches if m["cctvUrl"])
+    verified = sum(1 for m in matches if m["verified"])
+    print(f"已有回放链接: {has_url}/{len(matches)}")
+    print(f"已验证: {verified}/{len(matches)}")
+
+    # 按日期统计
+    from collections import Counter
+    date_counts = Counter(m["date"] for m in matches)
+    for d in sorted(date_counts.keys(), key=lambda x: int(x.replace("月","").replace("日",""))):
+        total = date_counts[d]
+        with_url = sum(1 for m in matches if m["date"] == d and m["cctvUrl"])
+        print(f"  {d}: {total}场, {with_url}有回放链接")
+
+    # 写入匹配文件
+    with open(mp, "w", encoding="utf-8") as f:
+        json.dump(matches, f, ensure_ascii=False, indent=2)
+    print(f"\n[写入] {mp}")
+
+    # 同步 HTML
+    sync_to_html(matches, hp)
+
+    print(f"\n[完成] 总共 {len(matches)} 场比赛，已有 {has_url} 场回放链接")
+
+
+if __name__ == "__main__":
+    main()

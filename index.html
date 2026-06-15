@@ -1120,17 +1120,21 @@
       return;
     }
 
-    function lookupInData(data) {
-      for (var i = 0; i < data.length; i++) {
-        if (data[i].note_id === noteId && data[i].video_urls && data[i].video_urls.length > 0) {
-          var url = data[i].video_urls[0];
-          cachedUrls[noteId] = { url: url, expires: Date.now() + 8 * 60 * 1000 };
-          setVideoSrc(video, url, loadingEl, container, fallbackEl);
-          return true;
+      function lookupInData(data) {
+        for (var i = 0; i < data.length; i++) {
+          if (data[i].note_id === noteId && data[i].video_urls && data[i].video_urls.length > 0) {
+            var urls = data[i].video_urls;
+            cachedUrls[noteId] = {
+              urls: urls,
+              currentIndex: 0,
+              expires: Date.now() + 4 * 60 * 1000  // 缓存4分钟
+            };
+            setVideoSrc(video, urls[0], loadingEl, container, fallbackEl, 0);
+            return true;
+          }
         }
+        return false;
       }
-      return false;
-    }
 
     // 优先读内联数据（解决 file:// 下 fetch 被 Chrome 阻止的问题）
     var inlineEl = document.getElementById('video-url-data');
@@ -1150,9 +1154,18 @@
       .catch(function() { showFallback(loadingEl, fallbackEl); });
   }
 
-  function setVideoSrc(video, url, loadingEl, container, fallbackEl) {
+  function setVideoSrc(video, url, loadingEl, container, fallbackEl, urlIndex) {
+    if (urlIndex === undefined) urlIndex = 0;
     video.onerror = function() {
       video.onerror = null;
+      // 尝试下一个 URL
+      var cached = cachedUrls[currentNoteId];
+      if (cached && cached.urls && urlIndex + 1 < cached.urls.length) {
+        var nextIndex = urlIndex + 1;
+        cached.currentIndex = nextIndex;
+        setVideoSrc(video, cached.urls[nextIndex], loadingEl, container, fallbackEl, nextIndex);
+        return;
+      }
       showFallback(loadingEl, fallbackEl);
     };
     video.src = url;

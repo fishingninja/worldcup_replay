@@ -3,32 +3,43 @@
 import asyncio, json, sys
 from pathlib import Path
 
-async def fetch_video_for_match(note_id, xsec_token, match_name, page):
-    """为单场比赛获取视频URL"""
-    url = f'https://www.xiaohongshu.com/explore/{note_id}?xsec_token={xsec_token}&xsec_source=pc_sfeed'
+async def fetch_video_for_match(note_id, xsec_token, match_name, page, max_retry=3):
+    """为单场比赛获取视频URL，失败自动重试"""
+    for attempt in range(1, max_retry + 1):
+        url = f'https://www.xiaohongshu.com/explore/{note_id}?xsec_token={xsec_token}&xsec_source=pc_feed'
+        
+        video_urls = []
+        req_count = 0
+        
+        def on_req(req):
+            nonlocal req_count
+            u = req.url
+            req_count += 1
+            if any(k in u for k in ['sns-video', '.mp4?', '/stream/']):
+                if u not in video_urls:
+                    video_urls.append(u)
+        
+        page.on('request', on_req)
+        
+        print(f'  尝试 {attempt}/{max_retry}: {match_name[:50]}...', flush=True)
+        try:
+            await page.goto(url, wait_until='domcontentloaded', timeout=20000)
+            await asyncio.sleep(6)
+        except Exception as e:
+            print(f'  error: {e}', flush=True)
+        
+        page.remove_listener('request', on_req)
+        
+        if video_urls:
+            print(f'  ✅ 成功获取 {len(video_urls)} 个视频URL', flush=True)
+            return video_urls
+        else:
+            print(f'  ⚠️ 未获取到视频URL (尝试 {attempt}/{max_retry})', flush=True)
+            if attempt < max_retry:
+                await asyncio.sleep(3)  # 重试前等待 3 秒
     
-    video_urls = []
-    req_count = 0
-    
-    def on_req(req):
-        nonlocal req_count
-        u = req.url
-        req_count += 1
-        if any(k in u for k in ['sns-video', '.mp4?', '/stream/']):
-            if u not in video_urls:
-                video_urls.append(u)
-    
-    page.on('request', on_req)
-    
-    print(f'  loading {url[:100]}...', flush=True)
-    try:
-        await page.goto(url, wait_until='domcontentloaded', timeout=20000)
-        await asyncio.sleep(6)
-    except Exception as e:
-        print(f'  error: {e}', flush=True)
-    
-    page.remove_listener('request', on_req)
-    return video_urls
+    print(f'  ❌ 重试 {max_retry} 次后仍未获取到视频URL', flush=True)
+    return []
 
 
 async def main():

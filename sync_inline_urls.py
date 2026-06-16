@@ -40,30 +40,38 @@ def main():
     existing_data = json.loads(match.group(1))
     print(f'现有内嵌数据: {len(existing_data)} 条')
 
-    # 4. 合并逻辑：以现有非空 URL 为准，只有现有为空时才用新数据
-    preserved = 0
-    updated = 0
+    # 4. 合并逻辑：新数据优先（XHS 视频 URL 约 10 分钟过期，新数据更新鲜）
+    # 保护机制：如果新数据全部为空（可能抓取失败），则完全跳过，保留现有数据
+    non_empty_new = sum(1 for e in new_data if e.get('video_urls'))
+    if non_empty_new == 0:
+        print(f'⚠️ 新数据全部为空，跳过同步（保留现有 {len(existing_data)} 条数据）')
+        return
+
     merged = {}
-    for entry in existing_data:
-        nid = entry.get('note_id')
-        merged[nid] = entry
+    updated = 0
+    new_added = 0
+    empty_kept = 0
 
     for entry in new_data:
         nid = entry.get('note_id')
-        if nid in merged:
-            existing_urls = merged[nid].get('video_urls', [])
-            new_urls = entry.get('video_urls', [])
-            if existing_urls and len(existing_urls) > 0:
-                preserved += 1
-            elif new_urls and len(new_urls) > 0:
-                merged[nid] = entry
-                updated += 1
-        elif entry.get('video_urls') and len(entry.get('video_urls', [])) > 0:
+        new_urls = entry.get('video_urls', [])
+        if new_urls and len(new_urls) > 0:
             merged[nid] = entry
             updated += 1
+        elif nid in {e.get('note_id') for e in existing_data}:
+            # 新数据为空，保留现有数据（无论现有是否为空）
+            for old in existing_data:
+                if old.get('note_id') == nid:
+                    merged[nid] = old
+                    empty_kept += 1
+                    break
+        else:
+            merged[nid] = entry
+            new_added += 1
 
     merged_list = list(merged.values())
-    print(f'合并结果: 保留 {preserved} 条现有非空, 新增/更新 {updated} 条')
+    print(f'合并结果: 更新 {updated} 条, 保留空 {empty_kept} 条, 新增 {new_added} 条, '
+          f'总计 {len(merged_list)} 条, 新数据非空 {non_empty_new}/{len(new_data)}')
 
     # 5. 构造新的内嵌数据并替换
     new_inline = json.dumps(merged_list, ensure_ascii=False, separators=(',', ':'))

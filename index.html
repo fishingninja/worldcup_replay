@@ -447,7 +447,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "H组"
+    "group": "H组",
+    "xhsNoteId": "6a304a31000000002200a1ea"
   },
   {
     "date": "6月16日",
@@ -457,7 +458,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "G组"
+    "group": "G组",
+    "xhsNoteId": "6a3088a1000000002200b776"
   },
   {
     "date": "6月16日",
@@ -1043,7 +1045,7 @@
 </script>
 
 <!-- 小红书视频 URL 缓存（由 CI 自动更新，前端优先读此内联数据，避免 file:// CORS 问题） -->
-  <script id="video-url-data" type="application/json">
+  <script id="video-url-data" type="application/json">[
     {"note_id": "6a2b3526000000000701093f", "video_urls": ["https://sns-video-v4-m.xhscdn.com/stream/79/110/258/01ea2b4d983ca51d4f0370019eb970e92c_258.mp4?sign=7b1a9e08c6c1b946d58bfeda43f280ff&t=6a303dc5"]},
     {"note_id": "6a2b8b570000000007020226", "video_urls": ["https://sns-video-qc-m.xhscdn.com/stream/79/110/259/01ea2c28d031663a010370039ebc9fb6d7_259.mp4?sign=0ea86b1371ee788def6a9c4cb391964a&t=6a303dce"]},
     {"note_id": "6a2c7ccb00000000210214ba", "video_urls": ["https://sns-video-qc-m.xhscdn.com/stream/79/110/259/01ea2c7ccc3b5354010370039ebe05a5e1_259.mp4?sign=3c7710a63ccc61a9aad13d996ada708e&t=6a303dd5"]},
@@ -1055,7 +1057,9 @@
     {"note_id": "6a2f08ae0000000006030ef8", "video_urls": ["https://sns-video-qc-m.xhscdn.com/stream/1/110/259/01ea2f060c2f6ec7010370039ec85bbde5_259.mp4?sign=745e74dfa51bb827b367b5c7a50199a1&t=6a303dfe"]},
     {"note_id": "6a2f336a00000000060375f4", "video_urls": ["https://sns-video-qc-m.xhscdn.com/stream/79/110/259/01ea2fcb433ffb9c010370039ecad632c1_259.mp4?sign=2deaba3d88fa1744cd74e894816b4bac&t=6a303e05"]},
     {"note_id": "6a2f67e10000000021023102", "video_urls": ["https://sns-video-qc-m.xhscdn.com/stream/79/110/259/01ea2f67e13cb7e2010370039ec973d5ee_259.mp4?sign=ac6ca7cfe48c38624280c343118cce81&t=6a303e0b"]},
-    {"note_id": "6a2f8728000000002101b966", "video_urls": ["https://sns-video-qc-m.xhscdn.com/stream/79/110/259/01ea2f87283d015b010370039ec9cd5fbe_259.mp4?sign=3fb70e0b35cd2cf7c2e998c7028ce2c2&t=6a303e12"]}
+    {"note_id": "6a2f8728000000002101b966", "video_urls": ["https://sns-video-qc-m.xhscdn.com/stream/79/110/259/01ea2f87283d015b010370039ec9cd5fbe_259.mp4?sign=3fb70e0b35cd2cf7c2e998c7028ce2c2&t=6a303e12"]},
+    {"note_id": "6a304a31000000002200a1ea", "video_urls": ["https://sns-video-qc-m.xhscdn.com/stream/79/110/259/01ea304a3138e77c010370039eccd5ef59_259.mp4?sign=b23c2ba3fd08d67a0e90cc5ca6d89321&t=6a309cc9"]},
+    {"note_id": "6a3088a1000000002200b776", "video_urls": ["https://sns-video-v2-m.xhscdn.com/stream/79/110/258/01ea3087fb3721f24f0370019ecd9c08f9_258.mp4?sign=b2d2aa969d4e7d5a7c43e043b7c070ae&t=6a309cc1"]}]
   </script>
 
 <script>
@@ -1316,8 +1320,8 @@
     document.getElementById('footer').innerHTML =
       '2026\u4E16\u754C\u676F \u00B7 \u9632\u5267\u900F\u56DE\u653E\u5165\u53E3 &nbsp;\u007C&nbsp; \u6570\u636E\u6765\u6E90\uFF1A\u592E\u89C6\u4F53\u80B2 &nbsp;\u007C&nbsp; \u5237\u65B0\uFF1A' +
       now.toLocaleString('zh-CN', { timeZone:'Asia/Shanghai' }) +
-      '<br><span class="counter">\uD83D\uDCC8 \u9875\u9762\u8BBF\u95EE\uFF1A<b id="pv2">...</b> \u6B21</span>' +
-      ' &nbsp; <span class="counter">\uD83D\uDC64 \u72EC\u7ACB\u8BBF\u5BA2\uFF1A<b id="uv2">...</b> \u4EBA</span>';
+      '<!--<br><span class="counter">\uD83D\uDCC8 \u9875\u9762\u8BBF\u95EE\uFF1A<b id="pv2">...</b> \u6B21</span>' +
+      ' &nbsp; <span class="counter">\uD83D\uDC64 \u72EC\u7ACB\u8BBF\u5BA2\uFF1A<b id="uv2">...</b> \u4EBA</span>-->';
     loadCounter();
   }
 

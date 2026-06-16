@@ -32,7 +32,7 @@ jobs:
       - name: Run Playwright CCTV scraper
         run: python update_replay_links.py
 
-      - name: [TEST] Geo test - can GHA access XHS replay pages?
+      - name: TEST Geo test - can GHA access XHS replay pages
         run: python test_xhs_geo.py
         continue-on-error: true
 

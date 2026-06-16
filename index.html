@@ -1159,6 +1159,7 @@
       }
       showFallback(loadingEl, fallbackEl);
     };
+    video.setAttribute('referrerpolicy', 'no-referrer');
     video.src = url;
     container.style.display = 'block';
     loadingEl.classList.remove('show');
@@ -1368,7 +1369,7 @@
   </div>
   <div class="player-loading" id="player-loading">⏳ 正在获取视频源...</div>
   <div class="player-container" id="player-container" style="display:none">
-    <video id="player-video" controls autoplay playsinline></video>
+    <video id="player-video" controls autoplay playsinline referrerpolicy="no-referrer"></video>
   </div>
   <div class="player-fallback" id="player-fallback">
     视频源暂时不可用（链接有效期约10分钟）<br>

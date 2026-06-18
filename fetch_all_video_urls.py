@@ -18,9 +18,9 @@ from pathlib import Path
 async def fetch_calendar_in_session(page):
     """在当前 page 上访问 worldcup26 并拦截 calendar_info，返回回放列表。"""
     print('>>> 1/2 拦截 calendar_info API...', flush=True)
-
+    
     calendar_responses = []
-
+    
     async def on_response(res):
         if 'calendar_info' in res.url:
             try:
@@ -29,14 +29,25 @@ async def fetch_calendar_in_session(page):
                 print(f'  [CAPTURED] calendar_info #{len(calendar_responses)} ({len(body)} bytes)', flush=True)
             except Exception as e:
                 print(f'  [ERR] 读取失败: {e}', flush=True)
-
+    
     page.on('response', on_response)
-
+    
     print('  goto worldcup26 ...', flush=True)
     await page.goto('https://www.xiaohongshu.com/worldcup26',
                     wait_until='domcontentloaded', timeout=30000)
-    await asyncio.sleep(10)  # 等待 API 全部加载
-
+    
+    # 等待初始数据加载
+    await asyncio.sleep(5)
+    
+    # 滚动页面以触发更多内容加载
+    print('  滚动页面加载更多数据...', flush=True)
+    for i in range(5):
+        await page.evaluate('window.scrollBy(0, 500)')
+        await asyncio.sleep(1)
+    
+    # 再次等待，确保 API 响应完成
+    await asyncio.sleep(5)
+    
     page.remove_listener('response', on_response)
 
     if not calendar_responses:

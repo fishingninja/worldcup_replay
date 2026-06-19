@@ -22,6 +22,7 @@ async def fetch_calendar_in_session(page):
     print('>>> 1/2 拦截 calendar_info API...', flush=True)
     
     calendar_responses = []
+    calendar_event = asyncio.Event()
     
     async def on_response(res):
         if 'calendar_info' in res.url:
@@ -29,26 +30,30 @@ async def fetch_calendar_in_session(page):
                 body = await res.text()
                 calendar_responses.append(body)
                 print(f'  [CAPTURED] calendar_info #{len(calendar_responses)} ({len(body)} bytes)', flush=True)
+                if len(body) > 100 and not calendar_event.is_set():  # 有效数据
+                    calendar_event.set()
             except Exception as e:
                 print(f'  [ERR] 读取失败: {e}', flush=True)
     
     page.on('response', on_response)
     
     print('  goto worldcup26 ...', flush=True)
-    await page.goto('https://www.xiaohongshu.com/worldcup26',
-                    wait_until='domcontentloaded', timeout=30000)
+    try:
+        await page.goto('https://www.xiaohongshu.com/worldcup26?wcup_source=web_sidebar_entry',
+                        wait_until='domcontentloaded', timeout=30000)
+    except Exception as e:
+        print(f'  goto 超时（不影响数据拦截）: {e}', flush=True)
     
-    # 等待初始数据加载
-    await asyncio.sleep(5)
+    # 等待 calendar_info 响应（最多 15 秒）
+    print('  等待 calendar_info 响应...', flush=True)
+    try:
+        await asyncio.wait_for(calendar_event.wait(), timeout=15)
+        print('  ✅ 已获取到 calendar_info 数据', flush=True)
+    except asyncio.TimeoutError:
+        print('  ⚠️ 等待超时，使用已捕获的响应', flush=True)
     
-    # 滚动页面以触发更多内容加载
-    print('  滚动页面加载更多数据...', flush=True)
-    for i in range(5):
-        await page.evaluate('window.scrollBy(0, 500)')
-        await asyncio.sleep(1)
-    
-    # 再次等待，确保 API 响应完成
-    await asyncio.sleep(5)
+    # 额外等待，确保拿到完整数据
+    await asyncio.sleep(3)
     
     page.remove_listener('response', on_response)
 
@@ -83,8 +88,8 @@ async def fetch_calendar_in_session(page):
                     'home': home_name,
                     'away': away_name,
                     'score': f"{m.get('home_score', '?')}:{m.get('away_score', '?')}",
-                    'teamA': home_name,   # 和 match-data 中的 teamA 格式一致（含国旗）
-                    'teamB': away_name,   # 和 match-data 中的 teamB 格式一致（含国旗）
+                    'teamA': home_name,   # 来自 calendar_info API（无国旗）
+                    'teamB': away_name,   # 来自 calendar_info API（无国旗）
                 })
 
     # 最新优先（日期靠后的排前面，用户最关心）
@@ -143,8 +148,11 @@ async def fetch_video_for_match(ctx, note_id, xsec_token, match_label, sem, max_
 
 
 async def main():
+    import sys
+    HEADLESS = False  # 改成 False 可以看到浏览器界面，有助于调试
+    
     from playwright.async_api import async_playwright
-
+    
     async with async_playwright() as p:
         # ── 单一浏览器会话，贯穿全程 ──
         browser = await p.chromium.launch(headless=True)

@@ -148,9 +148,6 @@ async def fetch_video_for_match(ctx, note_id, xsec_token, match_label, sem, max_
 
 
 async def main():
-    import sys
-    HEADLESS = False  # 改成 False 可以看到浏览器界面，有助于调试
-    
     from playwright.async_api import async_playwright
     
     async with async_playwright() as p:

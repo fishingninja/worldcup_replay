@@ -1,18 +1,36 @@
 #!/usr/bin/env python3
-"""从 XHS 赛程 API 实时获取所有回放比赛，并抓取视频流 URL。
+"""从 XHS 赛程 API 实时获取回放比赛，并抓取视频流 URL。
 
-关键修复 v3:
-- 保持同一浏览器会话：不在 calendar_info 和视频抓取之间关闭浏览器，
-  xsec_token 是会话绑定的，换浏览器就失效。
-- 最新优先处理：用户最关心最近的比赛。
-- 并发抓取：同一上下文中 4 个页面并行，16 场比赛 ~30 秒完成。
-- 自动回写 xhsNoteId 到 index.html（防止遗漏导致前端无法关联视频）。
+v4 改进:
+- 增量抓取：只抓取还没有视频URL的比赛，跳过已有的（节省资源）
+- 修复 subdivision flag（如苏格兰🏴󠁧󠁭󠁯󠁰󠁿）的 emoji 匹配问题
+- 支持 --full 参数强制全量抓取
+- 自动回写 xhsNoteId 到 index.html（防止遗漏导致前端无法关联视频）
+
+关键设计:
+- 保持同一浏览器会话：xsec_token 是会话绑定的，换浏览器就失效
+- 并发抓取：同一上下文中 4 个页面并行
 """
 import asyncio
 import json
 import sys
 import re
+import argparse
 from pathlib import Path
+
+
+# ── 旗帜 emoji 正则 ──
+# 匹配所有旗帜 emoji：
+# - U+1F1E6-U+1F1FF: Regional indicator symbols（普通国旗，如🇨🇳🇲🇽🇰🇷）
+# - U+1F3F4: Waving black flag（subdivision flag 基础字符，如🏴）
+# - U+E0020-U+E007F: Tag characters（subdivision flag 标签序列，如󠁧󠁭󠁯󠁰󠁿）
+#   苏格兰🏴󠁧󠁭󠁯󠁰󠁿 = U+1F3F4 + U+E0067 + U+E006D + U+E006F + U+E0070 + U+E007F
+FLAG_EMOJI_RE = re.compile(r'[\U0001F1E6-\U0001F1FF\U0001F3F4\U000E0020-\U000E007F]+')
+
+
+def strip_flags(text):
+    """去掉旗帜 emoji，返回纯文本队名"""
+    return FLAG_EMOJI_RE.sub('', text).strip()
 
 
 # ── 第1步：拦截 calendar_info，提取回放列表 ──
@@ -20,10 +38,10 @@ from pathlib import Path
 async def fetch_calendar_in_session(page):
     """在当前 page 上访问 worldcup26 并拦截 calendar_info，返回回放列表。"""
     print('>>> 1/2 拦截 calendar_info API...', flush=True)
-    
+
     calendar_responses = []
     calendar_event = asyncio.Event()
-    
+
     async def on_response(res):
         if 'calendar_info' in res.url:
             try:
@@ -34,16 +52,16 @@ async def fetch_calendar_in_session(page):
                     calendar_event.set()
             except Exception as e:
                 print(f'  [ERR] 读取失败: {e}', flush=True)
-    
+
     page.on('response', on_response)
-    
+
     print('  goto worldcup26 ...', flush=True)
     try:
         await page.goto('https://www.xiaohongshu.com/worldcup26?wcup_source=web_sidebar_entry',
                         wait_until='domcontentloaded', timeout=30000)
     except Exception as e:
         print(f'  goto 超时（不影响数据拦截）: {e}', flush=True)
-    
+
     # 等待 calendar_info 响应（最多 15 秒）
     print('  等待 calendar_info 响应...', flush=True)
     try:
@@ -51,10 +69,10 @@ async def fetch_calendar_in_session(page):
         print('  ✅ 已获取到 calendar_info 数据', flush=True)
     except asyncio.TimeoutError:
         print('  ⚠️ 等待超时，使用已捕获的响应', flush=True)
-    
+
     # 额外等待，确保拿到完整数据
     await asyncio.sleep(3)
-    
+
     page.remove_listener('response', on_response)
 
     if not calendar_responses:
@@ -147,9 +165,40 @@ async def fetch_video_for_match(ctx, note_id, xsec_token, match_label, sem, max_
         return []
 
 
+# ── 第3步：加载已有数据（增量用）──
+
+def load_existing_results():
+    """加载已有的 all_video_urls.json，返回 {note_id: entry} 映射。"""
+    path = Path('xhs_debug/all_video_urls.json')
+    if not path.exists():
+        return {}
+    try:
+        with open(path, encoding='utf-8') as f:
+            data = json.load(f)
+        return {r['note_id']: r for r in data if r.get('note_id')}
+    except (json.JSONDecodeError, KeyError, TypeError):
+        return {}
+
+
+# ── 主流程 ──
+
 async def main():
+    parser = argparse.ArgumentParser(description='抓取 XHS 世界杯回放视频 URL')
+    parser.add_argument('--full', action='store_true',
+                        help='强制全量抓取（忽略已有数据，重新抓取所有比赛）')
+    args = parser.parse_args()
+
     from playwright.async_api import async_playwright
-    
+
+    # 加载已有数据（用于增量判断）
+    existing = {} if args.full else load_existing_results()
+    if args.full:
+        print('🔧 --full 模式：全量抓取所有比赛', flush=True)
+    elif existing:
+        print(f'📦 已有数据: {len(existing)} 场（将跳过已有视频URL的比赛）', flush=True)
+    else:
+        print('📦 无已有数据，将全量抓取', flush=True)
+
     async with async_playwright() as p:
         # ── 单一浏览器会话，贯穿全程 ──
         browser = await p.chromium.launch(headless=True)
@@ -168,37 +217,75 @@ async def main():
             await browser.close()
             sys.exit(1)
 
-        # 2. 并发抓取视频（同一 context，不同 page）
-        print(f'\n>>> 2/2 并发抓取 {len(replays)} 场视频URL (并发数=4)...\n', flush=True)
+        # 2. 增量分析：哪些比赛需要抓取视频URL
+        to_fetch = []
+        skipped = []
+        for r in replays:
+            old = existing.get(r['note_id'])
+            if old and old.get('video_urls'):
+                # 已有视频URL，跳过
+                skipped.append(r)
+            else:
+                # 新比赛或之前抓取失败，需要抓取
+                to_fetch.append(r)
 
-        sem = asyncio.Semaphore(4)  # 最多 4 个并发
+        print(f'\n>>> 增量分析: 共 {len(replays)} 场', flush=True)
+        print(f'    需抓取: {len(to_fetch)} 场', flush=True)
+        print(f'    跳过(已有URL): {len(skipped)} 场', flush=True)
 
-        tasks = []
-        for i, r in enumerate(replays):
-            label = f"[{i + 1}/{len(replays)}] {r['date']} {r['home']} vs {r['away']} ({r['score']})"
-            tasks.append(fetch_video_for_match(
-                ctx, r['note_id'], r['xsec_token'], label, sem))
+        if skipped:
+            print('  跳过的比赛:', flush=True)
+            for r in skipped:
+                print(f'    ✓ {r["date"]} {r["home"]} vs {r["away"]}', flush=True)
 
-        raw_results = await asyncio.gather(*tasks)
+        # 3. 并发抓取视频（同一 context，不同 page）
+        raw_results = []
+        if to_fetch:
+            print(f'\n>>> 2/2 并发抓取 {len(to_fetch)} 场视频URL (并发数=4)...\n', flush=True)
+            sem = asyncio.Semaphore(4)
+
+            tasks = []
+            for i, r in enumerate(to_fetch):
+                label = f"[{i + 1}/{len(to_fetch)}] {r['date']} {r['home']} vs {r['away']} ({r['score']})"
+                tasks.append(fetch_video_for_match(
+                    ctx, r['note_id'], r['xsec_token'], label, sem))
+
+            raw_results = await asyncio.gather(*tasks)
+        else:
+            print('\n✅ 所有比赛已有视频URL，无需抓取', flush=True)
 
         await browser.close()
 
-    # 3. 组装结果（恢复原始顺序：日期从前到后）
+    # 4. 合并结果（新抓取 + 保留已有）
     results = []
-    for (i, r), urls in zip(enumerate(replays), raw_results):
+
+    # 新抓取的结果
+    for r, urls in zip(to_fetch, raw_results):
         results.append({
             'match': (f"{r['date']} {r['group']} "
                       f"{r['home']} vs {r['away']} {r['score']}"),
             'note_id': r['note_id'],
-            'teamA': r['teamA'],   # 含国旗，和 match-data 一致
-            'teamB': r['teamB'],   # 含国旗，和 match-data 一致
+            'teamA': r['teamA'],   # 来自 calendar_info API（无国旗）
+            'teamB': r['teamB'],   # 来自 calendar_info API（无国旗）
             'video_urls': list(set(urls))
         })
 
-    # 恢复日期正序（方便阅读）
-    results.reverse()
+    # 保留已有的结果（用新的 match 信息，保留旧的 video_urls）
+    for r in skipped:
+        old = existing[r['note_id']]
+        results.append({
+            'match': (f"{r['date']} {r['group']} "
+                      f"{r['home']} vs {r['away']} {r['score']}"),
+            'note_id': r['note_id'],
+            'teamA': r['teamA'],
+            'teamB': r['teamB'],
+            'video_urls': old.get('video_urls', [])
+        })
 
-    # 4. 保存
+    # 恢复日期正序（方便阅读）
+    results.sort(key=lambda x: x['match'])
+
+    # 5. 保存
     out_dir = Path('xhs_debug')
     out_dir.mkdir(exist_ok=True)
     out_path = out_dir / 'all_video_urls.json'
@@ -206,32 +293,39 @@ async def main():
                         encoding='utf-8')
     print(f'\n结果已保存: {out_path}', flush=True)
 
-    # 5. 汇总
+    # 6. 汇总
     print('\n===== 汇总 =====', flush=True)
-    success = 0
-    for r in results:
-        if r['video_urls']:
-            success += 1
-            print(f"✅ {r['match']}", flush=True)
-            for u in r['video_urls']:
-                print(f"   {u[:150]}", flush=True)
-        else:
-            print(f"❌ {r['match']}", flush=True)
+    new_success = sum(1 for _, urls in zip(to_fetch, raw_results) if urls)
+    total_success = sum(1 for r in results if r['video_urls'])
 
-    print(f'\n成功: {success}/{len(results)}', flush=True)
-    if success == 0:
+    if to_fetch:
+        print(f'本次抓取: {new_success}/{len(to_fetch)} 成功', flush=True)
+        for r, urls in zip(to_fetch, raw_results):
+            label = f"{r['date']} {r['home']} vs {r['away']}"
+            if urls:
+                print(f"  ✅ {label} ({len(urls)} 个URL)", flush=True)
+            else:
+                print(f"  ❌ {label}", flush=True)
+    else:
+        print('本次无需抓取', flush=True)
+
+    print(f'\n总计: {total_success}/{len(results)} 有视频URL', flush=True)
+    print(f'  (新抓取 {new_success} + 保留 {len(skipped)} 场)', flush=True)
+
+    if total_success == 0:
         print('⚠️ 全部失败，检查 xsec_token 是否在日历页加载后立即使用', flush=True)
         sys.exit(1)
 
-    # 6. 自动回写 xhsNoteId 到 index.html 的 match-data
+    # 7. 自动回写 xhsNoteId 到 index.html 的 match-data
     update_match_data_xhs_note_id(results)
 
 
 def update_match_data_xhs_note_id(results):
     """将 results 中的 note_id 回写到 index.html 的 match-data。
 
-    匹配逻辑：results 每条都有 teamA/teamB（含国旗，和 match-data 一致），
-    直接用 (teamA, teamB) 元组匹配 match-data 中的条目，补充 xhsNoteId。
+    匹配逻辑：results 中的 teamA/teamB 来自 calendar_info API（无国旗 emoji），
+    而 match-data 中的 teamA/teamB 含国旗 emoji（包括 subdivision flag 如苏格兰🏴󠁧󠁭󠁯󠁰󠁿），
+    所以匹配时两边统一用 strip_flags() 去掉所有旗帜 emoji 后比较。
     """
     index_path = Path('index.html')
     if not index_path.exists():
@@ -255,17 +349,15 @@ def update_match_data_xhs_note_id(results):
         return
 
     # 2. 从 results 构建 (clean_teamA, clean_teamB) -> note_id 映射
-    #    results 中的 teamA/teamB 来自 calendar_info API（无国旗 emoji），
-    #    而 match-data 中的 teamA/teamB 含国旗 emoji，
-    #    所以 NOTE_MAP 的 key 用无国旗格式，匹配时两边统一去掉国旗再比较。
+    #    results 中的 teamA/teamB 来自 calendar_info API（无国旗）
+    #    使用 strip_flags() 确保两边格式一致
     NOTE_MAP = {}  # key: (teamA_no_flag, teamB_no_flag) -> note_id
     for r in results:
         team_a = r.get('teamA', '')
         team_b = r.get('teamB', '')
         if team_a and team_b:
-            # teamA/teamB 可能含国旗，统一去掉
-            clean_a = re.sub(r'[\U0001F1E6-\U0001F1FF]+', '', team_a).strip()
-            clean_b = re.sub(r'[\U0001F1E6-\U0001F1FF]+', '', team_b).strip()
+            clean_a = strip_flags(team_a)
+            clean_b = strip_flags(team_b)
             NOTE_MAP[(clean_a, clean_b)] = r['note_id']
 
     if not NOTE_MAP:
@@ -273,21 +365,14 @@ def update_match_data_xhs_note_id(results):
         return
 
     # 3. 遍历 matches，补充 xhsNoteId
-    #    注意：results 中的 teamA/teamB 来自 calendar_info API（无国旗），
-    #    而 match-data 中的 teamA/teamB 含国旗 emoji，
-    #    所以匹配时两边都要去掉国旗 emoji。
-    EMOJI_RE = re.compile(r'[\U0001F1E6-\U0001F1FF]+')
-
     updated = 0
     for entry in matches:
-        entry_a = EMOJI_RE.sub('', entry.get('teamA', '')).strip()
-        entry_b = EMOJI_RE.sub('', entry.get('teamB', '')).strip()
+        entry_a = strip_flags(entry.get('teamA', ''))
+        entry_b = strip_flags(entry.get('teamB', ''))
 
         found = False
         for (r_a, r_b), nid in NOTE_MAP.items():
-            r_a_clean = EMOJI_RE.sub('', r_a).strip()
-            r_b_clean = EMOJI_RE.sub('', r_b).strip()
-            if entry_a == r_a_clean and entry_b == r_b_clean:
+            if entry_a == r_a and entry_b == r_b:
                 found = True
                 note_id = nid
                 break

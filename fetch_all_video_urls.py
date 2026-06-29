@@ -83,6 +83,11 @@ async def fetch_calendar_in_session(page):
     body = max(calendar_responses, key=len)
     print(f'  选择最大响应 ({len(body)} bytes)', flush=True)
 
+    # ── 保存实时赛程原始数据（供 generate_schedule_from_xhs.py 使用）──
+    raw_path = Path('xhs_debug/calendar_info_raw.json')
+    raw_path.write_text(body, encoding='utf-8')
+    print(f'  ✅ 赛程原始数据已保存: {raw_path}', flush=True)
+
     try:
         data = json.loads(body)
     except json.JSONDecodeError as e:

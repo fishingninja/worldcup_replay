@@ -1,0 +1,59 @@
+name: Update WorldCup Replay Data
+
+on:
+  schedule:
+    # 每天 4 次（北京时间 7:00/9:00/12:00/14:00）
+    # 对应 UTC: 23:00(前一天)/01:00/04:00/06:00
+    # GHA 更新 CCTV 央视数据；XHS 视频由本地定时任务更新
+    - cron: '0 23,1,4,6 * * *'
+  workflow_dispatch:  # 支持手动触发
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: pip install playwright requests
+
+      - name: Install Playwright browser
+        run: python -m playwright install chromium
+
+      - name: Run CCTV scraper
+        run: python update_replay_links.py
+
+      - name: Fetch XHS video URLs (requires China IP, may fail on GHA)
+        run: python fetch_all_video_urls.py
+        continue-on-error: true
+
+      - name: Generate video_urls.json (skip if XHS fetch failed)
+        run: python generate_video_urls_json.py
+        continue-on-error: true
+
+      - name: Sync inline URLs to index.html (skip if no new data)
+        run: python sync_inline_urls.py
+        continue-on-error: true
+
+      - name: Commit and push if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add matches.json video_urls.json index.html
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "auto: update match replay links + XHS video URLs [skip ci]"
+            git push
+          fi

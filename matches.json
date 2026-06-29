@@ -139,7 +139,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "H组"
+    "group": "H组",
+    "xhsNoteId": "6a304a31000000002200a1ea"
   },
   {
     "date": "6月16日",
@@ -149,7 +150,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "G组"
+    "group": "G组",
+    "xhsNoteId": "6a3088a1000000002200b776"
   },
   {
     "date": "6月16日",
@@ -159,7 +161,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "H组"
+    "group": "H组",
+    "xhsNoteId": "6a30a17b00000000080264a9"
   },
   {
     "date": "6月16日",
@@ -169,7 +172,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "G组"
+    "group": "G组",
+    "xhsNoteId": "6a30d4fa0000000006020188"
   },
   {
     "date": "6月17日",
@@ -179,7 +183,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "I组"
+    "group": "I组",
+    "xhsNoteId": "6a31c97f000000000702f6b8"
   },
   {
     "date": "6月17日",
@@ -189,7 +194,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "I组"
+    "group": "I组",
+    "xhsNoteId": "6a31f628000000002103e85c"
   },
   {
     "date": "6月17日",
@@ -199,7 +205,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "J组"
+    "group": "J组",
+    "xhsNoteId": "6a321955000000000800359d"
   },
   {
     "date": "6月17日",
@@ -209,17 +216,19 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "J组"
+    "group": "J组",
+    "xhsNoteId": "6a3249d80000000020038d80"
   },
   {
     "date": "6月18日",
     "kickoff": "2026-06-18T01:00:00+08:00",
     "teamA": "🇵🇹 葡萄牙",
-    "teamB": "🇨🇩 刚果民主共和国",
+    "teamB": "🇨🇩 刚果（金）",
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "K组"
+    "group": "K组",
+    "xhsNoteId": "6a3312ee0000000006020fe8"
   },
   {
     "date": "6月18日",
@@ -229,7 +238,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "L组"
+    "group": "L组",
+    "xhsNoteId": "6a332cfb000000002101660b"
   },
   {
     "date": "6月18日",
@@ -239,7 +249,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "L组"
+    "group": "L组",
+    "xhsNoteId": "6a334dfe000000002100aaf5"
   },
   {
     "date": "6月18日",
@@ -249,7 +260,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "K组"
+    "group": "K组",
+    "xhsNoteId": "6a337a4c000000002100ad5c"
   },
   {
     "date": "6月19日",
@@ -259,7 +271,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "A组"
+    "group": "A组",
+    "xhsNoteId": "6a3440c8000000000602395a"
   },
   {
     "date": "6月19日",
@@ -269,7 +282,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "B组"
+    "group": "B组",
+    "xhsNoteId": "6a346eca0000000007021b9c"
   },
   {
     "date": "6月19日",
@@ -279,7 +293,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "B组"
+    "group": "B组",
+    "xhsNoteId": "6a3493ac000000002101718f"
   },
   {
     "date": "6月19日",
@@ -289,7 +304,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "A组"
+    "group": "A组",
+    "xhsNoteId": "6a34bd410000000007029912"
   },
   {
     "date": "6月20日",
@@ -299,7 +315,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "D组"
+    "group": "D组",
+    "xhsNoteId": "6a35bd3c000000002101a862"
   },
   {
     "date": "6月20日",
@@ -309,27 +326,30 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "C组"
+    "group": "C组",
+    "xhsNoteId": "6a35e0f4000000000800209c"
   },
   {
     "date": "6月20日",
-    "kickoff": "2026-06-20T09:00:00+08:00",
+    "kickoff": "2026-06-20T08:30:00+08:00",
     "teamA": "🇧🇷 巴西",
     "teamB": "🇭🇹 海地",
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "C组"
+    "group": "C组",
+    "xhsNoteId": "6a3603cd000000000702cadf"
   },
   {
     "date": "6月20日",
-    "kickoff": "2026-06-20T12:00:00+08:00",
+    "kickoff": "2026-06-20T11:00:00+08:00",
     "teamA": "🇹🇷 土耳其",
     "teamB": "🇵🇾 巴拉圭",
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "D组"
+    "group": "D组",
+    "xhsNoteId": "6a3628d5000000002003a8a8"
   },
   {
     "date": "6月21日",
@@ -339,7 +359,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "F组"
+    "group": "F组",
+    "xhsNoteId": "6a36ecc90000000008033c4f"
   },
   {
     "date": "6月21日",
@@ -349,7 +370,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "E组"
+    "group": "E组",
+    "xhsNoteId": "6a3716a00000000007020a07"
   },
   {
     "date": "6月21日",
@@ -359,7 +381,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "E组"
+    "group": "E组",
+    "xhsNoteId": "6a374e640000000006035630"
   },
   {
     "date": "6月21日",
@@ -369,7 +392,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "F组"
+    "group": "F组",
+    "xhsNoteId": "6a3784ef0000000006031da2"
   },
   {
     "date": "6月22日",
@@ -379,7 +403,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "H组"
+    "group": "H组",
+    "xhsNoteId": "6a382fcd000000000603469e"
   },
   {
     "date": "6月22日",
@@ -389,7 +414,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "G组"
+    "group": "G组",
+    "xhsNoteId": "6a3859c0000000002103d0f6"
   },
   {
     "date": "6月22日",
@@ -399,7 +425,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "H组"
+    "group": "H组",
+    "xhsNoteId": "6a3885aa0000000022014dff"
   },
   {
     "date": "6月22日",
@@ -409,7 +436,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "G组"
+    "group": "G组",
+    "xhsNoteId": "6a38ae60000000002100a370"
   },
   {
     "date": "6月23日",
@@ -419,7 +447,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "J组"
+    "group": "J组",
+    "xhsNoteId": "6a398f610000000007012296"
   },
   {
     "date": "6月23日",
@@ -429,7 +458,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "I组"
+    "group": "I组",
+    "xhsNoteId": "6a39deae000000002100a5f9"
   },
   {
     "date": "6月23日",
@@ -439,7 +469,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "I组"
+    "group": "I组",
+    "xhsNoteId": "6a39f1b1000000000802762f"
   },
   {
     "date": "6月23日",
@@ -449,7 +480,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "J组"
+    "group": "J组",
+    "xhsNoteId": "6a3a1a260000000021008d7e"
   },
   {
     "date": "6月24日",
@@ -459,7 +491,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "K组"
+    "group": "K组",
+    "xhsNoteId": "6a3adf890000000007013f5b"
   },
   {
     "date": "6月24日",
@@ -469,7 +502,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "L组"
+    "group": "L组",
+    "xhsNoteId": "6a3b09a2000000000803e92a"
   },
   {
     "date": "6月24日",
@@ -479,17 +513,19 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "L组"
+    "group": "L组",
+    "xhsNoteId": "6a3b333900000000080304f3"
   },
   {
     "date": "6月24日",
     "kickoff": "2026-06-24T10:00:00+08:00",
     "teamA": "🇨🇴 哥伦比亚",
-    "teamB": "🇨🇩 刚果民主共和国",
+    "teamB": "🇨🇩 刚果（金）",
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "K组"
+    "group": "K组",
+    "xhsNoteId": "6a3b5d440000000008033f3a"
   },
   {
     "date": "6月25日",
@@ -499,7 +535,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "B组"
+    "group": "B组",
+    "xhsNoteId": "6a3c4dad0000000007012e3c"
   },
   {
     "date": "6月25日",
@@ -509,7 +546,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "B组"
+    "group": "B组",
+    "xhsNoteId": "6a3c4c6a00000000060374c7"
   },
   {
     "date": "6月25日",
@@ -519,7 +557,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "C组"
+    "group": "C组",
+    "xhsNoteId": "6a3c7a0b00000000210198c0"
   },
   {
     "date": "6月25日",
@@ -529,7 +568,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "C组"
+    "group": "C组",
+    "xhsNoteId": "6a3c77c40000000008031a52"
   },
   {
     "date": "6月25日",
@@ -539,7 +579,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "A组"
+    "group": "A组",
+    "xhsNoteId": "6a3ca102000000000803da8d"
   },
   {
     "date": "6月25日",
@@ -549,17 +590,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "A组"
-  },
-  {
-    "date": "6月26日",
-    "kickoff": "2026-06-26T04:00:00+08:00",
-    "teamA": "🇨🇼 库拉索",
-    "teamB": "🇨🇮 科特迪瓦",
-    "cctvUrl": "",
-    "miguUrl": "",
-    "verified": false,
-    "group": "E组"
+    "group": "A组",
+    "xhsNoteId": "6a3ca21700000000060324a6"
   },
   {
     "date": "6月26日",
@@ -569,17 +601,19 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "E组"
+    "group": "E组",
+    "xhsNoteId": "6a3dad240000000008000ba5"
   },
   {
     "date": "6月26日",
-    "kickoff": "2026-06-26T07:00:00+08:00",
-    "teamA": "🇯🇵 日本",
-    "teamB": "🇸🇪 瑞典",
+    "kickoff": "2026-06-26T04:00:00+08:00",
+    "teamA": "🇨🇼 库拉索",
+    "teamB": "🇨🇮 科特迪瓦",
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "F组"
+    "group": "E组",
+    "xhsNoteId": "6a3daa960000000007022d9f"
   },
   {
     "date": "6月26日",
@@ -589,7 +623,19 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "F组"
+    "group": "F组",
+    "xhsNoteId": "6a3dd79100000000210158f4"
+  },
+  {
+    "date": "6月26日",
+    "kickoff": "2026-06-26T07:00:00+08:00",
+    "teamA": "🇯🇵 日本",
+    "teamB": "🇸🇪 瑞典",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "F组",
+    "xhsNoteId": "6a3dd63f00000000070293e6"
   },
   {
     "date": "6月26日",
@@ -599,7 +645,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "D组"
+    "group": "D组",
+    "xhsNoteId": "6a3e04b40000000006030690"
   },
   {
     "date": "6月26日",
@@ -609,7 +656,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "D组"
+    "group": "D组",
+    "xhsNoteId": "6a3e02740000000022017cef"
   },
   {
     "date": "6月27日",
@@ -619,7 +667,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "I组"
+    "group": "I组",
+    "xhsNoteId": "6a3ef1fa0000000021020029"
   },
   {
     "date": "6月27日",
@@ -629,17 +678,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "I组"
-  },
-  {
-    "date": "6月27日",
-    "kickoff": "2026-06-27T08:00:00+08:00",
-    "teamA": "🇨🇻 佛得角",
-    "teamB": "🇸🇦 沙特阿拉伯",
-    "cctvUrl": "",
-    "miguUrl": "",
-    "verified": false,
-    "group": "H组"
+    "group": "I组",
+    "xhsNoteId": "6a3ef3900000000006030921"
   },
   {
     "date": "6月27日",
@@ -649,17 +689,19 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "H组"
+    "group": "H组",
+    "xhsNoteId": "6a3f3a46000000000803e77a"
   },
   {
     "date": "6月27日",
-    "kickoff": "2026-06-27T11:00:00+08:00",
-    "teamA": "🇪🇬 埃及",
-    "teamB": "🇮🇷 伊朗",
+    "kickoff": "2026-06-27T08:00:00+08:00",
+    "teamA": "🇨🇻 佛得角",
+    "teamB": "🇸🇦 沙特阿拉伯",
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "G组"
+    "group": "H组",
+    "xhsNoteId": "6a3f36a80000000008002327"
   },
   {
     "date": "6月27日",
@@ -669,7 +711,19 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "G组"
+    "group": "G组",
+    "xhsNoteId": "6a3f6228000000002100920b"
+  },
+  {
+    "date": "6月27日",
+    "kickoff": "2026-06-27T11:00:00+08:00",
+    "teamA": "🇪🇬 埃及",
+    "teamB": "🇮🇷 伊朗",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "G组",
+    "xhsNoteId": "6a3f639d0000000008027800"
   },
   {
     "date": "6月28日",
@@ -679,7 +733,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "L组"
+    "group": "L组",
+    "xhsNoteId": "6a405eb100000000210174fc"
   },
   {
     "date": "6月28日",
@@ -689,7 +744,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "L组"
+    "group": "L组",
+    "xhsNoteId": "6a405d6d0000000022015cea"
   },
   {
     "date": "6月28日",
@@ -699,27 +755,19 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "K组"
+    "group": "K组",
+    "xhsNoteId": "6a408263000000002101b932"
   },
   {
     "date": "6月28日",
     "kickoff": "2026-06-28T07:30:00+08:00",
-    "teamA": "🇨🇩 刚果民主共和国",
+    "teamA": "🇨🇩 刚果（金）",
     "teamB": "🇺🇿 乌兹别克斯坦",
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "K组"
-  },
-  {
-    "date": "6月28日",
-    "kickoff": "2026-06-28T10:00:00+08:00",
-    "teamA": "🇩🇿 阿尔及利亚",
-    "teamB": "🇦🇹 奥地利",
-    "cctvUrl": "",
-    "miguUrl": "",
-    "verified": false,
-    "group": "J组"
+    "group": "K组",
+    "xhsNoteId": "6a4080990000000022009129"
   },
   {
     "date": "6月28日",
@@ -729,6 +777,179 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "J组"
+    "group": "J组",
+    "xhsNoteId": "6a40a5340000000008003cc0"
+  },
+  {
+    "date": "6月28日",
+    "kickoff": "2026-06-28T10:00:00+08:00",
+    "teamA": "🇩🇿 阿尔及利亚",
+    "teamB": "🇦🇹 奥地利",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "J组",
+    "xhsNoteId": "6a40a37400000000070218d6"
+  },
+  {
+    "date": "6月29日",
+    "kickoff": "2026-06-29T03:00:00+08:00",
+    "teamA": "🇿🇦 南非",
+    "teamB": "🇨🇦 加拿大",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/16决赛",
+    "xhsNoteId": "6a41909400000000060234ce"
+  },
+  {
+    "date": "6月30日",
+    "kickoff": "2026-06-30T01:00:00+08:00",
+    "teamA": "🇧🇷 巴西",
+    "teamB": "🇯🇵 日本",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/16决赛"
+  },
+  {
+    "date": "6月30日",
+    "kickoff": "2026-06-30T04:30:00+08:00",
+    "teamA": "🇩🇪 德国",
+    "teamB": "🇵🇾 巴拉圭",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/16决赛"
+  },
+  {
+    "date": "6月30日",
+    "kickoff": "2026-06-30T09:00:00+08:00",
+    "teamA": "🇳🇱 荷兰",
+    "teamB": "🇲🇦 摩洛哥",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/16决赛"
+  },
+  {
+    "date": "7月1日",
+    "kickoff": "2026-07-01T01:00:00+08:00",
+    "teamA": "🇨🇮 科特迪瓦",
+    "teamB": "🇳🇴 挪威",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/16决赛"
+  },
+  {
+    "date": "7月1日",
+    "kickoff": "2026-07-01T05:00:00+08:00",
+    "teamA": "🇫🇷 法国",
+    "teamB": "🇸🇪 瑞典",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/16决赛"
+  },
+  {
+    "date": "7月1日",
+    "kickoff": "2026-07-01T09:00:00+08:00",
+    "teamA": "🇲🇽 墨西哥",
+    "teamB": "🇪🇨 厄瓜多尔",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/16决赛"
+  },
+  {
+    "date": "7月2日",
+    "kickoff": "2026-07-02T00:00:00+08:00",
+    "teamA": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 英格兰",
+    "teamB": "🇨🇩 刚果（金）",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/16决赛"
+  },
+  {
+    "date": "7月2日",
+    "kickoff": "2026-07-02T04:00:00+08:00",
+    "teamA": "🇧🇪 比利时",
+    "teamB": "🇸🇳 塞内加尔",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/16决赛"
+  },
+  {
+    "date": "7月2日",
+    "kickoff": "2026-07-02T08:00:00+08:00",
+    "teamA": "🇺🇸 美国",
+    "teamB": "🇧🇦 波黑",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/16决赛"
+  },
+  {
+    "date": "7月3日",
+    "kickoff": "2026-07-03T03:00:00+08:00",
+    "teamA": "🇪🇸 西班牙",
+    "teamB": "🇦🇹 奥地利",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/16决赛"
+  },
+  {
+    "date": "7月3日",
+    "kickoff": "2026-07-03T07:00:00+08:00",
+    "teamA": "🇵🇹 葡萄牙",
+    "teamB": "🇭🇷 克罗地亚",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/16决赛"
+  },
+  {
+    "date": "7月3日",
+    "kickoff": "2026-07-03T11:00:00+08:00",
+    "teamA": "🇨🇭 瑞士",
+    "teamB": "🇩🇿 阿尔及利亚",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/16决赛"
+  },
+  {
+    "date": "7月4日",
+    "kickoff": "2026-07-04T02:00:00+08:00",
+    "teamA": "🇦🇺 澳大利亚",
+    "teamB": "🇪🇬 埃及",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/16决赛"
+  },
+  {
+    "date": "7月4日",
+    "kickoff": "2026-07-04T06:00:00+08:00",
+    "teamA": "🇦🇷 阿根廷",
+    "teamB": "🇨🇻 佛得角",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/16决赛"
+  },
+  {
+    "date": "7月4日",
+    "kickoff": "2026-07-04T09:30:00+08:00",
+    "teamA": "🇨🇴 哥伦比亚",
+    "teamB": "🇬🇭 加纳",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/16决赛"
   }
 ]

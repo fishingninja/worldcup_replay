@@ -1482,7 +1482,8 @@
       if (dateStr !== currentDate) {
         currentDate = dateStr;
         var title = document.createElement('div');
-        title.className = 'section-title' + (dateStr === '6月15日' ? ' today' : '');
+        var todayStr = new Date().toLocaleDateString('zh-CN', { month: 'numeric', day: 'numeric' }).replace(/\//g, '月') + '日';
+        title.className = 'section-title' + (dateStr === todayStr ? ' today' : '');
         title.textContent = '📅 ' + dateStr;
         listEl.appendChild(title);
       }

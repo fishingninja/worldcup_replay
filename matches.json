@@ -832,7 +832,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "1/16决赛"
+    "group": "1/16决赛",
+    "xhsNoteId": "6a434a0d0000000008024cf6"
   },
   {
     "date": "7月1日",
@@ -953,5 +954,15 @@
     "miguUrl": "",
     "verified": false,
     "group": "1/16决赛"
+  },
+  {
+    "date": "7月5日",
+    "kickoff": "2026-07-05T01:00:00+08:00",
+    "teamA": "🇨🇦 加拿大",
+    "teamB": "🇲🇦 摩洛哥",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/8决赛"
   }
 ]

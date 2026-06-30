@@ -33,89 +33,108 @@ def strip_flags(text):
     return FLAG_EMOJI_RE.sub('', text).strip()
 
 
-# ── 第1步：拦截 calendar_info，提取回放列表 ──
+# ── 第1步：从 SSR HTML 提取赛程数据（无需浏览器，无需登录）──
 
-async def fetch_calendar_in_session(page):
-    """在当前 page 上访问 worldcup26 并拦截 calendar_info，返回回放列表。"""
-    print('>>> 1/2 拦截 calendar_info API...', flush=True)
+SSR_URL = 'https://www.xiaohongshu.com/worldcup26?channel_id=&channel_type=explore_feed'
 
-    calendar_responses = []
-    calendar_event = asyncio.Event()
 
-    async def on_response(res):
-        if 'calendar_info' in res.url:
-            try:
-                body = await res.text()
-                calendar_responses.append(body)
-                print(f'  [CAPTURED] calendar_info #{len(calendar_responses)} ({len(body)} bytes)', flush=True)
-                if len(body) > 100 and not calendar_event.is_set():  # 有效数据
-                    calendar_event.set()
-            except Exception as e:
-                print(f'  [ERR] 读取失败: {e}', flush=True)
+def fetch_calendar_ssr():
+    """直接下载 XHS 页面 HTML，从 SSR 数据中提取回放比赛列表。"""
+    import urllib.request
+    print('>>> 1/2 从 SSR HTML 提取赛程数据...', flush=True)
 
-    page.on('response', on_response)
-
-    print('  goto worldcup26 ...', flush=True)
+    req = urllib.request.Request(SSR_URL, headers={
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
+        'Accept': 'text/html,*/*',
+        'Accept-Language': 'zh-CN,zh;q=0.9',
+    })
     try:
-        await page.goto('https://www.xiaohongshu.com/worldcup26?wcup_source=web_sidebar_entry',
-                        wait_until='domcontentloaded', timeout=30000)
+        resp = urllib.request.urlopen(req, timeout=30)
     except Exception as e:
-        print(f'  goto 超时（不影响数据拦截）: {e}', flush=True)
+        print(f'  ❌ 页面下载失败: {e}', flush=True)
+        return []
+    html = resp.read().decode('utf-8', errors='replace')
+    print(f'  页面大小: {len(html)} bytes', flush=True)
 
-    # 等待 calendar_info 响应（最多 15 秒）
-    print('  等待 calendar_info 响应...', flush=True)
-    try:
-        await asyncio.wait_for(calendar_event.wait(), timeout=15)
-        print('  ✅ 已获取到 calendar_info 数据', flush=True)
-    except asyncio.TimeoutError:
-        print('  ⚠️ 等待超时，使用已捕获的响应', flush=True)
-
-    # 额外等待，确保拿到完整数据
-    await asyncio.sleep(3)
-
-    page.remove_listener('response', on_response)
-
-    if not calendar_responses:
-        print('  ❌ 未捕获到 calendar_info！', flush=True)
+    # 提取 window.__INITIAL_STATE__
+    start = html.find('window.__INITIAL_STATE__')
+    if start < 0:
+        print('  ❌ 未找到 SSR 数据', flush=True)
+        return []
+    eq = html.find('=', start)
+    script_end = html.find('</script>', eq)
+    if script_end < 0:
+        print('  ❌ 未找到 script 结束标记', flush=True)
         return []
 
-    # 取最大响应
-    body = max(calendar_responses, key=len)
-    print(f'  选择最大响应 ({len(body)} bytes)', flush=True)
+    raw = html[eq + 1:script_end]
 
-    # ── 保存实时赛程原始数据（供 generate_schedule_from_xhs.py 使用）──
+    # 修复 JS 特有语法
+    raw = re.sub(r':undefined(?=[,}])', ':null', raw)
+
+    try:
+        state = json.loads(raw)
+    except json.JSONDecodeError as e:
+        print(f'  ❌ SSR JSON 解析失败: {e}', flush=True)
+        return []
+
+    # 提取 rawCalendarData
+    try:
+        rc = state['worldCupMatchSchedule']['rawCalendarData']
+    except KeyError:
+        print('  ❌ 未找到 rawCalendarData', flush=True)
+        return []
+
+    cl = rc.get('calendarList', [])
+    print(f'  calendarList: {len(cl)} 天', flush=True)
+
+    # ── 保存实时赛程原始数据（兼容旧格式供 generate_schedule_from_xhs.py 使用）──
+    # 将 camelCase 转为旧版 snake_case 格式
+    def cc2sc(name):
+        """camelCase 转 snake_case"""
+        return re.sub(r'([A-Z])', r'_\1', name).lower()
+    
+    def convert_match(m):
+        result = {}
+        for k, v in m.items():
+            sk = cc2sc(k)
+            if isinstance(v, dict):
+                result[sk] = convert_match(v)
+            else:
+                result[sk] = v
+        return result
+    
+    old_format = {'data': {'calendar_list': []}}
+    for day in cl:
+        old_day = {'date_label': day.get('dateLabel', ''), 'date': day.get('date', ''), 'matches': []}
+        for m in day.get('matches', []):
+            old_day['matches'].append(convert_match(m))
+        old_format['data']['calendar_list'].append(old_day)
+    
     raw_path = Path('xhs_debug/calendar_info_raw.json')
-    raw_path.write_text(body, encoding='utf-8')
+    raw_path.write_text(json.dumps(old_format, ensure_ascii=False), encoding='utf-8')
     print(f'  ✅ 赛程原始数据已保存: {raw_path}', flush=True)
 
-    try:
-        data = json.loads(body)
-    except json.JSONDecodeError as e:
-        print(f'  ❌ JSON 解析失败: {e}', flush=True)
-        return []
-
     replays = []
-    for day in data.get('data', {}).get('calendar_list', []):
+    for day in cl:
         for m in day.get('matches', []):
-            info = m.get('live_info', {})
-            nid = info.get('replay_note_id')
-            token = info.get('xsec_token')
+            info = m.get('liveInfo', {})
+            nid = info.get('replayNoteId')
+            token = info.get('xsecToken')
             if nid and token:
-                home_name = m.get('home_team_name', '')
-                away_name = m.get('away_team_name', '')
                 replays.append({
                     'note_id': nid,
                     'xsec_token': token,
-                    'date': day.get('date_label', ''),
-                    'group': m.get('group_label', ''),
-                    'home': home_name,
-                    'away': away_name,
-                    'score': f"{m.get('home_score', '?')}:{m.get('away_score', '?')}",
-                    'teamA': home_name,   # 来自 calendar_info API（无国旗）
-                    'teamB': away_name,   # 来自 calendar_info API（无国旗）
+                    'date': day.get('dateLabel', ''),
+                    'group': m.get('groupLabel', ''),
+                    'home': m.get('homeTeamName', ''),
+                    'away': m.get('awayTeamName', ''),
+                    'score': f"{m.get('homeScore', '?')}:{m.get('awayScore', '?')}",
+                    'teamA': m.get('homeTeamName', ''),
+                    'teamB': m.get('awayTeamName', ''),
                 })
 
-    # 最新优先（日期靠后的排前面，用户最关心）
+    # 最新优先
     replays.reverse()
 
     print(f'  共 {len(replays)} 场回放（最新优先）', flush=True)
@@ -193,8 +212,6 @@ async def main():
                         help='强制全量抓取（忽略已有数据，重新抓取所有比赛）')
     args = parser.parse_args()
 
-    from playwright.async_api import async_playwright
-
     # 加载已有数据（用于增量判断）
     existing = {} if args.full else load_existing_results()
     if args.full:
@@ -204,48 +221,43 @@ async def main():
     else:
         print('📦 无已有数据，将全量抓取', flush=True)
 
-    async with async_playwright() as p:
-        # ── 单一浏览器会话，贯穿全程 ──
-        browser = await p.chromium.launch(headless=True)
-        ctx = await browser.new_context(
-            user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-            viewport={'width': 1920, 'height': 1080}
-        )
-        page = await ctx.new_page()
+    # ── 第1步：从 SSR HTML 获取赛程（不需要浏览器）──
+    replays = fetch_calendar_ssr()
 
-        # 1. 获取回放列表（使用同一会话）
-        replays = await fetch_calendar_in_session(page)
-        await page.close()
+    if not replays:
+        print('没有找到回放比赛，退出。', flush=True)
+        sys.exit(1)
 
-        if not replays:
-            print('没有找到回放比赛，退出。', flush=True)
-            await browser.close()
-            sys.exit(1)
+    # ── 第2步：增量分析 ──
+    to_fetch = []
+    skipped = []
+    for r in replays:
+        old = existing.get(r['note_id'])
+        if old and old.get('video_urls'):
+            skipped.append(r)
+        else:
+            to_fetch.append(r)
 
-        # 2. 增量分析：哪些比赛需要抓取视频URL
-        to_fetch = []
-        skipped = []
-        for r in replays:
-            old = existing.get(r['note_id'])
-            if old and old.get('video_urls'):
-                # 已有视频URL，跳过
-                skipped.append(r)
-            else:
-                # 新比赛或之前抓取失败，需要抓取
-                to_fetch.append(r)
+    print(f'\n>>> 增量分析: 共 {len(replays)} 场', flush=True)
+    print(f'    需抓取: {len(to_fetch)} 场', flush=True)
+    print(f'    跳过(已有URL): {len(skipped)} 场', flush=True)
 
-        print(f'\n>>> 增量分析: 共 {len(replays)} 场', flush=True)
-        print(f'    需抓取: {len(to_fetch)} 场', flush=True)
-        print(f'    跳过(已有URL): {len(skipped)} 场', flush=True)
+    if skipped:
+        print('  跳过的比赛:', flush=True)
+        for r in skipped:
+            print(f'    ✓ {r["date"]} {r["home"]} vs {r["away"]}', flush=True)
 
-        if skipped:
-            print('  跳过的比赛:', flush=True)
-            for r in skipped:
-                print(f'    ✓ {r["date"]} {r["home"]} vs {r["away"]}', flush=True)
+    # ── 第3步：启动 Playwright 并发抓取视频 URL ──
+    raw_results = []
+    if to_fetch:
+        from playwright.async_api import async_playwright
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=True)
+            ctx = await browser.new_context(
+                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
+                viewport={'width': 1920, 'height': 1080}
+            )
 
-        # 3. 并发抓取视频（同一 context，不同 page）
-        raw_results = []
-        if to_fetch:
             print(f'\n>>> 2/2 并发抓取 {len(to_fetch)} 场视频URL (并发数=4)...\n', flush=True)
             sem = asyncio.Semaphore(4)
 
@@ -256,10 +268,9 @@ async def main():
                     ctx, r['note_id'], r['xsec_token'], label, sem))
 
             raw_results = await asyncio.gather(*tasks)
-        else:
-            print('\n✅ 所有比赛已有视频URL，无需抓取', flush=True)
-
-        await browser.close()
+            await ctx.close()
+    else:
+        print('\n✅ 所有比赛已有视频URL，无需抓取', flush=True)
 
     # 4. 合并结果（新抓取 + 保留已有）
     results = []

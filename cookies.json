@@ -1,0 +1,92 @@
+[
+  {
+    "name": "a1",
+    "value": "<decrypt_error: prefix=b'v20'>",
+    "domain": ".xiaohongshu.com",
+    "path": "/",
+    "secure": false,
+    "httpOnly": false,
+    "expires": 1812993183.0,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "abRequestId",
+    "value": "<decrypt_error: prefix=b'v20'>",
+    "domain": ".xiaohongshu.com",
+    "path": "/",
+    "secure": false,
+    "httpOnly": false,
+    "expires": 1812993182.890562,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "ets",
+    "value": "<decrypt_error: prefix=b'v20'>",
+    "domain": ".xiaohongshu.com",
+    "path": "/",
+    "secure": false,
+    "httpOnly": false,
+    "expires": 1784049183.459938,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "webId",
+    "value": "<decrypt_error: prefix=b'v20'>",
+    "domain": ".xiaohongshu.com",
+    "path": "/",
+    "secure": false,
+    "httpOnly": false,
+    "expires": 1812993183.0,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "web_session",
+    "value": "<decrypt_error: prefix=b'v20'>",
+    "domain": ".xiaohongshu.com",
+    "path": "/",
+    "secure": true,
+    "httpOnly": true,
+    "expires": 1812993184.28932,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "gid",
+    "value": "<decrypt_error: prefix=b'v20'>",
+    "domain": ".xiaohongshu.com",
+    "path": "/",
+    "secure": false,
+    "httpOnly": false,
+    "expires": 1817267228.4804783,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "loadts",
+    "value": "<decrypt_error: prefix=b'v20'>",
+    "domain": ".xiaohongshu.com",
+    "path": "/",
+    "secure": false,
+    "httpOnly": false,
+    "expires": 1814243214.0,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "websectiga",
+    "value": "<decrypt_error: prefix=b'v20'>",
+    "domain": ".xiaohongshu.com",
+    "path": "/",
+    "secure": false,
+    "httpOnly": false,
+    "expires": 1782966415.0,
+    "sameSite": "Lax"
+  },
+  {
+    "name": "xsecappid",
+    "value": "<decrypt_error: prefix=b'v20'>",
+    "domain": ".xiaohongshu.com",
+    "path": "/",
+    "secure": false,
+    "httpOnly": false,
+    "expires": 1814243214.0,
+    "sameSite": "Lax"
+  }
+]

@@ -854,17 +854,19 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "1/16决赛"
+    "group": "1/16决赛",
+    "xhsNoteId": "6a44501d00000000080323c8"
   },
   {
     "date": "7月1日",
-    "kickoff": "2026-07-01T09:00:00+08:00",
+    "kickoff": "2026-07-01T10:00:00+08:00",
     "teamA": "🇲🇽 墨西哥",
     "teamB": "🇪🇨 厄瓜多尔",
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "1/16决赛"
+    "group": "1/16决赛",
+    "xhsNoteId": "6a44993a0000000021017d86"
   },
   {
     "date": "7月2日",

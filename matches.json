@@ -898,7 +898,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "1/16决赛"
+    "group": "1/16决赛",
+    "xhsNoteId": "6a45d1120000000007022f31"
   },
   {
     "date": "7月3日",
@@ -908,7 +909,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "1/16决赛"
+    "group": "1/16决赛",
+    "xhsNoteId": "6a46d8cc0000000021017166"
   },
   {
     "date": "7月3日",
@@ -995,6 +997,16 @@
     "kickoff": "2026-07-06T08:00:00+08:00",
     "teamA": "🇲🇽 墨西哥",
     "teamB": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 英格兰",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/8决赛"
+  },
+  {
+    "date": "7月7日",
+    "kickoff": "2026-07-07T08:00:00+08:00",
+    "teamA": "🇺🇸 美国",
+    "teamB": "🇧🇪 比利时",
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,

@@ -1030,7 +1030,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "1/8决赛"
+    "group": "1/8决赛",
+    "xhsNoteId": "6a4c6500000000002103f66a"
   },
   {
     "date": "7月8日",
@@ -1057,6 +1058,16 @@
     "kickoff": "2026-07-10T04:00:00+08:00",
     "teamA": "🇫🇷 法国",
     "teamB": "🇲🇦 摩洛哥",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "1/4决赛"
+  },
+  {
+    "date": "7月11日",
+    "kickoff": "2026-07-11T03:00:00+08:00",
+    "teamA": "🇪🇸 西班牙",
+    "teamB": "🇧🇪 比利时",
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,

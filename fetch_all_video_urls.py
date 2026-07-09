@@ -3,8 +3,9 @@
 
 v4 改进:
 - 增量抓取：只抓取还没有视频URL的比赛，跳过已有的（节省资源）
+- 自动刷新：最近 48 小时内的比赛强制重新抓取（签名~10分钟过期）
 - 修复 subdivision flag（如苏格兰🏴󠁧󠁭󠁯󠁰󠁿）的 emoji 匹配问题
-- 支持 --full 参数强制全量抓取
+- 支持 --full 参数强制全量抓取，--no-refresh 关闭自动刷新
 - 自动回写 xhsNoteId 到 index.html（防止遗漏导致前端无法关联视频）
 
 关键设计:
@@ -189,6 +190,34 @@ async def fetch_video_for_match(ctx, note_id, xsec_token, match_label, sem, max_
         return []
 
 
+# ── 自动刷新：最近 N 小时内的比赛强制重新抓取 ──
+
+REFRESH_HOURS = 48  # 最近48小时内的比赛强制刷新（签名约10分钟过期）
+
+
+def parse_date_label(label: str):
+    """解析 dateLabel 如 '07月08日' 为 (month, day)，失败返回 None。"""
+    if not label:
+        return None
+    m = re.match(r'(\d{1,2})月(\d{1,2})日', label)
+    if not m:
+        return None
+    return int(m.group(1)), int(m.group(2))
+
+
+def is_recent(date_label: str, hours: int = REFRESH_HOURS) -> bool:
+    """判断 dateLabel 对应的比赛日期是否在最近 hours 小时内。"""
+    md = parse_date_label(date_label)
+    if not md:
+        return False
+    from datetime import datetime, timedelta, date
+    month, day = md
+    now = datetime.now()
+    match_date = date(now.year, month, day)
+    cutoff_date = (now - timedelta(hours=hours)).date()
+    return match_date >= cutoff_date
+
+
 # ── 第3步：加载已有数据（增量用）──
 
 def load_existing_results():
@@ -210,6 +239,8 @@ async def main():
     parser = argparse.ArgumentParser(description='抓取 XHS 世界杯回放视频 URL')
     parser.add_argument('--full', action='store_true',
                         help='强制全量抓取（忽略已有数据，重新抓取所有比赛）')
+    parser.add_argument('--no-refresh', action='store_true',
+                        help='关闭自动刷新（最近48h内的比赛也跳过，仅抓缺URL的比赛）')
     args = parser.parse_args()
 
     # 加载已有数据（用于增量判断）
@@ -217,7 +248,8 @@ async def main():
     if args.full:
         print('🔧 --full 模式：全量抓取所有比赛', flush=True)
     elif existing:
-        print(f'📦 已有数据: {len(existing)} 场（将跳过已有视频URL的比赛）', flush=True)
+        refresh_info = f' (最近{REFRESH_HOURS}h内强制刷新)' if not args.no_refresh else ''
+        print(f'📦 已有数据: {len(existing)} 场（将跳过已有视频URL的比赛{refresh_info}）', flush=True)
     else:
         print('📦 无已有数据，将全量抓取', flush=True)
 
@@ -231,15 +263,29 @@ async def main():
     # ── 第2步：增量分析 ──
     to_fetch = []
     skipped = []
+    refreshed = []  # 最近48h内强制刷新的比赛
     for r in replays:
         old = existing.get(r['note_id'])
-        if old and old.get('video_urls'):
+        has_urls = bool(old and old.get('video_urls'))
+
+        # 🔄 自动刷新：最近48小时内的比赛即使有URL也重新抓取
+        if (has_urls
+                and not args.full
+                and not args.no_refresh
+                and is_recent(r.get('date', ''))):
+            refreshed.append(r)
+            to_fetch.append(r)
+            continue
+
+        if has_urls:
             skipped.append(r)
         else:
             to_fetch.append(r)
 
     print(f'\n>>> 增量分析: 共 {len(replays)} 场', flush=True)
     print(f'    需抓取: {len(to_fetch)} 场', flush=True)
+    if refreshed:
+        print(f'      (其中 {len(refreshed)} 场为最近{REFRESH_HOURS}h内强制刷新)', flush=True)
     print(f'    跳过(已有URL): {len(skipped)} 场', flush=True)
 
     if skipped:
@@ -326,7 +372,10 @@ async def main():
         print('本次无需抓取', flush=True)
 
     print(f'\n总计: {total_success}/{len(results)} 有视频URL', flush=True)
-    print(f'  (新抓取 {new_success} + 保留 {len(skipped)} 场)', flush=True)
+    if refreshed:
+        print(f'  (刷新 {len(refreshed)} + 新抓取 {new_success - len(refreshed)} + 保留 {len(skipped)} 场)', flush=True)
+    else:
+        print(f'  (新抓取 {new_success} + 保留 {len(skipped)} 场)', flush=True)
 
     if total_success == 0:
         print('⚠️ 全部失败，检查 xsec_token 是否在日历页加载后立即使用', flush=True)

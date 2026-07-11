@@ -1074,7 +1074,8 @@
     "cctvUrl": "",
     "miguUrl": "",
     "verified": false,
-    "group": "1/4决赛"
+    "group": "1/4决赛",
+    "xhsNoteId": "6a5164c4000000002101b7ce"
   },
   {
     "date": "7月12日",
@@ -1095,5 +1096,15 @@
     "miguUrl": "",
     "verified": false,
     "group": "1/4决赛"
+  },
+  {
+    "date": "7月15日",
+    "kickoff": "2026-07-15T03:00:00+08:00",
+    "teamA": "🇫🇷 法国",
+    "teamB": "🇪🇸 西班牙",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "半决赛"
   }
 ]

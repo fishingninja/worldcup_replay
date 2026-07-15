@@ -1119,5 +1119,25 @@
     "miguUrl": "",
     "verified": false,
     "group": "半决赛"
+  },
+  {
+    "date": "7月19日",
+    "kickoff": "2026-07-19T05:00:00+08:00",
+    "teamA": "🇫🇷 法国",
+    "teamB": "🏴󠁧󠁢󠁥󠁮󠁧󠁿 英格兰",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "季军赛"
+  },
+  {
+    "date": "7月20日",
+    "kickoff": "2026-07-20T03:00:00+08:00",
+    "teamA": "🇪🇸 西班牙",
+    "teamB": "🇦🇷 阿根廷",
+    "cctvUrl": "",
+    "miguUrl": "",
+    "verified": false,
+    "group": "决赛"
   }
 ]

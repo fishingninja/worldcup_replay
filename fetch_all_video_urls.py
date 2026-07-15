@@ -39,11 +39,9 @@ def strip_flags(text):
 SSR_URL = 'https://www.xiaohongshu.com/worldcup26?channel_id=&channel_type=explore_feed'
 
 
-def fetch_calendar_ssr():
-    """直接下载 XHS 页面 HTML，从 SSR 数据中提取回放比赛列表。"""
+def _download_ssr_html():
+    """下载 XHS 世界杯页面 HTML，返回字符串；失败返回空串。"""
     import urllib.request
-    print('>>> 1/2 从 SSR HTML 提取赛程数据...', flush=True)
-
     req = urllib.request.Request(SSR_URL, headers={
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
         'Accept': 'text/html,*/*',
@@ -53,40 +51,64 @@ def fetch_calendar_ssr():
         resp = urllib.request.urlopen(req, timeout=30)
     except Exception as e:
         print(f'  ❌ 页面下载失败: {e}', flush=True)
-        return []
-    html = resp.read().decode('utf-8', errors='replace')
-    print(f'  页面大小: {len(html)} bytes', flush=True)
+        return ''
+    return resp.read().decode('utf-8', errors='replace')
 
-    # 提取 window.__INITIAL_STATE__
+
+def _parse_calendar_state(html):
+    """从 SSR HTML 中解析出 rawCalendarData 的 calendarList，失败返回 None。"""
+    if not html:
+        return None
     start = html.find('window.__INITIAL_STATE__')
     if start < 0:
-        print('  ❌ 未找到 SSR 数据', flush=True)
-        return []
+        return None
     eq = html.find('=', start)
     script_end = html.find('</script>', eq)
     if script_end < 0:
-        print('  ❌ 未找到 script 结束标记', flush=True)
-        return []
-
+        return None
     raw = html[eq + 1:script_end]
-
-    # 修复 JS 特有语法
     raw = re.sub(r':undefined(?=[,}])', ':null', raw)
-
     try:
         state = json.loads(raw)
-    except json.JSONDecodeError as e:
-        print(f'  ❌ SSR JSON 解析失败: {e}', flush=True)
-        return []
-
-    # 提取 rawCalendarData
+    except json.JSONDecodeError:
+        return None
     try:
         rc = state['worldCupMatchSchedule']['rawCalendarData']
-    except KeyError:
-        print('  ❌ 未找到 rawCalendarData', flush=True)
+    except (KeyError, TypeError):
+        return None
+    cl = rc.get('calendarList', [])
+    if not cl:
+        return None
+    return cl
+
+
+def fetch_calendar_ssr(max_retry=4):
+    """直接下载 XHS 页面 HTML，从 SSR 数据中提取回放比赛列表。
+
+    XHS 的 SSR 响应并不稳定：有时会返回尚未填充 rawCalendarData 的
+    精简页面（约 800KB，无赛程数据），导致一次性抓取失败。这里增加
+    重试机制：若未解析出有效 calendarList，则短暂等待后重新下载。
+    """
+    import time
+    print('>>> 1/2 从 SSR HTML 提取赛程数据...', flush=True)
+
+    cl = None
+    for attempt in range(1, max_retry + 1):
+        html = _download_ssr_html()
+        print(f'  页面大小: {len(html)} bytes (尝试 {attempt}/{max_retry})', flush=True)
+        cl = _parse_calendar_state(html)
+        if cl is not None:
+            if attempt > 1:
+                print(f'  ✅ 第 {attempt} 次重试成功解析出赛程', flush=True)
+            break
+        print('  ⚠️ 未解析出有效赛程数据（可能是 SSR 异步数据未就绪），准备重试', flush=True)
+        if attempt < max_retry:
+            time.sleep(3 * attempt)
+
+    if cl is None:
+        print('  ❌ 多次重试后仍无法获取赛程数据', flush=True)
         return []
 
-    cl = rc.get('calendarList', [])
     print(f'  calendarList: {len(cl)} 天', flush=True)
 
     # ── 保存实时赛程原始数据（兼容旧格式供 generate_schedule_from_xhs.py 使用）──

@@ -278,7 +278,7 @@
     <div class="emoji">🌙</div>
     <div class="text">
       <b>昨晚错过的比赛，今天放心看。</b>每场提供两个回放入口，小红书和央视任选。
-      每天自动更新 <span class="hl">07:00 / 12:00 / 18:00</span> ·
+      每天自动更新 <span class="hl">07:00 / 09:00 / 12:00 / 14:00</span> ·
       <span class="ok">进入播放页后不往下滚动即可避开剧透 ✅</span>
     </div>
   </div>
@@ -293,7 +293,7 @@
   <div class="detail-panel">
     <div class="row"><span class="label">🎯 适用场景：</span>世界杯比赛多在深夜/凌晨开球，不方便熬夜？第二天用这个页面安全地补看全场录像。</div>
     <div class="row"><span class="label">⏰ 更新频率：</span><span class="hl">每天 07:00、12:00、18:00</span> 自动从央视体育抓取最新回放链接。</div>
-    <div class="row"><span class="label">📅 显示范围：</span>最近两天已完赛的比赛（比赛结束约2.5小时后回放上线）。</div>
+    <div class="row"><span class="label">📅 显示范围：</span>最近三场已完赛的比赛（比赛结束约2.5小时后回放上线）。</div>
     <div class="row"><span class="label">⚠️ 防剧透要点：</span>点击链接进入央视播放页后，<b>只观看播放器区域，不要向下滚动</b>查看文字介绍（可能含比分）。</div>
     <div class="row" style="margin-top:8px;padding-top:8px;border-top:1px solid #21262d;color:#555;">
       数据来源：sports.cctv.com（央视体育官方）· 回放需浏览器直接打开，无需下载App
@@ -304,7 +304,7 @@
   <div id="match-list"></div>
 
   <div class="no-match" id="no-match">
-    📭 最近两天暂无已完赛的比赛<br>
+    📭 最近暂无已完赛的比赛<br>
     <span style="font-size:11.5px;color:#555;">请在比赛结束约2.5小时后再来查看</span>
   </div>
 
@@ -1475,6 +1475,8 @@
   function isWithinTwoDays(kickoffISO) {
     return (Date.now() - new Date(kickoffISO).getTime()) <= (2 * 24 * 60 * 60 * 1000);
   }
+  // 淘汰赛阶段比赛减少，改为只显示最近3场
+  var SHOW_LAST_N = 3;
 
   // ── 小红书视频播放器 ──
   var cachedUrls = {};
@@ -1652,12 +1654,13 @@
 
     if (!matches.length) { noMatchEl.classList.add('show'); updateFooter(); return; }
 
-    var filtered = matches.filter(function(m) { return isFinished(m.kickoff) && isWithinTwoDays(m.kickoff); });
+    // 淘汰赛阶段只显示最近3场已完赛的比赛
+    var filtered = matches.filter(function(m) { return isFinished(m.kickoff); });
+    filtered.sort(function(a, b) { return new Date(b.kickoff) - new Date(a.kickoff); });
+    filtered = filtered.slice(0, SHOW_LAST_N);
 
     if (filtered.length === 0) { noMatchEl.classList.add('show'); updateFooter(); return; }
     noMatchEl.classList.remove('show');
-
-    filtered.sort(function(a, b) { return new Date(b.kickoff) - new Date(a.kickoff); });
 
     var currentDate = '';
     for (var i = 0; i < filtered.length; i++) {

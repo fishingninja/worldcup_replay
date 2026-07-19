@@ -7,6 +7,10 @@
 import json, base64, os, sys, urllib.request
 from pathlib import Path
 
+# 直连 GitHub：避免走环境变量 HTTPS_PROXY 指向的本地代理（如 127.0.0.1:7897）
+# 当其失效时会导致 SSL 握手 UNEXPECTED_EOF_WHILE_READING。实测直连 api.github.com 正常。
+urllib.request.install_opener(urllib.request.build_opener(urllib.request.ProxyHandler({})))
+
 # ── 读取 Token（优先环境变量，兼容之前硬编码的旧值）──
 TOKEN = os.environ.get('GITHUB_TOKEN') or os.environ.get('GH_TOKEN') or ''
 if not TOKEN:

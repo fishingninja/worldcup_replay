@@ -4,12 +4,16 @@
 ⚠️ 开源前请先在环境变量中设置 GITHUB_TOKEN，不要在代码中硬编码密码。
    本地调试可创建 .env 文件写入 GITHUB_TOKEN=your_token_here
 """
-import json, base64, os, sys, urllib.request
+import json, base64, os, sys, time, urllib.request, urllib.error
 from pathlib import Path
 
 # 直连 GitHub：避免走环境变量 HTTPS_PROXY 指向的本地代理（如 127.0.0.1:7897）
 # 当其失效时会导致 SSL 握手 UNEXPECTED_EOF_WHILE_READING。实测直连 api.github.com 正常。
 urllib.request.install_opener(urllib.request.build_opener(urllib.request.ProxyHandler({})))
+
+# 5xx（含 503 Service Unavailable）多为 GitHub git-data 后端瞬时不可用，自动重试。
+_MAX_RETRIES = 6
+_BASE_BACKOFF = 5  # 秒，指数退避：5, 10, 20, 40, 80, 160
 
 # ── 读取 Token（优先环境变量，兼容之前硬编码的旧值）──
 TOKEN = os.environ.get('GITHUB_TOKEN') or os.environ.get('GH_TOKEN') or ''
@@ -36,9 +40,27 @@ def github_api(method, endpoint, data=None):
         'User-Agent': 'worldcup-replay-push'
     }
     body = json.dumps(data).encode() if data else None
-    req = urllib.request.Request(url, data=body, headers=headers, method=method)
-    with urllib.request.urlopen(req) as r:
-        return json.loads(r.read())
+    last_err = None
+    for attempt in range(1, _MAX_RETRIES + 1):
+        req = urllib.request.Request(url, data=body, headers=headers, method=method)
+        try:
+            with urllib.request.urlopen(req) as r:
+                return json.loads(r.read())
+        except urllib.error.HTTPError as e:
+            # 5xx：GitHub 后端瞬时不可用，按指数退避重试
+            if 500 <= e.code < 600 and attempt < _MAX_RETRIES:
+                wait = _BASE_BACKOFF * (2 ** (attempt - 1))
+                msg = ''
+                try:
+                    msg = json.loads(e.read().decode()).get('message', '')
+                except Exception:
+                    pass
+                print(f'  ⚠️ {method} {endpoint} -> HTTP {e.code}（{msg}），第 {attempt}/{_MAX_RETRIES} 次重试，等待 {wait}s', flush=True)
+                time.sleep(wait)
+                last_err = e
+                continue
+            raise
+    raise last_err
 
 print('>>> 推送 via GitHub REST API...', flush=True)
 

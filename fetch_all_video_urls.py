@@ -186,8 +186,9 @@ async def fetch_video_for_match(ctx, note_id, xsec_token, match_label, sem, max_
 
             page.on('request', on_req)
 
-            url = (f'https://www.xiaohongshu.com/explore/{note_id}'
-                   f'?xsec_token={xsec_token}&xsec_source=pc_feed')
+            url = f'https://www.xiaohongshu.com/explore/{note_id}'
+            if xsec_token:
+                url += f'?xsec_token={xsec_token}&xsec_source=pc_feed'
 
             prefix = f'  [{match_label[:40]}]'
             print(f'{prefix} 尝试 {attempt}/{max_retry}...', flush=True)
@@ -255,6 +256,114 @@ def load_existing_results():
         return {}
 
 
+# ── 赛事结束后：仅刷新最后 N 场视频URL ──
+
+async def refresh_last_n(n: int):
+    """赛事结束后的“仅刷新最后 N 场”模式。
+
+    - 从实时赛程取时间最新的最后 N 场（带 xsec_token），强制重新抓取视频URL；
+    - 其余所有比赛直接从已有 all_video_urls.json 保留，不重新发现、不重新抓取；
+    - 即使实时赛程页已下架（返回空），也回退到已有数据的末尾 N 场，
+      保证赛程总数不丢失（不会把 104 场清成只剩几场）。
+    """
+    print(f'🔄 仅刷新模式：刷新时间最新的最后 {n} 场，其余从已有数据保留', flush=True)
+
+    replays = fetch_calendar_ssr()
+    if replays:
+        last_n = replays[:n]
+    else:
+        # 实时赛程页已无数据：从已有数据取末尾 N 场（按存储顺序）
+        items = list(load_existing_results().values())
+        tail = items[-n:] if n <= len(items) else items
+        last_n = [{
+            'note_id': it.get('note_id', ''),
+            'xsec_token': it.get('xsec_token', ''),
+            'date': '',
+            'group': '',
+            'home': it.get('teamA', ''),
+            'away': it.get('teamB', ''),
+            'score': '',
+            'teamA': it.get('teamA', ''),
+            'teamB': it.get('teamB', ''),
+        } for it in tail]
+        print(f'  ⚠️ 实时赛程无数据，回退到已有数据末尾 {len(last_n)} 场', flush=True)
+
+    if not last_n:
+        print('没有可刷新的比赛，退出。', flush=True)
+        sys.exit(1)
+
+    to_fetch = last_n
+    print(f'\n>>> 增量分析(仅刷新): 刷新 {len(to_fetch)} 场，保留其余已有比赛', flush=True)
+    for r in to_fetch:
+        print(f"    🔄 {r.get('date','')} {r.get('home','')} vs {r.get('away','')}", flush=True)
+
+    # ── 启动 Playwright 并发抓取视频 URL ──
+    raw_results = []
+    if to_fetch:
+        from playwright.async_api import async_playwright
+        async with async_playwright() as p:
+            browser = await p.chromium.launch(headless=True)
+            ctx = await browser.new_context(
+                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
+                viewport={'width': 1920, 'height': 1080}
+            )
+            print(f'\n>>> 并发抓取 {len(to_fetch)} 场视频URL (并发数=4)...\n', flush=True)
+            sem = asyncio.Semaphore(4)
+            tasks = []
+            for i, r in enumerate(to_fetch):
+                label = f"[{i + 1}/{len(to_fetch)}] {r.get('date','')} {r.get('home','')} vs {r.get('away','')} ({r.get('score','')})"
+                tasks.append(fetch_video_for_match(
+                    ctx, r['note_id'], r.get('xsec_token', ''), label, sem))
+            raw_results = await asyncio.gather(*tasks)
+            await ctx.close()
+
+    # ── 合并：刷新的 N 场用新结果，其余保留已有 ──
+    existing = load_existing_results()
+    fetched_nids = {r['note_id'] for r in to_fetch}
+    results = []
+    for r, urls in zip(to_fetch, raw_results):
+        # 抓取失败则保留该场已有URL，避免清空
+        kept = urls if urls else existing.get(r['note_id'], {}).get('video_urls', [])
+        results.append({
+            'match': (f"{r.get('date','')} {r.get('group','')} "
+                      f"{r.get('home','')} vs {r.get('away','')} {r.get('score','')}"),
+            'note_id': r['note_id'],
+            'teamA': r.get('teamA', ''),
+            'teamB': r.get('teamB', ''),
+            'video_urls': list(set(kept))
+        })
+    # 保留其余所有已有比赛
+    for old in existing.values():
+        if old.get('note_id') not in fetched_nids:
+            results.append(old)
+
+    results.sort(key=lambda x: x.get('match', ''))
+
+    # ── 保存 ──
+    out_dir = Path('xhs_debug')
+    out_dir.mkdir(exist_ok=True)
+    out_path = out_dir / 'all_video_urls.json'
+    out_path.write_text(json.dumps(results, ensure_ascii=False, indent=2), encoding='utf-8')
+    print(f'\n结果已保存: {out_path}（共 {len(results)} 场）', flush=True)
+
+    # ── 汇总 ──
+    print('\n===== 汇总 =====', flush=True)
+    new_success = sum(1 for _, urls in zip(to_fetch, raw_results) if urls)
+    total_success = sum(1 for r in results if r['video_urls'])
+    if to_fetch:
+        print(f'本次刷新: {new_success}/{len(to_fetch)} 成功', flush=True)
+        for r, urls in zip(to_fetch, raw_results):
+            label = f"{r.get('date','')} {r.get('home','')} vs {r.get('away','')}"
+            if urls:
+                print(f"  ✅ {label} ({len(urls)} 个URL)", flush=True)
+            else:
+                print(f"  ❌ {label}（保留旧URL）", flush=True)
+    print(f'\n总计: {total_success}/{len(results)} 有视频URL', flush=True)
+
+    # ── 回写 xhsNoteId 到 index.html ──
+    update_match_data_xhs_note_id(results)
+
+
 # ── 主流程 ──
 
 async def main():
@@ -263,7 +372,15 @@ async def main():
                         help='强制全量抓取（忽略已有数据，重新抓取所有比赛）')
     parser.add_argument('--no-refresh', action='store_true',
                         help='关闭自动刷新（最近48h内的比赛也跳过，仅抓缺URL的比赛）')
+    parser.add_argument('--last', type=int, default=None,
+                        help='仅刷新模式：只刷新时间最新的最后 N 场，其余保留已有数据。'
+                             '用于赛事结束后定期刷新即将过期的视频URL。')
     args = parser.parse_args()
+
+    # ── 赛事结束后：仅刷新最后 N 场视频URL（其余保留，不重新发现/抓取新比赛）──
+    if args.last is not None:
+        await refresh_last_n(args.last)
+        return
 
     # 加载已有数据（用于增量判断）
     existing = {} if args.full else load_existing_results()

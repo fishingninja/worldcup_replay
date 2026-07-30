@@ -47,18 +47,26 @@ def github_api(method, endpoint, data=None):
             with urllib.request.urlopen(req) as r:
                 return json.loads(r.read())
         except urllib.error.HTTPError as e:
+            # 诊断：任何非成功响应都打印 GitHub 返回的报错体
+            err_body = ''
+            try:
+                err_body = e.read().decode()
+            except Exception:
+                pass
             # 5xx：GitHub 后端瞬时不可用，按指数退避重试
             if 500 <= e.code < 600 and attempt < _MAX_RETRIES:
                 wait = _BASE_BACKOFF * (2 ** (attempt - 1))
                 msg = ''
                 try:
-                    msg = json.loads(e.read().decode()).get('message', '')
+                    msg = json.loads(err_body).get('message', '')
                 except Exception:
                     pass
                 print(f'  ⚠️ {method} {endpoint} -> HTTP {e.code}（{msg}），第 {attempt}/{_MAX_RETRIES} 次重试，等待 {wait}s', flush=True)
                 time.sleep(wait)
                 last_err = e
                 continue
+            print(f'  ❌ {method} {endpoint} -> HTTP {e.code}', flush=True)
+            print(f'  响应体: {err_body[:1000]}', flush=True)
             raise
     raise last_err
 

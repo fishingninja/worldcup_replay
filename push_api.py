@@ -53,8 +53,8 @@ def github_api(method, endpoint, data=None):
                 err_body = e.read().decode()
             except Exception:
                 pass
-            # 5xx：GitHub 后端瞬时不可用，按指数退避重试
-            if 500 <= e.code < 600 and attempt < _MAX_RETRIES:
+            # 5xx / 422：GitHub git-data 后端瞬时抖动（422 偶发，重试即可吸收），按指数退避重试
+            if (500 <= e.code < 600 or e.code == 422) and attempt < _MAX_RETRIES:
                 wait = _BASE_BACKOFF * (2 ** (attempt - 1))
                 msg = ''
                 try:

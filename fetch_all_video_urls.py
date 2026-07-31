@@ -34,6 +34,58 @@ def strip_flags(text):
     return FLAG_EMOJI_RE.sub('', text).strip()
 
 
+# ── 注入登录态 Cookie（XHS 笔记视频需登录才能加载）──
+
+def load_cookies():
+    """读取 cookies.json，返回可注入 Playwright 的 cookie 列表。
+
+    无登录态时 XHS 笔记页会返回登录墙，导致抓取不到视频流。
+    返回空列表表示没有可用 cookie（调用方照常无登录态运行）。
+    """
+    path = Path('cookies.json')
+    if not path.exists():
+        return []
+    try:
+        data = json.loads(path.read_text(encoding='utf-8'))
+    except (json.JSONDecodeError, OSError):
+        return []
+    # 兼容 {cookies: [...]} 与 [...] 两种格式
+    if isinstance(data, dict):
+        cookies = data.get('cookies', [])
+    elif isinstance(data, list):
+        cookies = data
+    else:
+        return []
+    # 过滤掉解密失败的占位符值（<decrypt_error: ...>）
+    valid = []
+    for c in cookies:
+        v = c.get('value', '')
+        if not v or v.startswith('<decrypt_error'):
+            continue
+        valid.append(c)
+    return valid
+
+
+def apply_cookies(ctx, cookies):
+    """把 cookie 列表注入浏览器上下文；忽略单条格式错误。"""
+    if not cookies:
+        return 0
+    try:
+        ctx.add_cookies(cookies)
+        return len(cookies)
+    except Exception as e:
+        print(f'  ⚠️ 注入 Cookie 失败: {e}', flush=True)
+        # 逐条注入，跳过坏条目
+        ok = 0
+        for c in cookies:
+            try:
+                ctx.add_cookies([c])
+                ok += 1
+            except Exception:
+                pass
+        return ok
+
+
 # ── 第1步：从 SSR HTML 提取赛程数据（无需浏览器，无需登录）──
 
 SSR_URL = 'https://www.xiaohongshu.com/worldcup26?channel_id=&channel_type=explore_feed'
@@ -307,6 +359,11 @@ async def refresh_last_n(n: int):
                 user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
                 viewport={'width': 1920, 'height': 1080}
             )
+            n_cookies = apply_cookies(ctx, load_cookies())
+            if n_cookies:
+                print(f'  🍪 已注入 {n_cookies} 个登录态 Cookie', flush=True)
+            else:
+                print('  ⚠️ 无可用登录态 Cookie（XHS 笔记视频可能返回登录墙）', flush=True)
             print(f'\n>>> 并发抓取 {len(to_fetch)} 场视频URL (并发数=4)...\n', flush=True)
             sem = asyncio.Semaphore(4)
             tasks = []
@@ -442,6 +499,11 @@ async def main():
                 user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
                 viewport={'width': 1920, 'height': 1080}
             )
+            n_cookies = apply_cookies(ctx, load_cookies())
+            if n_cookies:
+                print(f'  🍪 已注入 {n_cookies} 个登录态 Cookie', flush=True)
+            else:
+                print('  ⚠️ 无可用登录态 Cookie（XHS 笔记视频可能返回登录墙）', flush=True)
 
             print(f'\n>>> 2/2 并发抓取 {len(to_fetch)} 场视频URL (并发数=4)...\n', flush=True)
             sem = asyncio.Semaphore(4)

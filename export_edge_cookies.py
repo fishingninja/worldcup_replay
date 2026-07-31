@@ -27,49 +27,64 @@ def get_encryption_key():
 
 def decrypt_value(encrypted_value, key):
     """使用 AES-GCM 解密 Edge Cookie 值。
-    
+
     支持格式:
       v10/v11: 3字节标记 + 12字节 nonce + ciphertext + 16字节 tag
-      v20: 3字节标记 + 12字节 nonce + ciphertext + 16字节 tag（密钥派生方式不同，但 AES 密钥一致）
+               直接以 DPAPI 解密出来的主密钥作为 AES 密钥
+      v20 (App-Bound Encryption): 结构相同，但 AES 密钥 = SHA256(主密钥)
+               （新版 Edge/Chrome 对 cookie 值改用 SHA256 派生密钥）
     """
+    import hashlib
+    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+
     if not encrypted_value or len(encrypted_value) < 15:
         return ''
-    
+
     prefix = encrypted_value[:3]
     nonce = encrypted_value[3:15]
     ciphertext = encrypted_value[15:-16]
     tag = encrypted_value[-16:]
 
-    from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-    
-    # v10/v11/v20 均采用 AES-GCM 结构（v20 密钥派生方式不同但最终 AES 密钥一致）
-    for prefix_try in (b'v10', b'v11', b'v20'):
-        if prefix == prefix_try:
-            try:
-                aesgcm = AESGCM(key)
-                plaintext = aesgcm.decrypt(nonce, ciphertext + tag, None)
-                return plaintext.decode('utf-8')
-            except Exception:
-                break  # 密钥不匹配，尝试其他方式
-    
-    # 回退：尝试旧版 DPAPI 直接解密
+    # v20 用 SHA256(主密钥) 派生 AES 密钥；v10/v11 直接用主密钥
+    if prefix == b'v20':
+        aes_key = hashlib.sha256(key).digest()
+    else:
+        aes_key = key
+
+    try:
+        aesgcm = AESGCM(aes_key)
+        plaintext = aesgcm.decrypt(nonce, ciphertext + tag, None)
+        return plaintext.decode('utf-8')
+    except Exception:
+        pass
+
+    # 回退：尝试旧版 DPAPI 直接解密（极旧格式）
     try:
         return win32crypt.CryptUnprotectData(encrypted_value, None, None, None, 0)[1].decode('utf-8')
     except Exception:
         return f'<decrypt_error: prefix={prefix}>'
 
 
-def export_cookies(target_domain=TARGET_DOMAIN):
+def export_cookies(target_domain=TARGET_DOMAIN, db_path=None):
     """导出指定域名的所有 Cookie（可能含 . 前缀）。"""
-    if not os.path.exists(EDGE_COOKIE_DB):
-        print(f'❌ Edge Cookie 数据库不存在: {EDGE_COOKIE_DB}')
+    db_path = db_path or EDGE_COOKIE_DB
+    if not os.path.exists(db_path):
+        print(f'❌ Edge Cookie 数据库不存在: {db_path}')
         return []
 
     key = get_encryption_key()
     print(f'  ✅ 解密密钥获取成功 ({len(key)} bytes)', flush=True)
 
-    # 直接连接（WAL 模式允许并发读）
-    conn = sqlite3.connect(EDGE_COOKIE_DB)
+    # Edge 可能正在运行并锁住数据库，复制到临时文件再读取（避开文件锁）
+    tmp_db = os.path.join(tempfile.gettempdir(), f'edge_cookies_{os.getpid()}.db')
+    try:
+        shutil.copy2(db_path, tmp_db)
+    except Exception as e:
+        print(f'  ⚠️ 复制数据库失败（可能被占用），直接尝试连接: {e}', flush=True)
+        tmp_db = db_path
+
+    # 连接副本（WAL 模式允许并发读）
+    conn = sqlite3.connect(tmp_db)
     conn.text_factory = bytes
     cursor = conn.cursor()
 
@@ -81,6 +96,13 @@ def export_cookies(target_domain=TARGET_DOMAIN):
     )
     rows = cursor.fetchall()
     conn.close()
+
+    # 清理临时副本
+    if tmp_db != EDGE_COOKIE_DB and os.path.exists(tmp_db):
+        try:
+            os.remove(tmp_db)
+        except Exception:
+            pass
 
     cookies = []
     for row in rows:
@@ -121,7 +143,11 @@ def export_cookies(target_domain=TARGET_DOMAIN):
 
 
 if __name__ == '__main__':
-    cookies = export_cookies()
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--db', help='指定 Cookie 数据库路径（默认读取 Edge）')
+    args = ap.parse_args()
+    cookies = export_cookies(db_path=args.db)
     if cookies:
         print(f'  ✅ 获取到 {len(cookies)} 个 Cookie（域: {TARGET_DOMAIN}）', flush=True)
         for c in cookies:

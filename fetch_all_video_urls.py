@@ -17,7 +17,15 @@ import json
 import sys
 import re
 import argparse
+import os
 from pathlib import Path
+
+
+# 浏览器代理：
+# 默认直连（本机可直连小红书；Windows 系统代理 127.0.0.1:7897 常失效，
+# Chromium 继承该代理后 page.goto 会卡到超时，导致视频抓取全部失败）。
+# 如需走代理，设置环境变量 XHS_PROXY（如 http://127.0.0.1:7897）。
+BROWSER_PROXY = {"server": os.environ.get("XHS_PROXY", "direct://")}
 
 
 # ── 旗帜 emoji 正则 ──
@@ -354,7 +362,7 @@ async def refresh_last_n(n: int):
     if to_fetch:
         from playwright.async_api import async_playwright
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True)
+            browser = await p.chromium.launch(headless=True, proxy=BROWSER_PROXY)
             ctx = await browser.new_context(
                 user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
                 viewport={'width': 1920, 'height': 1080}
@@ -494,7 +502,7 @@ async def main():
     if to_fetch:
         from playwright.async_api import async_playwright
         async with async_playwright() as p:
-            browser = await p.chromium.launch(headless=True)
+            browser = await p.chromium.launch(headless=True, proxy=BROWSER_PROXY)
             ctx = await browser.new_context(
                 user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
                 viewport={'width': 1920, 'height': 1080}

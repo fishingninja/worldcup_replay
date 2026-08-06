@@ -262,8 +262,11 @@ async def fetch_video_for_match(ctx, note_id, xsec_token, match_label, sem, max_
             prefix = f'  [{match_label[:40]}]'
             print(f'{prefix} 尝试 {attempt}/{max_retry}...', flush=True)
             try:
-                await page.goto(url, wait_until='domcontentloaded', timeout=20000)
-                await asyncio.sleep(5)  # 等待视频请求触发
+                # 用 commit 而非 domcontentloaded：小红书笔记页 JS 很重，
+                # DCL 常 >20s 不触发导致超时；commit 在导航提交(响应返回)即返回，
+                # 之后 sleep 期间页面继续加载、视频流请求照常触发并被捕获。
+                await page.goto(url, wait_until='commit', timeout=25000)
+                await asyncio.sleep(6)  # 等待视频请求触发
             except Exception as e:
                 print(f'{prefix} goto 出错: {e}', flush=True)
 

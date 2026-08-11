@@ -68,6 +68,17 @@ def github_api(method, endpoint, data=None):
             print(f'  ❌ {method} {endpoint} -> HTTP {e.code}', flush=True)
             print(f'  响应体: {err_body[:1000]}', flush=True)
             raise
+        except (urllib.error.URLError, ConnectionError, OSError) as e:
+            # 瞬时网络故障：RemoteDisconnected / 连接重置 / DNS 抖动等，urlopen 不会包成 HTTPError，
+            # 按指数退避重试（覆盖本次自动化遇到的 Remote end closed connection without response）。
+            if attempt < _MAX_RETRIES:
+                wait = _BASE_BACKOFF * (2 ** (attempt - 1))
+                print(f'  ⚠️ {method} {endpoint} -> 网络错误 {type(e).__name__}（{e}），第 {attempt}/{_MAX_RETRIES} 次重试，等待 {wait}s', flush=True)
+                time.sleep(wait)
+                last_err = e
+                continue
+            print(f'  ❌ {method} {endpoint} -> 网络错误 {type(e).__name__}（{e}）', flush=True)
+            raise
     raise last_err
 
 print('>>> 推送 via GitHub REST API...', flush=True)

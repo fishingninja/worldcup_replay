@@ -45,18 +45,23 @@ def decrypt_value(encrypted_value, key):
     ciphertext = encrypted_value[15:-16]
     tag = encrypted_value[-16:]
 
-    # v20 用 SHA256(主密钥) 派生 AES 密钥；v10/v11 直接用主密钥
+    # v20 (App-Bound Encryption) 与 v10/v11 结构相同，但 AES 密钥派生方式有两种可能：
+    #   1) 直接以 DPAPI 解密出的主密钥作为 AES 密钥；
+    #   2) SHA256(主密钥) 派生。
+    # 这里两种都尝试，哪种能解出有效明文就用哪种。
     if prefix == b'v20':
-        aes_key = hashlib.sha256(key).digest()
+        candidates = [key, hashlib.sha256(key).digest()]
     else:
-        aes_key = key
+        candidates = [key]
 
-    try:
-        aesgcm = AESGCM(aes_key)
-        plaintext = aesgcm.decrypt(nonce, ciphertext + tag, None)
-        return plaintext.decode('utf-8')
-    except Exception:
-        pass
+    last_err = None
+    for aes_key in candidates:
+        try:
+            aesgcm = AESGCM(aes_key)
+            plaintext = aesgcm.decrypt(nonce, ciphertext + tag, None)
+            return plaintext.decode('utf-8')
+        except Exception as e:
+            last_err = e
 
     # 回退：尝试旧版 DPAPI 直接解密（极旧格式）
     try:

@@ -223,6 +223,12 @@
     border-radius:6px; cursor:pointer; font-size:14px; transition:all .2s;
   }
   .player-fallback .retry-btn:hover { background:#ff6b8a; color:#fff; }
+  .player-fallback .xhs-link {
+    display:none; margin-top:12px; padding:8px 24px;
+    background:#ff6b8a; border:1px solid #ff6b8a; color:#fff; text-decoration:none;
+    border-radius:6px; cursor:pointer; font-size:14px; transition:all .2s;
+  }
+  .player-fallback .xhs-link:hover { background:#ff86a0; border-color:#ff86a0; }
 
   /* ── 移动端适配 ── */
   @media (max-width:768px) {
@@ -1587,6 +1593,15 @@
   function showFallback(loadingEl, fallbackEl) {
     loadingEl.classList.remove('show');
     fallbackEl.classList.add('show');
+    var link = document.getElementById('player-xhs-link');
+    if (link) {
+      if (currentNoteId) {
+        link.href = 'https://www.xiaohongshu.com/explore/' + encodeURIComponent(currentNoteId);
+        link.style.display = 'inline-block';
+      } else {
+        link.style.display = 'none';
+      }
+    }
   }
 
   function closePlayer() {
@@ -1786,8 +1801,9 @@
     <video id="player-video" controls autoplay playsinline referrerpolicy="no-referrer"></video>
   </div>
   <div class="player-fallback" id="player-fallback">
-    视频源暂时不可用（链接有效期约10分钟）<br>
+    视频源已过期（小红书 CDN 链接会失效）<br>
     <button class="retry-btn" id="player-retry-btn">🔄 重新获取</button>
+    <a class="xhs-link" id="player-xhs-link" href="#" target="_blank" rel="noopener">📺 在小红书观看</a>
   </div>
 </div>
 

@@ -22,9 +22,16 @@
 需要在本地（中国IP）运行，因为 GHA 在境外无法访问小红书。
 """
 import argparse
+import os
 import subprocess
 import sys
 from pathlib import Path
+
+# 强制使用真实 Edge 配置模式抓取：XHS cookie 为 App-Bound Encryption(v20)，
+# 无法导出成明文注入无登录态 Chromium；改用真实 msedge.exe + 用户配置目录
+# （通过 junction 避开默认目录的 DevTools 限制）自带登录态抓取，才能拿到
+# 带有效签名的新鲜视频URL。cookies.json 已永久失效，此开关为唯一可行路径。
+os.environ["XHS_USE_EDGE_PROFILE"] = "1"
 
 PYTHON = sys.executable
 

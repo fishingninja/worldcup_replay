@@ -72,27 +72,30 @@ async def _launch_browser(p):
     否则 → 无登录态 Chromium + cookies.json（旧逻辑）。
     """
     if os.environ.get("XHS_USE_EDGE_PROFILE"):
-        edge_exe = _find_edge_exe()
-        user_data = _make_edge_junction()
-        print(f'  🌐 真实 Edge 配置模式: {edge_exe}', flush=True)
-        print(f'     用户配置(junction): {user_data}', flush=True)
-        ctx = await p.chromium.launch_persistent_context(
-            user_data_dir=user_data,
-            executable_path=edge_exe,
-            headless=True,
-            proxy=BROWSER_PROXY,
-            args=['--no-proxy-server', '--disable-extensions'],
-            user_agent=EDGE_UA,
-            viewport=EDGE_VIEWPORT,
-        )
-        browser = ctx.browser
-        return browser, ctx
-    else:
-        browser = await p.chromium.launch(
-            headless=True, proxy=BROWSER_PROXY, args=BROWSER_ARGS)
-        ctx = await browser.new_context(
-            user_agent=EDGE_UA, viewport=EDGE_VIEWPORT)
-        return browser, ctx
+        try:
+            edge_exe = _find_edge_exe()
+            user_data = _make_edge_junction()
+            print(f'  🌐 真实 Edge 配置模式: {edge_exe}', flush=True)
+            print(f'     用户配置(junction): {user_data}', flush=True)
+            ctx = await p.chromium.launch_persistent_context(
+                user_data_dir=user_data,
+                executable_path=edge_exe,
+                headless=True,
+                proxy=BROWSER_PROXY,
+                args=['--no-proxy-server', '--disable-extensions'],
+                user_agent=EDGE_UA,
+                viewport=EDGE_VIEWPORT,
+            )
+            browser = ctx.browser
+            return browser, ctx
+        except Exception as e:
+            print(f'  ⚠️ Edge 配置模式启动失败({type(e).__name__})，回退无登录态 Chromium: {e}', flush=True)
+    # 旧逻辑：无登录态 Chromium + cookies.json（cookies 已失效时只能拿到登录墙）
+    browser = await p.chromium.launch(
+        headless=True, proxy=BROWSER_PROXY, args=BROWSER_ARGS)
+    ctx = await browser.new_context(
+        user_agent=EDGE_UA, viewport=EDGE_VIEWPORT)
+    return browser, ctx
 
 
 def _make_edge_junction():

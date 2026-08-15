@@ -37,6 +37,96 @@ else:
     BROWSER_ARGS = ["--no-proxy-server"]
 
 
+# ── 浏览器启动：真实 Edge 配置模式（绕过 v20 cookie 无法导出问题）──
+#
+# XHS 笔记视频需登录态。Edge 自 127 起对 cookie 启用 App-Bound Encryption
+# (v20)，密钥绑定到 msedge.exe 进程身份，无法把 cookie 导出成明文文件注入
+# 无登录态的 Chromium。破解办法：直接用真实的 msedge.exe + 用户 User Data
+# 目录启动 Playwright 持久化上下文——此时进程就是 msedge.exe，Edge 自己能
+# 解开 v20 cookie，浏览器天然带登录态，无需 cookies.json。
+#
+# 触发：设置环境变量 XHS_USE_EDGE_PROFILE=1（update_xhs_all.py 子进程会继承）。
+
+EDGE_UA = ('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 '
+           '(KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0')
+EDGE_VIEWPORT = {'width': 1920, 'height': 1080}
+
+
+def _find_edge_exe():
+    candidates = [
+        os.path.expandvars(r'%ProgramFiles(x86)%\Microsoft\Edge\Application\msedge.exe'),
+        os.path.expandvars(r'%ProgramFiles%\Microsoft\Edge\Application\msedge.exe'),
+        r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe',
+        r'C:\Program Files\Microsoft\Edge\Application\msedge.exe',
+    ]
+    for c in candidates:
+        if os.path.exists(c):
+            return c
+    raise FileNotFoundError('未找到 msedge.exe，请确认 Edge 已安装')
+
+
+async def _launch_browser(p):
+    """返回 (browser, ctx)。
+
+    XHS_USE_EDGE_PROFILE=1 → 真实 Edge + 用户配置（自带登录态）；
+    否则 → 无登录态 Chromium + cookies.json（旧逻辑）。
+    """
+    if os.environ.get("XHS_USE_EDGE_PROFILE"):
+        edge_exe = _find_edge_exe()
+        user_data = _make_edge_junction()
+        print(f'  🌐 真实 Edge 配置模式: {edge_exe}', flush=True)
+        print(f'     用户配置(junction): {user_data}', flush=True)
+        ctx = await p.chromium.launch_persistent_context(
+            user_data_dir=user_data,
+            executable_path=edge_exe,
+            headless=True,
+            proxy=BROWSER_PROXY,
+            args=['--no-proxy-server', '--disable-extensions'],
+            user_agent=EDGE_UA,
+            viewport=EDGE_VIEWPORT,
+        )
+        browser = ctx.browser
+        return browser, ctx
+    else:
+        browser = await p.chromium.launch(
+            headless=True, proxy=BROWSER_PROXY, args=BROWSER_ARGS)
+        ctx = await browser.new_context(
+            user_agent=EDGE_UA, viewport=EDGE_VIEWPORT)
+        return browser, ctx
+
+
+def _make_edge_junction():
+    """创建指向真实 Edge User Data 的 NTFS 目录交接点(junction)。
+
+    Edge 拒绝在『默认 User Data 目录』下开启 DevTools 远程调试
+    (Playwright 靠它驱动)，故必须用非默认路径。junction 瞬时创建、
+    不复制(配置约3.4GB)、读写的仍是真实登录态文件；进程退出时自动清理。
+    """
+    import subprocess, atexit
+    src = os.path.expandvars(r'%LOCALAPPDATA%\Microsoft\Edge\User Data')
+    junction = os.path.expandvars(r'%LOCALAPPDATA%\Microsoft\Edge\User Data_XHS')
+    # 清掉可能残留的旧 junction
+    if os.path.exists(junction) or os.path.islink(junction):
+        subprocess.run(['cmd', '/c', 'rmdir', junction],
+                       stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    os.makedirs(os.path.dirname(junction), exist_ok=True)
+    r = subprocess.run(['cmd', '/c', 'mklink', '/J', junction, src],
+                       capture_output=True, text=True, errors='replace')
+    if r.returncode != 0:
+        raise RuntimeError(f'创建 Edge junction 失败: {r.stderr}')
+    # 清残留 SingletonLock（此前被强制结束的 Edge 进程会留下）
+    lock = os.path.join(junction, 'SingletonLock')
+    if os.path.exists(lock):
+        try:
+            os.remove(lock)
+        except OSError:
+            pass
+    atexit.register(
+        lambda: subprocess.run(['cmd', '/c', 'rmdir', junction],
+                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL))
+    return junction
+
+
 # ── 旗帜 emoji 正则 ──
 # 匹配所有旗帜 emoji：
 # - U+1F1E6-U+1F1FF: Regional indicator symbols（普通国旗，如🇨🇳🇲🇽🇰🇷）
@@ -374,12 +464,7 @@ async def refresh_last_n(n: int):
     if to_fetch:
         from playwright.async_api import async_playwright
         async with async_playwright() as p:
-            browser = await p.chromium.launch(
-                headless=True, proxy=BROWSER_PROXY, args=BROWSER_ARGS)
-            ctx = await browser.new_context(
-                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
-                viewport={'width': 1920, 'height': 1080}
-            )
+            browser, ctx = await _launch_browser(p)
             n_cookies = apply_cookies(ctx, load_cookies())
             if n_cookies:
                 print(f'  🍪 已注入 {n_cookies} 个登录态 Cookie', flush=True)
@@ -515,12 +600,7 @@ async def main():
     if to_fetch:
         from playwright.async_api import async_playwright
         async with async_playwright() as p:
-            browser = await p.chromium.launch(
-                headless=True, proxy=BROWSER_PROXY, args=BROWSER_ARGS)
-            ctx = await browser.new_context(
-                user_agent='Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/149.0.0.0 Safari/537.36 Edg/149.0.0.0',
-                viewport={'width': 1920, 'height': 1080}
-            )
+            browser, ctx = await _launch_browser(p)
             n_cookies = apply_cookies(ctx, load_cookies())
             if n_cookies:
                 print(f'  🍪 已注入 {n_cookies} 个登录态 Cookie', flush=True)

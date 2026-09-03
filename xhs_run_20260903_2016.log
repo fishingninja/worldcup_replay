@@ -1,6 +1,6 @@
 🔄 仅刷新模式：刷新时间最新的最后 3 场，其余从已有数据保留
 >>> 1/2 从 SSR HTML 提取赛程数据...
-  页面大小: 642929 bytes (尝试 1/4)
+  页面大小: 642928 bytes (尝试 1/4)
   calendarList: 34 天
   ✅ 赛程原始数据已保存: xhs_debug\calendar_info_raw.json
   共 104 场回放（最新优先）
@@ -20,17 +20,17 @@
   ⚠️ Edge 配置模式启动失败(Error)，回退无登录态 Chromium: BrowserType.launch_persistent_context: Failed to create a ProcessSingleton for your profile directory. This usually means that the profile is already in use by another instance of Chromium.
 Call log:
   - <launching> C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,BoundaryEventDispatchTracksNodeRemoval,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --no-proxy-server --disable-extensions --user-data-dir=C:\Users\37618\AppData\Local\Microsoft\Edge\User Data_XHS --remote-debugging-pipe about:blank
-  - <launched> pid=18468
-  - [pid=18468][err] [18468:1828:0903/171618.242:ERROR:chrome\browser\process_singleton_win.cc:933] Lock file can not be created! Error code: 32
-  - [pid=18468][err] [18468:1828:0903/171618.242:ERROR:chrome\app\chrome_main_delegate.cc:689] Failed to create a ProcessSingleton for your profile directory. This means that running multiple instances would start multiple browser processes rather than opening a new window in the existing process. Aborting now to avoid profile corruption.
-  - [pid=18468] <gracefully close start>
-  - [pid=18468] <kill>
-  - [pid=18468] <will force kill>
-  - [pid=18468] taskkill stderr: ����: û���ҵ����� "18468"��
-  - [pid=18468] <process did exit: exitCode=21, signal=null>
-  - [pid=18468] starting temporary directories cleanup
-  - [pid=18468] finished temporary directories cleanup
-  - [pid=18468] <gracefully close end>
+  - <launched> pid=20664
+  - [pid=20664][err] [20664:2960:0903/201642.108:ERROR:chrome\browser\process_singleton_win.cc:933] Lock file can not be created! Error code: 32
+  - [pid=20664][err] [20664:2960:0903/201642.108:ERROR:chrome\app\chrome_main_delegate.cc:689] Failed to create a ProcessSingleton for your profile directory. This means that running multiple instances would start multiple browser processes rather than opening a new window in the existing process. Aborting now to avoid profile corruption.
+  - [pid=20664] <gracefully close start>
+  - [pid=20664] <kill>
+  - [pid=20664] <will force kill>
+  - [pid=20664] taskkill stderr: ����: û���ҵ����� "20664"��
+  - [pid=20664] <process did exit: exitCode=21, signal=null>
+  - [pid=20664] starting temporary directories cleanup
+  - [pid=20664] finished temporary directories cleanup
+  - [pid=20664] <gracefully close end>
 
   ⚠️ 无可用登录态 Cookie（XHS 笔记视频可能返回登录墙）
 
@@ -60,8 +60,8 @@ Call log:
 合并结果: 更新 104 条, 保留空 0 条, 新增 0 条, 总计 104 条, 新数据非空 104/104
 ✅ 已合并 104 条内嵌视频 URL 到 index.html
 >>> 推送 via GitHub REST API...
-  当前 HEAD: c20f9939...
-  待推送 29 个文件
+  当前 HEAD: d1eefd79...
+  待推送 30 个文件
   ✓ blob .github\workflows\update.yml -> 31c36dc3...
   ✓ blob .gitignore -> c56d7d2b...
   ✓ blob README.md -> fe701a5e...
@@ -77,7 +77,7 @@ Call log:
   ✓ blob generate_full_schedule.py -> 00309838...
   ✓ blob generate_schedule_from_xhs.py -> 66374480...
   ✓ blob generate_video_urls_json.py -> 0ad77792...
-  ✓ blob index.html -> 429d649d...
+  ✓ blob index.html -> 7933da15...
   ✓ blob matches.json -> 452ad86d...
   ✓ blob push_api.py -> 1fce444a...
   ✓ blob refresh_recent_videos.py -> ddc67a3c...
@@ -85,41 +85,6 @@ Call log:
   ✓ blob update_matches.py -> 741dbb43...
   ✓ blob update_replay_links.py -> 09964caa...
   ✓ blob update_xhs_all.py -> aea536c5...
-  ✓ blob video_urls.json -> f8e1f31d...
+  ✓ blob video_urls.json -> 5d076a57...
   ✓ blob xhs_run_20260903_0232.log -> fb9d6080...
-  ✓ blob xhs_run_20260903_1715.log -> 301e0036...
-  ✓ blob xhs_update_run.log -> 087eb37d...
-  ✓ blob xhs_update_summary_2026-09-02_2036.md -> 7a12e056...
-  ✓ blob xhs_update_summary_2026-09-02_2335.md -> 0eae2083...
-  ✓ tree 40841d6a...
-  ✓ commit d1eefd79...
-  ✓ 更新 ref refs/heads/master -> d1eefd79...
-
-✅ 推送成功！共 29 个文件
-   查看: https://github.com/fishingninja/worldcup_replay/commit/d1eefd796b28a75fc6f3284e8c474cae76da551c
-
-📌 赛事已结束：仅刷新模式（最后 3 场）
-
-==================================================
->>> 1/4 刷新最后 3 场 XHS 视频URL
-==================================================
-✅ 1/4 刷新最后 3 场 XHS 视频URL 完成
-
-==================================================
->>> 2/4 生成 video_urls.json
-==================================================
-✅ 2/4 生成 video_urls.json 完成
-
-==================================================
->>> 3/4 同步到 index.html
-==================================================
-✅ 3/4 同步到 index.html 完成
-
-==================================================
->>> 4/4 推送到 GitHub
-==================================================
-✅ 4/4 推送到 GitHub 完成
-
-==================================================
-🎉 全部完成！线上数据已更新。
-==================================================
+  ✓ blob xhs_run_20260903_1715.log -> 7c0d9d67...
